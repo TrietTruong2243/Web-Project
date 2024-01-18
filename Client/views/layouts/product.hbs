@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en"=>
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <style>
+        #dg-chat-iframe {
+            position: absolute;
+            opacity: 0;
+            width: 1px;
+            height: 1px;
+            top: 0;
+            left: 0;
+            border: none;
+            display: block;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        #dg-chat-container {
+            position: relative;
+            z-index: 2147483647;
+        }
+
+        #dg-chat-widget {
+            position: fixed;
+            width: 100%;
+            right: 20px;
+            bottom: 20px;
+            max-width: 375px;
+            height: 90%;
+            max-height: 650px;
+            min-height: 570px;
+            box-shadow: rgb(0 0 0 / 12%) 0 12px 48px 4px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        @media only screen and (max-width: 800px) {
+            #dg-chat-widget {
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 100%;
+                width: 100%;
+                max-width: initial;
+                max-height: initial;
+                border-radius: 0;
+            }
+        }
+
+        #dg-chat-widget-launcher {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            height: 65px;
+            width: 65px;
+        }
+
+        #dg-chat-widget-proactive {
+            position: fixed;
+            right: 20px;
+            bottom: 90px;
+        }
+    </style>
+
+    <title> {{productName1}} </title>
+
+    <link data-stencil-stylesheet="" href="./source/theme-8c4df980-6632-013c-f3de-5e0f1ae9fa0d.css" rel="stylesheet">
+
+
+    <style type="text/css">
+        #dg-chat-container {
+            display: none;
+        }
+    </style>
+
+    <link type="text/css" rel="stylesheet" href="./source/widget.css">
+</head>
+
+<body class="productlanding US_EN  cookie-message-active   pace-done" id="productlanding">
+     {{> headers/page_header}}
+
+    <div class="body" id="main-content">
+        <div class="body-inner">
+            <div class="body-content">
+
+                <div class="productEnhanced productEnhanced--full productEnhanced--2021 js-productEnhanced productView loading-pdp-image"
+                    style="background-color: rgb(190, 191, 186);">
+
+                    <div>
+
+                        <div class="productEnhanced-hero js-productEnhanced-hero"
+                            style="background-color: rgb(190, 191, 186);">
+                            <div class="productEnhanced-heroImage-container js-productEnhanced-heroImage-container">
+
+                                <section class="show-for-large-up">
+                                    <div data-photo-gallery="desktop" data-slick=""
+                                        class="slick-initialized slick-slider">
+
+                                        <div class="slick-list draggable">
+
+                                            <div class="slick-track"
+                                                style="opacity: 1; width: 13824px; transform: translate3d(-1000px, 0px, 0px);">
+                                                <div class="slick-slide slick-cloned" aria-hidden="true"
+                                                    style="width: 1536px;" tabindex="-1">
+                                                    {{!-- <img src="./source/3bd3f6bf93a92c8ef50cc3eae30a14e68949017626dffd298d4f145.jpg"
+                                                        class="" alt=""> --}}
+                                                </div>
+                                                <div class="slick-slide slick-current slick-active" aria-hidden="false"
+                                                    style="width: 1000px;" tabindex="0">
+                                                    <img src="{{productImage}}"
+                                                        class="" alt="">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </section>
+
+                            </div>
+
+                            <div class="container productEnhanced-hero-container js-productEnhanced-hero-container">
+                                <div class="show-for-large-up productEnhanced-hero-background js-productEnhanced-hero-background"
+                                    style="background-color: rgb(190, 191, 186);"></div>
+                                <div class="productEnhanced-hero-position js-productEnhanced-hero-position">
+                                    <div class="productEnhanced-buyGrid">
+                                        <form method="post" action="#" class="form">
+
+                                            <div class="productEnhanced-heroInfo">
+
+
+                                                {{!-- <h2 class="h1 productEnhanced-tagline notranslate" translate="no">
+                                                    <span class="desktop-title">Upgradable tech, unbeatable
+                                                        sound.</span>
+                                                </h2> --}}
+
+                                                <h1 class="productView-title h2">
+                                                    <span class="desktop-title">{{productName2}}</span>
+                                                </h1>
+
+                                                <h2 class="price-section price-section--withoutTax">
+                                                    <span data-product-price-without-tax=""
+                                                        class="price price--withoutTax">Giá: {{productPrice}}</span>
+                                                </h2>
+
+
+                                            </div>
+
+                                            {{!-- <dr --}}
+
+                                            <div class="productView-addToCartRow">
+                                                <div class="form-action productView-addToCartButton">
+                                                    <button id="form-action-addToCart"
+                                                        class="product-button--action button button--info js-button--addToCart"
+                                                        type="submit">Add to Cart</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <section
+                                        class="productIcons productEnhanced-at-a-glance js-productEnhanced-at-a-glance  hide-on-image-loading">
+                                        <div class="productIcons-contents">
+                                            <div class="">
+                                                <div class="productIcons-list">
+                                                    
+                                                    <div class="productIcon">
+                                                        {{!-- <img src="./source/11079_17942.png" alt=""
+                                                            class="productIcon-image"> --}}
+                                                        <span class="productIcon-title">{{productDescribe}}</span>
+                                                    </div>
+                                                    <div class="productIcon">
+                                                        {{!-- <img src="./source/11079_17942.png" alt=""
+                                                            class="productIcon-image"> --}}
+                                                        <span class="productIcon-title">Số lượng: {{productQuantity}}</span>
+                                                    </div>
+                                                    {{!-- <div class="productIcon">
+                                                        <img src="./source/10569_17432.png" alt=""
+                                                            class="productIcon-image">
+                                                        <span class="productIcon-title">IP55 Sweat, Water and Dust
+                                                            Resistant</span>
+                                                    </div>
+                                                    <div class="productIcon">
+                                                        <img src="./source/10570_17433.png" alt=""
+                                                            class="productIcon-image">
+                                                        <span class="productIcon-title">Skull-iQ Smart Feature
+                                                            Technology®</span>
+                                                    </div>
+                                                    <div class="productIcon">
+                                                        <img src="./source/10571_17434.png" alt=""
+                                                            class="productIcon-image">
+                                                        <span class="productIcon-title">Personal Sound by Mimi®</span>
+                                                    </div>
+                                                    <div class="productIcon">
+                                                        <img src="./source/10572_17435.png" alt=""
+                                                            class="productIcon-image">
+                                                        <span class="productIcon-title">Multipoint Pairing</span>
+                                                    </div>
+                                                    <div class="productIcon">
+                                                        <img src="./source/10573_17436.png" alt=""
+                                                            class="productIcon-image">
+                                                        <span class="productIcon-title">Built-In Tile™ Finding
+                                                            Technology</span>
+                                                    </div> --}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <section class="productInTheBox">
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+  {{> footers/page_footer}}
+
+
+    <style>
+        .clyde-fade-in {
+            opacity: 0;
+            -webkit-animation: fadeIn ease-in 1;
+            -moz-animation: fadeIn ease-in 1;
+            animation: fadeIn ease-in 1;
+            -webkit-animation-fill-mode: forwards;
+            -moz-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+            -webkit-animation-duration: .3s;
+            -moz-animation-duration: .3s;
+            animation-duration: .3s;
+        }
+
+        @-webkit-keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @-moz-keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</body>
