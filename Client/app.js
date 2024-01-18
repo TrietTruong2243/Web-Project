@@ -1,14 +1,16 @@
+require('dotenv').config()
 const express= require('express');
 const exphbs=require('express-handlebars');
 const cors=require('cors');
 const app= express();
-const port=3000;
+const port= process.env.PORT;
+const host= process.env.HOSt;
 const bodyParser = require('body-parser');
 // var path = require('path');
 const appRouter = require("./routers/app.r");
 const authRouter = require("./routers/auth.r")
 const flash = require('express-flash');
-require('dotenv').config()
+
 // const cookieParser = require("cookie-parser");
 const session = require('express-session');
 // const https = require('https');
@@ -21,6 +23,7 @@ app.use(bodyParser.json()) // parse application/json
 app.use(flash())
 app.use(cors());
 app.use(express.static(__dirname+'/public'));
+
 app.use(session({
     secret: "thisismysecrctekey",
     saveUninitialized:true,
@@ -38,6 +41,7 @@ app.engine('hbs',exphbs.engine({
     layoutsDir:"views/layouts",
 }));
 app.set('view engine','hbs');
-app.use('/',appRouter);
+app.use('/', appRouter);
 app.use('/auth',authRouter)
-app.listen(port,()=> console.log(`Server listening on port ${port}: localhost:3000`));
+app.listen(port,()=> console.log(`Server listening on port ${port}: http://${host}:${port}`));
+ 

@@ -1,11 +1,13 @@
 require("dotenv").config();
 const app = require('express');
+
 const router = app.Router();
 const appControl = require("../controllers/auth.c");
 const passport = require('passport');
 const bcrypt = require("bcrypt")
 const User = require("../db/db_user_helpers")
 var LocalStrategy = require('passport-local').Strategy;
+router.use(app.static(__dirname+'/../public'));
 router.use(passport.initialize());
 router.use(passport.session());
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
