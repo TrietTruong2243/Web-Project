@@ -1,13 +1,13 @@
 const db = require("../db/db_user_helpers")
 module.exports = {
     addNewUser: async(param)=>{
-        console.log(param);
+      
         const email = param.email_address;
-        const userCheck = db.findUserByEmail(email);
-        
-        if (userCheck)
+        const userCheck = await db.findUserByEmail(email);
+        console.log(userCheck);
+        if (!userCheck)
         {
-            const addUser = db.addNewUser(param);
+            const addUser = await db.addNewUser(param);
             if (addUser)
             {
                 return 1;

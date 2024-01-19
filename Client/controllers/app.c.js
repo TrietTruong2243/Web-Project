@@ -1,46 +1,36 @@
-const model = require("../models/app.m")
-// const passport = require('passport');
-// const app = require('express');
-// var LocalStrategy = require('passport-local').Strategy;
-// // app.use(passport.initialize());
-// // app.use(passport.session());
-// var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
+const model = require("../models/app.m");
+// const { all } = require("../routers/app.r");
 
-// passport.use(new GoogleStrategy({
-//     clientID:     '7818524727-1ia978rpjj26a5ctqvparepfi0oo17ir.apps.googleusercontent.com',
-//     clientSecret: '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',
-//     callbackURL: "http://localhost:3000/auth/google/callback",
-//     passReqToCallback   : true
-//   },
-//   function(request, accessToken, refreshToken, profile, done) {
-//     // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-//     //   return done(err, user);
-//     // });
-//   }
-// ));
-// passport.use(new LocalStrategy(async (username, password, done) => {
-//     // console.log(`username:::${username}, pass::::${ password}`);
-//     const rs = await User.getUserByID(username);
-//     // console.log(rs);
-//     let auth = false;
-//     if (rs) {
-//         auth = await bcrypt.compare(password, rs.MATKHAU);
-//     }
-
-//     if (auth) {
-//         return done(null, rs);
-//     }
-//     // done('invalid auth');
-//     done(null, false, { message: 'bad password' })
-// }));
-// passport.serializeUser((user, done) => done(null, user.MSSV));
-// passport.deserializeUser((username, done) => {
-  
-//     done(null, false)
-// });
 module.exports = {
     homepage: async (req,res)=>{
         res.render("home")
     },
+    getAllCategories: async(req,res)=>{
+        const categories = await model.getAllCategories();
+        const categoryID = categories[0].CategoryID;
+        res.cookie('categoryid',categoryID);
+        res.json({categories: categories})
+    },
+    getAllPageByCategory: async(req,res)=>{
+        const categoryID = req.query.categoryID;
+        const allpage = await  model.getAllPages(categoryID);
+        const firstPage = await model.getProductsByPage(categoryID,1);
+        res.cookie('categoryid',categoryID);
+        res.json({firstPage: firstPage, allpage: allpage})
+    },
+    getProductByPage: async(req,res)=>{
+        const page = req.query.page;
+        const categoryID = req.cookies['categoryid'];
+        const pagedata = await model.getProductsByPage(categoryID,page);
+
+        res.json({pagedata: pagedata})
     
+    },
+    viewProduct: async(req,res)=>{
+        const productID = req.query.id;
+        const product = await model.getProductByID(productID);
+
+        res.render("home", {layout: "product", productName1: product.ProductName ,productImage:product.Image,productName2:product.ProductName ,productPrice: product.Price, 
+        productDescribe: product.Describe, productQuantity: product.InventoryQuantity   })
+    }
 }

@@ -27,25 +27,29 @@
                         <div class="row justify-content-center">
 
                             <div class="col-md-10 col-lg-6 col-xl-6  order-lg-1">
-                                <form class="mx-1 mx-md-4 text-left"  id="signup" method="post">
+                                <form class="mx-1 mx-md-4 text-left" id="signup" method="post">
                                     <div class="d-flex flex-row align-items-center mb-4">
 
-                                         <h2 style="color:red; font: size 20px;" id ="err">
-                                            </h2> 
+                                        <h2 style="color:red; font: size 20px;" id="err">
+                                        </h2>
                                     </div>
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <div class="form-outline flex-fill mb-0">
                                             <label class="form-label" for="form3Example1c">Email Address</label>
 
                                             <input type="email" id="form3Example1c" class="form-control"
-                                                name="email_address" required/>
+                                                name="email_address" />
+                                            <h4 style="color:red" id="email_err"></h4>
+
                                         </div>
                                     </div>
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <div class="form-outline flex-fill mb-0">
                                             <label class="form-label" for="form3Example1c">Name</label>
 
-                                            <input type="text" id="form3Example1c" class="form-control" name="name" required/>
+                                            <input type="text" id="form3Example1c" class="form-control" name="name" />
+                                            <h4 style="color:red" id="name_err"></h4>
+
                                         </div>
                                     </div>
                                     <div class="d-flex flex-row align-items-center mb-4">
@@ -53,7 +57,9 @@
                                             <label class="form-label" for="form3Example1c">Phone number</label>
 
                                             <input type="text" id="form3Example1c" class="form-control"
-                                                name="phone_number" required />
+                                                name="phone_number" />
+                                            <h4 style="color:red" id="phone_number_err"></h4>
+
                                         </div>
                                     </div>
 
@@ -62,7 +68,9 @@
                                             <label class="form-label" for="form3Example1c">Home Address</label>
 
                                             <input type="text" id="form3Example1c" class="form-control"
-                                                name="home_address" required/>
+                                                name="home_address" />
+                                            <h4 style="color:red" id="home_address_err"></h4>
+
                                         </div>
                                     </div>
 
@@ -80,7 +88,9 @@
                                             <label class="form-label" for="form3Example4c">Password</label>
 
                                             <input type="password" id="form3Example4c" class="form-control"
-                                                name="password" required/>
+                                                name="password" />
+                                            <h4 style="color:red" id="pw_err"></h4>
+
                                         </div>
                                     </div>
                                     <div class="d-flex flex-row align-items-center mb-4">
@@ -88,7 +98,8 @@
                                             <label class="form-label" for="form3Example4c">Password Confirm </label>
 
                                             <input type="password" id="form3Example4c" class="form-control"
-                                                name="password_confirm" required />
+                                                name="password_confirm" />
+                                            <h4 style="color:red" id="pw_confirm_err"></h4>
                                         </div>
                                     </div>
 
@@ -133,22 +144,64 @@
     $(document).ready(function () {
         $("#signup").on('submit', function (e) {
             e.preventDefault();
-                const formData = $(this).serialize();
-                $.ajax({
-                    type: 'POST',
-                    url: '/auth/signup',
-                    data: formData,
-                    //dataType: 'string',
-                    success: function(response){
-                
-                        $("#err").text(response)
-                    },
-                    
-                    error: function (err) {
-                        alert("Thêm tài khoản thành công")
-                        window.location.href ="/auth/userinfo"
+            const formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/auth/signup',
+                data: formData,
+                //dataType: 'string',
+                success: function (response) {
+                    $("#err").text("")
+                    $("#email_err").text("")
+                    $("#name_err").text("")
+                    $("#phone_number_err").text("")
+                    $("#home_address_err").text("")
+                    $("#pw_err").text("")
+                    $("#pw_confirm_err").text("")
+                    if (response.err) {
+
+                        const error = response.err;
+                        for (i of error) {
+                            if (i.path === 'email_address') {
+                                $("#email_err").text(i.msg);
+
+                            }
+                            if (i.path === 'name') {
+                                $("#name_err").text(i.msg);
+
+                            }
+                            if (i.path === 'phone_number') {
+                                $("#phone_number_err").text(i.msg);
+
+                            }
+                            if (i.path === 'home_address') {
+                                $("#home_address_err").text(i.msg);
+
+                            }
+                            if (i.path === 'password') {
+                                $("#pw_err").text(i.msg);
+
+                            }
+                            if (i.path === 'password_confirm') {
+                                $("#pw_confirm_err").text(i.msg);
+
+                            }
+                        }
                     }
-                })
+                    else if (response.addErr) {
+                        $("#err").text(response.addErr)
+                    }
+                    else{
+                         alert("Thêm tài khoản thành công")
+                    window.location.href = "/auth/userinfo"
+                    }
+                },
+
+                error: function (err) {
+                    alert("Thêm tài khoản thành công")
+                    window.location.href = "/auth/userinfo"
+                }
+            })
         })
 
     });

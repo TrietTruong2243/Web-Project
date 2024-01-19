@@ -1,10 +1,12 @@
 const userModel = require("../models/user.m")
-module.exports = {
-    accountsettings: async (req, res) => {
 
+module.exports = {
+    
+
+    accountsettings: async (req, res) => {
+        console.log("check");
         const id = req.user.id;
         const user = await userModel.getUserByID(id);
-        console.log(user);
         var jsonfile;
         if (user.IsGoogleAccount === true) {
             jsonfile = `<div class="container h-100">
@@ -94,7 +96,7 @@ module.exports = {
         </div>
     </div>`
         }
-        else{
+        else {
             jsonfile = `<div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-lg-12 col-xl-11">

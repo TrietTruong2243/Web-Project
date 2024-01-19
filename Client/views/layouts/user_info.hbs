@@ -99,7 +99,7 @@
 
 <body class="productlanding US_EN  cookie-message-active   pace-done" id="productlanding">
 
-    
+
 
 
     {{> headers/page_header}}
@@ -120,9 +120,9 @@
 
 
                         </li>
-                     
-                        <li class="navBar-item" id="signout" onclick = "signout()">
-                
+
+                        <li class="navBar-item" id="signout" onclick="signout()">
+
                             <a class="navBar-action" class="p-2" href="/auth/signout">Sign Out</a>
                         </li>
 
@@ -265,15 +265,14 @@
     </div>
 
     {{> footers/page_footer}}
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
     <script>
 
         $(function () {
-            
+
             $(".navBar-item").click(function (e) {
-               
-
                 if (!$(this).hasClass('is-active')) {
-
                     $(".navBar-item.is-active").removeClass("is-active");
                     $(this).addClass("is-active");
                     const id = $(this).attr("id");
@@ -282,14 +281,18 @@
                         $.ajax({
                             type: 'GET',
                             url: '/user/accountsettings',
-                         
                             success: function (data) {
+                                alert("check")
+
                                 $("#content").html(data)
+                            },
+                            error: function(err){
+                                alert("check2")
                             }
                         });
                     }
                     else if (id === "Order") {
-                       e.preventDefault();
+                        e.preventDefault();
                         $.ajax({
                             type: 'GET',
                             url: '/user/order',
@@ -297,23 +300,21 @@
                             success: function (data) {
                             }
                         });
-                    }else if (id === "singout") {
-                       
+                    } else if (id === "singout") {
+
                         $.ajax({
                             type: 'GET',
                             url: '/auth/signout',
-                            data: null,
-                            
+
                         });
                     }
-                    
+
 
 
                 }
             });
         });
     </script>
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
 </body>
 

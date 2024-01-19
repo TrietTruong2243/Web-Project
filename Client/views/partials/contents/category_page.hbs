@@ -1,124 +1,344 @@
- <div class="body" id="main-content">
-    <div class="body-inner">
-      <div class="body-content">
-        <div id="site-wide-promo" class="site-wide-promo" style="display: block;">
-          <a class="site-wide-promo-link" style="background-color:#000000;color:#ffffff">
-            So... This shit cost me 1 hour!. Can you believe that?
-          </a>
-        </div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+{{!--
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+--}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<div class="body" id="main-content">
+  <div class="body-inner">
+    <div class="body-content">
+      <div id="site-wide-promo" class="site-wide-promo" style="display: block;">
+        <a class="site-wide-promo-link" style="background-color:#000000;color:#ffffff">
+          So... This shit cost me 1 hour!. Can you believe that?
+        </a>
+      </div>
 
 
-        <div class="category-container">
-          <div class="category-heading-parent">
-            <div class="category-heading ">
-              <div class="container--narrow">
-                <h1 class="page-heading">
-                  Earbuds
-                </h1>
-                <!-- snippet location categories -->
-              </div>
+      <div class="category-container">
+        <div class="category-heading-parent">
+          <div class="category-heading ">
+            <div class="container--narrow">
+              <h1 class="page-heading" id="heading">
+                
+              </h1>
+              <!-- snippet location categories -->
             </div>
-
           </div>
 
-          <div class="category-main container">
-            <!-- category  -->
-            <div class="category-utility">
-              <div class="category-link-container row">
-                <div class="category-link">
-                  <a href="https://www.skullcandy.com/shop/headphones"
-                    class="button button--full button--secondary">Headphones</a>
-                </div>
-                <div class="category-link">
-                  <a href="https://www.skullcandy.com/shop/speakers"
-                    class="button button--full button--secondary">Speakers</a>
-                </div>
-                <div class="category-link">
-                  <a href="https://www.skullcandy.com/gaming" class="button button--full button--secondary">Gaming</a>
-                </div>
-                <div class="category-link">
-                  <a href="https://www.skullcandy.com/shop/accessories"
-                    class="button button--full button--secondary">Accessories</a>
-                </div>
-              </div>
-              <div class="category-sort-container">
-                <form class="actionBar" method="get" data-sort-by="">
-                  <style>
-                    .category-sort-container .form-field.form-field--select:before {
-                      content: "Sort:"
-                    }
-                  </style>
+        </div>
 
-                  <fieldset class="form-fieldset actionBar-section">
-                    <legend class="is-srOnly">Sort:</legend>
-                    <label class="" for="sort">
-                      <div class="form-field form-field--select">
-                        <select class="form-select" name="sort" id="sort">
-                          <option value="featured" selected="">Featured Items</option>
-                          <option value="newest">Newest Items</option>
-                          <option value="bestselling">Best Selling</option>
-                          <option value="alphaasc">A to Z</option>
-                          <option value="alphadesc">Z to A</option>
-                          <option value="avgcustomerreview">By Review</option>
-                          <option value="priceasc">PRICE LOW TO HIGH</option>
-                          <option value="pricedesc">PRICE HIGH TO LOW</option>
-                        </select>
-                      </div>
-                    </label>
-                  </fieldset>
+        <div class="category-main container">
+          <!-- category  -->
+          <div class="category-utility">
+            <div class="category-sort-container">
+              <form class="actionBar" method="get" data-sort-by="">
+                <style>
+                  .category-sort-container .form-field1.form-field.form-field--select:before {
+                    content: "Loại:"
+                  }
+                </style>
 
-                </form>
-              </div>
+                <fieldset class="form-fieldset actionBar-section">
+                  <legend class="is-srOnly">Loại:</legend>
+                  <label class="" for="categories">
+                    <div class="form-field1 form-field form-field--select">
+                      <select class="form-select" name="categories" id="categories">
+                        {{!-- <option value="featured" selected="">Featured Items</option>
+                        <option value="newest">Newest Items</option>
+                        <option value="bestselling">Best Selling</option>
+                        <option value="alphaasc">A to Z</option>
+                        <option value="alphadesc">Z to A</option>
+                        <option value="avgcustomerreview">By Review</option>
+                        <option value="priceasc">PRICE LOW TO HIGH</option>
+                        <option value="pricedesc">PRICE HIGH TO LOW</option> --}}
+                      </select>
+                    </div>
+                  </label>
+                </fieldset>
+
+              </form>
             </div>
+            <div class="category-link-container row">
 
-            <main class="category-products" id="product-listing-container">
+            </div>
+            <div class="category-sort-container">
+              <form class="actionBar" method="get" data-sort-by="">
+                <style>
+                  .category-sort-container .form-field.form-field--select:before {
+                    content: "Sort:"
+                  }
+                </style>
 
-              <!-- item template here ->  -->
-              <form action="https://www.skullcandy.com/compare" method="POST" data-product-compare="">
-                <div class="productGrid">
-                  <article class="product-card card" data-product-id="392"
-                    data-product-url="https://www.skullcandy.com/shop/earbuds/inkd-plus/">
-                    <div class="card-content" data-ga-name="Ink’d+ Earbuds with Microphone" data-ga-price="17.99"
-                      data-ga-skuid="product-enhanced-full"
-                      data-ga-color="earbuds, earbuds with mic, earbuds with microphone, noise isolating earbuds">
-                      <a href="https://www.skullcandy.com/shop/earbuds/inkd-plus/" class="card-content-inner">
-                        <figure class="card-figure">
-                          <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
-                            src="./resource/c9f4f7654b39e3c01e29a3146f83481093b9663f9fa6b924806eb035e249362b__21647.jpg"
-                            data-load="https://cdn11.bigcommerce.com/s-k11cg5mzh9/stencil/80b40f30-6632-013c-db43-4e33b7865e67/e/2dcfde50-f407-0135-4ccd-525400970412/img/loading.svg"
-                            data-src="https://cdn11.bigcommerce.com/s-k11cg5mzh9/images/stencil/500x659/products/392/145951/c9f4f7654b39e3c01e29a3146f83481093b9663f9fa6b924806eb035e249362b__21647.1701155715.jpg?c=2"
-                            alt="Ink’d+ Earbuds with Microphone" sizes="50px">
-                        </figure>
-                        <div class="product-card-swatch-container swatches-loaded"
-                          data-product-url="https://www.skullcandy.com/shop/earbuds/inkd-plus/">
-                          <ul class="product-card-swatches">
-                            <li class="js-product-card-swatch" tooltip="Black" data-option-id="8239">
-                              <img src="./resource/8239.preview.jpg" alt="Black">
-                            </li>
-                            <li class="js-product-card-swatch" tooltip="Fresh Mint" data-option-id="8179">
-                              <img src="./resource/8179.preview.jpg" alt="Fresh Mint">
-                            </li>
-                          </ul>
-                        </div>
-                        <div class="card-body">
-                          <h4 class="card-title">Ink’d+ Earbuds with Microphone</h4>
-                          <div class="card-text" data-test-info-type="price">
-                            <div class="price-section price-section--withoutTax">
-                              <span data-product-price-without-tax="" class="price price--withoutTax">$17.99</span>
-                            </div>
+                <fieldset class="form-fieldset actionBar-section">
+                  <legend class="is-srOnly">Sort:</legend>
+                  <label class="" for="sort">
+                    <div class="form-field form-field--select">
+                      <select class="form-select" name="sort" id="sort">
+                        <option value="featured" selected="">Featured Items</option>
+                        <option value="newest">Newest Items</option>
+                        <option value="bestselling">Best Selling</option>
+                        <option value="alphaasc">A to Z</option>
+                        <option value="alphadesc">Z to A</option>
+                        <option value="avgcustomerreview">By Review</option>
+                        <option value="priceasc">PRICE LOW TO HIGH</option>
+                        <option value="pricedesc">PRICE HIGH TO LOW</option>
+                      </select>
+                    </div>
+                  </label>
+                </fieldset>
+
+              </form>
+            </div>
+          </div>
+
+          <main class="category-products" id="product-listing-container">
+
+            <!-- item template here ->  -->
+            {{!-- <form action="https://www.skullcandy.com/compare" method="POST" data-product-compare=""> --}}
+              <div class="productGrid" id="products">
+                {{!-- <article class="product-card card">
+                  <div class="card-content">
+                    <a href="/viewproduct" class="card-content-inner">
+                      <figure class="card-figure">
+                        <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                          src="./resource/c9f4f7654b39e3c01e29a3146f83481093b9663f9fa6b924806eb035e249362b__21647.jpg"
+                          alt="" sizes="50px">
+                      </figure>
+                      <div class="product-card-swatch-container swatches-loaded"
+                        data-product-url="https://www.skullcandy.com/shop/earbuds/inkd-plus/">
+                        <ul class="product-card-swatches">
+                          <li class="js-product-card-swatch" tooltip="Black" data-option-id="8239">
+                            <img src="./resource/8239.preview.jpg" alt="Black">
+                          </li>
+                          <li class="js-product-card-swatch" tooltip="Fresh Mint" data-option-id="8179">
+                            <img src="./resource/8179.preview.jpg" alt="Fresh Mint">
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="card-body">
+                        <h4 class="card-title">Ink’d+ Earbuds with Microphone</h4>
+                        <div class="card-text" data-test-info-type="price">
+                          <div class="price-section price-section--withoutTax">
+                            <span data-product-price-without-tax="" class="price price--withoutTax">$17.99</span>
                           </div>
                         </div>
-                      </a>
-                    </div>
-                  </article>
-                </div>
-              </form>
+                      </div>
+                    </a>
+                  </div>
+                </article> --}}
+              </div>
+              <nav aria-label="..." style="height:100px">
+                <ul id="pages" class="pagination d-flex justify-content-center pagination-lg">
+                  {{!-- <li class="page-item active" aria-current="page">
+                    <span class="page-link">1</span>
+                  </li>
+                  <li class="page-item"><span class="page-link" href="#">2</span></li>
+                  <li class="page-item"><span class="page-link" href="#">3</span></li> --}}
+                </ul>
+              </nav>
+              {{!--
+            </form> --}}
 
 
-            </main>
-          </div>
+          </main>
         </div>
-
       </div>
+
     </div>
   </div>
+</div>
+<script>
+  window.onload = function () {
+
+    $.ajax({
+      type: 'GET',
+      url: '/getallcategories',
+      success: function (data) {
+        const categories = data.categories;
+        let category = '';
+        for (let i = 0; i < categories.length; i++) {
+          if (i === 0) {
+            category = category + `<option value="${categories[i].CategoryID}" selected="">${categories[i].CategoryName}</option>`
+            const categoryID = categories[i].CategoryID;
+            $.ajax({
+              type: 'GET',
+              url: '/getallpagebycategory',
+              data: { categoryID: categoryID },
+              success(data) {
+                const allpages = data.allpage;
+                const allProduct = data.firstPage.list;
+                let pagesHTML = '';
+                for (let i = 0; i < allpages.length; i++) {
+                  if (i === 0) {
+                    pagesHTML = pagesHTML + `<li class="page-item active" value = "${allpages[i].value}" aria-current="page">
+                    <span class="page-link">${allpages[i].value}</span>
+                  </li>`
+                  }
+                  else {
+                    pagesHTML = pagesHTML + `<li class="page-item " value = "${allpages[i].value}" >
+                    <span class="page-link">${allpages[i].value}</span>
+                  </li>`
+                  }
+                  const list = document.getElementById("pages");
+                  while (list.hasChildNodes()) {
+                    list.removeChild(list.firstChild);
+                  }
+                  $("#pages").append(pagesHTML)
+                  let productHTML = '';
+                  for (let i of allProduct) {
+                    productHTML = productHTML + `<article class="product-card card" >
+                  <div class="card-content">
+                    <a href="/viewproduct?id=${i.ProductID}" class="card-content-inner">
+                      <figure class="card-figure">
+                        <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                          src="${i.Image}"
+                          alt="${i.Describe}" sizes="50px">
+                      </figure>
+                      <div class="product-card-swatch-container swatches-loaded"
+                  >
+                        
+                      </div>
+                      <div class="card-body">
+                        <h4 class="card-title">${i.ProductName}</h4>
+                        <div class="card-text" data-test-info-type="price">
+                          <div class="price-section price-section--withoutTax">
+                            <span class="price price--withoutTax">${i.Price}đ</span>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </article>`
+                  }
+                  const list1 = document.getElementById("products");
+                  while (list1.hasChildNodes()) {
+                    list1.removeChild(list1.firstChild);
+                  }
+                  $("#products").append(productHTML)
+                }
+              }
+            })
+          }
+          else {
+            category = category + `<option value="${categories[i].CategoryID}">${categories[i].CategoryName}</option>`
+          }
+        }
+        $("#categories").append(category)
+      }
+    })
+  }
+
+</script>
+<script>
+  $("body").delegate(".page-item", "click", function () {
+    if (!$(this).hasClass('active')) {
+      $(".page-item.active").removeClass("active");
+      $(this).addClass("active");
+      const page = $(this).val();
+      $.ajax({
+        type: 'GET',
+        url: '/getproductbypage',
+        data: { page: page },
+        success(data) {
+          const allProduct = data.pagedata.list
+          let productHTML = '';
+          for (let i of allProduct) {
+            productHTML = productHTML + `<article class="product-card card" >
+                  <div class="card-content">
+                    <a href="/viewproduct?id=${i.ProductID}" class="card-content-inner">
+                      <figure class="card-figure">
+                        <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                          src="${i.Image}"
+                          alt="${i.Describe}" sizes="50px">
+                      </figure>
+                      <div class="product-card-swatch-container swatches-loaded"
+                  >
+                        
+                      </div>
+                      <div class="card-body">
+                        <h4 class="card-title">${i.ProductName}</h4>
+                        <div class="card-text" data-test-info-type="price">
+                          <div class="price-section price-section--withoutTax">
+                            <span class="price price--withoutTax">${i.Price}đ</span>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </article>`
+          }
+          const list1 = document.getElementById("products");
+          while (list1.hasChildNodes()) {
+            list1.removeChild(list1.firstChild);
+          }
+          $("#products").append(productHTML)
+        }
+      })
+    }
+  })
+</script>
+<script>
+  $("body").delegate("#categories", "change", function () {
+    const categoryID = $(this).val();
+    $.ajax({
+      type: 'GET',
+      url: '/getallpagebycategory',
+      data: { categoryID: categoryID },
+      success(data) {
+        const allpages = data.allpage;
+        const allProduct = data.firstPage.list;
+        let pagesHTML = '';
+        for (let i = 0; i < allpages.length; i++) {
+          if (i === 0) {
+            pagesHTML = pagesHTML + `<li class="page-item active" value = "${allpages[i].value}" aria-current="page">
+                    <span class="page-link">${allpages[i].value}</span>
+                  </li>`
+          }
+          else {
+            pagesHTML = pagesHTML + `<li class="page-item " value = "${allpages[i].value}" >
+                    <span class="page-link">${allpages[i].value}</span>
+                  </li>`
+          }
+          const list = document.getElementById("pages");
+          while (list.hasChildNodes()) {
+            list.removeChild(list.firstChild);
+          }
+          $("#pages").append(pagesHTML)
+          let productHTML = '';
+          for (let i of allProduct) {
+            productHTML = productHTML + `<article class="product-card card" >
+                  <div class="card-content">
+                    <a href="/viewproduct?id=${i.ProductID}" class="card-content-inner">
+                      <figure class="card-figure">
+                        <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                          src="${i.Image}"
+                          alt="${i.Describe}" sizes="50px">
+                      </figure>
+                      <div class="product-card-swatch-container swatches-loaded"
+                  >
+                        
+                      </div>
+                      <div class="card-body">
+                        <h4 class="card-title">${i.ProductName}</h4>
+                        <div class="card-text" data-test-info-type="price">
+                          <div class="price-section price-section--withoutTax">
+                            <span class="price price--withoutTax">${i.Price}đ</span>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </article>`
+          }
+          const list1 = document.getElementById("products");
+          while (list1.hasChildNodes()) {
+            list1.removeChild(list1.firstChild);
+          }
+          $("#products").append(productHTML)
+        }
+      }
+    })
+  });
+</script>

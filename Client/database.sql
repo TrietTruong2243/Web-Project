@@ -7,6 +7,7 @@ CREATE TABLE "Customer"
     "HomeAddress" VARCHAR(255),
     "Email" VARCHAR(100),
     "Password" VARCHAR(255)
+    "IsGoogleAccount" BOOLEAN
 );
 
 CREATE TABLE "Admin"

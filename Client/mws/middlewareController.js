@@ -3,7 +3,7 @@ require('dotenv').config();
 const middlewareController = {
     //verifyToken
     verifyToken: (req, res, next) => {
-        
+
         const token = req.cookies.token;
         if (token) {
             const accessToken = token;
@@ -14,9 +14,10 @@ const middlewareController = {
                     res.redirect('/auth/signin')
                 }
                 else{
-                    
                     req.user = user;
-                    next()
+                    console.log("object");
+                    return next();
+                    
                 }
                 
 
@@ -27,8 +28,9 @@ const middlewareController = {
             res.redirect('/auth/signin')
            // res.status(481).json("You're not authenticated");
         }
-       
-           
+         
+        
+
     }
 
 }
