@@ -21,7 +21,7 @@
           <div class="category-heading ">
             <div class="container--narrow">
               <h1 class="page-heading" id="heading">
-                
+
               </h1>
               <!-- snippet location categories -->
             </div>
@@ -67,23 +67,19 @@
               <form class="actionBar" method="get" data-sort-by="">
                 <style>
                   .category-sort-container .form-field.form-field--select:before {
-                    content: "Sort:"
+                    content: "Lọc:"
                   }
                 </style>
 
                 <fieldset class="form-fieldset actionBar-section">
-                  <legend class="is-srOnly">Sort:</legend>
-                  <label class="" for="sort">
+                  <legend class="is-srOnly">Lọc sản phẩm:</legend>
+                  <label class="" for="filter">
                     <div class="form-field form-field--select">
-                      <select class="form-select" name="sort" id="sort">
-                        <option value="featured" selected="">Featured Items</option>
-                        <option value="newest">Newest Items</option>
-                        <option value="bestselling">Best Selling</option>
-                        <option value="alphaasc">A to Z</option>
-                        <option value="alphadesc">Z to A</option>
-                        <option value="avgcustomerreview">By Review</option>
-                        <option value="priceasc">PRICE LOW TO HIGH</option>
-                        <option value="pricedesc">PRICE HIGH TO LOW</option>
+                      <select class="form-select" name="filter" id="filter">
+                        <option value="default" selected="">Mặc định</option>
+                        <option value="under1">Dưới 1.000.000đ</option>
+                        <option value="under3">Trên 1.000.000đ và dưới 3.000.000đ </option>
+                        <option value="over3">Trên 3.000.000đ</option>
                       </select>
                     </div>
                   </label>
@@ -236,11 +232,14 @@
     if (!$(this).hasClass('active')) {
       $(".page-item.active").removeClass("active");
       $(this).addClass("active");
+      const category = $("#categories").val();
       const page = $(this).val();
+      const filter = $("#filter").val();
+
       $.ajax({
         type: 'GET',
         url: '/getproductbypage',
-        data: { page: page },
+        data: { page: page, category: category,filter: filter },
         success(data) {
           const allProduct = data.pagedata.list
           let productHTML = '';
@@ -282,6 +281,7 @@
 <script>
   $("body").delegate("#categories", "change", function () {
     const categoryID = $(this).val();
+    
     $.ajax({
       type: 'GET',
       url: '/getallpagebycategory',
@@ -301,14 +301,19 @@
                     <span class="page-link">${allpages[i].value}</span>
                   </li>`
           }
-          const list = document.getElementById("pages");
-          while (list.hasChildNodes()) {
-            list.removeChild(list.firstChild);
-          }
-          $("#pages").append(pagesHTML)
-          let productHTML = '';
-          for (let i of allProduct) {
-            productHTML = productHTML + `<article class="product-card card" >
+        }
+        if (pagesHTML==='')
+        {
+          pagesHTML = '<h4>Không có sản phẩm phù hợp </h4>'
+        }
+        const list = document.getElementById("pages");
+        while (list.hasChildNodes()) {
+          list.removeChild(list.firstChild);
+        }
+        $("#pages").append(pagesHTML)
+        let productHTML = '';
+        for (let i of allProduct) {
+          productHTML = productHTML + `<article class="product-card card" >
                   <div class="card-content">
                     <a href="/viewproduct?id=${i.ProductID}" class="card-content-inner">
                       <figure class="card-figure">
@@ -331,14 +336,86 @@
                     </a>
                   </div>
                 </article>`
-          }
-          const list1 = document.getElementById("products");
-          while (list1.hasChildNodes()) {
-            list1.removeChild(list1.firstChild);
-          }
-          $("#products").append(productHTML)
         }
+        const list1 = document.getElementById("products");
+        while (list1.hasChildNodes()) {
+          list1.removeChild(list1.firstChild);
+        }
+        $("#products").append(productHTML)
+        $("#filter").val("default");
+
       }
     })
   });
+</script>
+<script>
+  $("body").delegate("#filter", "change", function () {
+
+    const filter = $("#filter").val();
+    const categoryID = $("#categories").val();
+    $.ajax({
+      type: 'GET',
+      url: '/getallpagebyfilter',
+      data: { categoryID: categoryID, filter: filter },
+      success(data) {
+       const allpages = data.allpage;
+        const allProduct = data.firstPage.list;
+        let pagesHTML = '';
+        for (let i = 0; i < allpages.length; i++) {
+          if (i === 0) {
+            pagesHTML = pagesHTML + `<li class="page-item active" value = "${allpages[i].value}" aria-current="page">
+                    <span class="page-link">${allpages[i].value}</span>
+                  </li>`
+          }
+          else {
+            pagesHTML = pagesHTML + `<li class="page-item " value = "${allpages[i].value}" >
+                    <span class="page-link">${allpages[i].value}</span>
+                  </li>`
+          }
+        }
+        if (pagesHTML==='')
+        {
+          pagesHTML = '<h4>Không có sản phẩm phù hợp </h4>'
+        }
+        const list = document.getElementById("pages");
+        while (list.hasChildNodes()) {
+          list.removeChild(list.firstChild);
+        }
+        $("#pages").append(pagesHTML)
+        let productHTML = '';
+        for (let i of allProduct) {
+          productHTML = productHTML + `<article class="product-card card" >
+                  <div class="card-content">
+                    <a href="/viewproduct?id=${i.ProductID}" class="card-content-inner">
+                      <figure class="card-figure">
+                        <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                          src="${i.Image}"
+                          alt="${i.Describe}" sizes="50px">
+                      </figure>
+                      <div class="product-card-swatch-container swatches-loaded"
+                  >
+                        
+                      </div>
+                      <div class="card-body">
+                        <h4 class="card-title">${i.ProductName}</h4>
+                        <div class="card-text" data-test-info-type="price">
+                          <div class="price-section price-section--withoutTax">
+                            <span class="price price--withoutTax">${i.Price}đ</span>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </article>`
+        }
+        const list1 = document.getElementById("products");
+        while (list1.hasChildNodes()) {
+          list1.removeChild(list1.firstChild);
+        }
+        $("#products").append(productHTML)
+      
+        
+      }
+    })
+  })
 </script>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <style>
+    #dg-chat-iframe {
+      position: absolute;
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+      top: 0;
+      left: 0;
+      border: none;
+      display: block;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    #dg-chat-container {
+      position: relative;
+      z-index: 2147483647;
+    }
+
+    #dg-chat-widget {
+      position: fixed;
+      width: 100%;
+      right: 20px;
+      bottom: 20px;
+      max-width: 375px;
+      height: 90%;
+      max-height: 650px;
+      min-height: 570px;
+      box-shadow: rgb(0 0 0 / 12%) 0 12px 48px 4px;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    @media only screen and (max-width: 800px) {
+      #dg-chat-widget {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        width: 100%;
+        max-width: initial;
+        max-height: initial;
+        border-radius: 0;
+      }
+    }
+
+    #dg-chat-widget-launcher {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      height: 65px;
+      width: 65px;
+    }
+
+    #dg-chat-widget-proactive {
+      position: fixed;
+      right: 20px;
+      bottom: 90px;
+    }
+  </style>
+  <title>Earbuds</title>
+
+
+  <!-- Windows 8 IE 10-->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <link href="./resource/theme-8c4df980-6632-013c-f3de-5e0f1ae9fa0d.css" rel="stylesheet">
+  <style type="text/css">
+    #dg-chat-container {
+      display: none;
+    }
+  </style>
+
+  <link type="text/css" rel="stylesheet" href="./resource/widget.css">
+</head>
+
+<body class="productlanding US_EN  cookie-message-active   pace-done" id="productlanding" >
+
+  <!-- icons -->
+      <!-- navbar Icons -->
+    
+<!-- header -->
+ {{> headers/page_header}}
+<!-- body -->
+ 
+{{> contents/search_page}}
+<!-- footer -->
+  {{> footers/page_footer}}
+</body>
+
+</html>

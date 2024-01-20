@@ -1,0 +1,367 @@
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+
+
+<div class="body" id="main-content">
+    <div class="body-inner">
+        <div class="body-content">
+            <div id="site-wide-promo" class="site-wide-promo" style="display: block;">
+                <a class="site-wide-promo-link" style="background-color:#000000;color:#ffffff">
+                </a>
+            </div>
+
+
+            <div class="category-container">
+                <div class="category-heading-parent">
+                    <div class="category-heading ">
+                        <div class="container--narrow">
+                            <form class="d-flex" id="search_form">
+                                <div class="input-group">
+                                    <input type="search" class="form-control rounded" placeholder="Search"
+                                        aria-label="Search" aria-describedby="search-addon" name="value"
+                                        id="search_value" />
+                                    <button id="search-button" type="submit" class="btn btn-primary">
+                                        Search
+                                    </button>
+                                </div>
+                            </form>
+                            <!-- snippet location categories -->
+                        </div>
+                    </div>
+
+                </div>
+                <h4 class="text-center" id="findQuery"> </h4>
+                <div class="category-main container">
+
+                    <main class="category-products" id="product-listing-container">
+
+                        <!-- item template here ->  -->
+                        <div class="productGrid" id="products">
+                            {{!-- <article class="product-card card">
+                                <div class="card-content">
+                                    <a href="/viewproduct" class="card-content-inner">
+                                        <figure class="card-figure">
+                                            <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                                                src="./resource/c9f4f7654b39e3c01e29a3146f83481093b9663f9fa6b924806eb035e249362b__21647.jpg"
+                                                alt="" sizes="50px">
+                                        </figure>
+                                        <div class="product-card-swatch-container swatches-loaded"
+                                            data-product-url="https://www.skullcandy.com/shop/earbuds/inkd-plus/">
+                                            <ul class="product-card-swatches">
+                                                <li class="js-product-card-swatch" tooltip="Black"
+                                                    data-option-id="8239">
+                                                    <img src="./resource/8239.preview.jpg" alt="Black">
+                                                </li>
+                                                <li class="js-product-card-swatch" tooltip="Fresh Mint"
+                                                    data-option-id="8179">
+                                                    <img src="./resource/8179.preview.jpg" alt="Fresh Mint">
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="card-body">
+                                            <h4 class="card-title">Ink’d+ Earbuds with Microphone</h4>
+                                            <div class="card-text" data-test-info-type="price">
+                                                <div class="price-section price-section--withoutTax">
+                                                    <span data-product-price-without-tax=""
+                                                        class="price price--withoutTax">$17.99</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </article> --}}
+                        </div>
+                        <nav aria-label="..." style="height:100px">
+                            <ul id="pages" class="pagination d-flex justify-content-center pagination-lg">
+                                {{!-- <li class="page-item active" aria-current="page">
+                                    <span class="page-link">1</span>
+                                </li>
+                                <li class="page-item"><span class="page-link" href="#">2</span></li>
+                                <li class="page-item"><span class="page-link" href="#">3</span></li> --}}
+                            </ul>
+                        </nav>
+
+
+
+                    </main>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+
+        $('#search_form').submit(function (e) {
+            e.preventDefault();
+            const value = $("#search_value").val();
+
+            $("#findQuery").text("Kết quả tìm kiếm cho: " + value)
+            $("#findQuery").val(value)
+            $.ajax({
+                type: 'GET',
+                url: '/getsearchproduct',
+                data: { value: value },
+                success(data) {
+                    const allpages = data.allpage;
+                    const allProduct = data.firstPage.list;
+                    let pagesHTML = '';
+                    for (let i = 0; i < allpages.length; i++) {
+                        if (i === 0) {
+                            pagesHTML = pagesHTML + `<li class="page-item active" value = "${allpages[i].value}" aria-current="page">
+                  <span class="page-link">${allpages[i].value}</span>
+                </li>`
+                        }
+                        else {
+                            pagesHTML = pagesHTML + `<li class="page-item " value = "${allpages[i].value}" >
+                  <span class="page-link">${allpages[i].value}</span>
+                </li>`
+                        }
+                        const list = document.getElementById("pages");
+                        while (list.hasChildNodes()) {
+                            list.removeChild(list.firstChild);
+                        }
+                        $("#pages").append(pagesHTML)
+                        let productHTML = '';
+                        for (let i of allProduct) {
+                            productHTML = productHTML + `<article class="product-card card" >
+                <div class="card-content">
+                  <a href="/viewproduct?id=${i.ProductID}" class="card-content-inner">
+                    <figure class="card-figure">
+                      <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                        src="${i.Image}"
+                        alt="${i.Describe}" sizes="50px">
+                    </figure>
+                    <div class="product-card-swatch-container swatches-loaded"
+                >
+                      
+                    </div>
+                    <div class="card-body">
+                      <h4 class="card-title">${i.ProductName}</h4>
+                      <div class="card-text" data-test-info-type="price">
+                        <div class="price-section price-section--withoutTax">
+                          <span class="price price--withoutTax">${i.Price}đ</span>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </article>`
+                        }
+                        const list1 = document.getElementById("products");
+                        while (list1.hasChildNodes()) {
+                            list1.removeChild(list1.firstChild);
+                        }
+                        $("#products").append(productHTML)
+                    }
+                }
+            })
+        })
+    })
+</script>
+
+{{!--
+<script>
+    window.onload = function () {
+
+        $.ajax({
+            type: 'GET',
+            url: '/getallcategories',
+            success: function (data) {
+                const categories = data.categories;
+                let category = '';
+                for (let i = 0; i < categories.length; i++) {
+                    if (i === 0) {
+                        category = category + `<option value="${categories[i].CategoryID}" selected="">${categories[i].CategoryName}</option>`
+                        const categoryID = categories[i].CategoryID;
+                        $.ajax({
+                            type: 'GET',
+                            url: '/getallpagebycategory',
+                            data: { categoryID: categoryID },
+                            success(data) {
+                                const allpages = data.allpage;
+                                const allProduct = data.firstPage.list;
+                                let pagesHTML = '';
+                                for (let i = 0; i < allpages.length; i++) {
+                                    if (i === 0) {
+                                        pagesHTML = pagesHTML + `<li class="page-item active" value = "${allpages[i].value}" aria-current="page">
+                  <span class="page-link">${allpages[i].value}</span>
+                </li>`
+                                    }
+                                    else {
+                                        pagesHTML = pagesHTML + `<li class="page-item " value = "${allpages[i].value}" >
+                  <span class="page-link">${allpages[i].value}</span>
+                </li>`
+                                    }
+                                    const list = document.getElementById("pages");
+                                    while (list.hasChildNodes()) {
+                                        list.removeChild(list.firstChild);
+                                    }
+                                    $("#pages").append(pagesHTML)
+                                    let productHTML = '';
+                                    for (let i of allProduct) {
+                                        productHTML = productHTML + `<article class="product-card card" >
+                <div class="card-content">
+                  <a href="/viewproduct?id=${i.ProductID}" class="card-content-inner">
+                    <figure class="card-figure">
+                      <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                        src="${i.Image}"
+                        alt="${i.Describe}" sizes="50px">
+                    </figure>
+                    <div class="product-card-swatch-container swatches-loaded"
+                >
+                      
+                    </div>
+                    <div class="card-body">
+                      <h4 class="card-title">${i.ProductName}</h4>
+                      <div class="card-text" data-test-info-type="price">
+                        <div class="price-section price-section--withoutTax">
+                          <span class="price price--withoutTax">${i.Price}đ</span>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </article>`
+                                    }
+                                    const list1 = document.getElementById("products");
+                                    while (list1.hasChildNodes()) {
+                                        list1.removeChild(list1.firstChild);
+                                    }
+                                    $("#products").append(productHTML)
+                                }
+                            }
+                        })
+                    }
+                    else {
+                        category = category + `<option value="${categories[i].CategoryID}">${categories[i].CategoryName}</option>`
+                    }
+                }
+                $("#categories").append(category)
+            }
+        })
+    }
+
+</script> --}}
+<script>
+    $("body").delegate(".page-item", "click", function () {
+        if (!$(this).hasClass('active')) {
+            $(".page-item.active").removeClass("active");
+            $(this).addClass("active");
+            const value = $("#findQuery").val();
+            const page = $(this).val();
+            $.ajax({
+                type: 'GET',
+                url: '/getfindproductbypage',
+                data: { value: value, page: page },
+                success(data) {
+                    const allProduct = data.pagedata.list
+                    let productHTML = '';
+                    for (let i of allProduct) {
+                        productHTML = productHTML + `<article class="product-card card" >
+                <div class="card-content">
+                  <a href="/viewproduct?id=${i.ProductID}" class="card-content-inner">
+                    <figure class="card-figure">
+                      <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                        src="${i.Image}"
+                        alt="${i.Describe}" sizes="50px">
+                    </figure>
+                    <div class="product-card-swatch-container swatches-loaded"
+                >
+                      
+                    </div>
+                    <div class="card-body">
+                      <h4 class="card-title">${i.ProductName}</h4>
+                      <div class="card-text" data-test-info-type="price">
+                        <div class="price-section price-section--withoutTax">
+                          <span class="price price--withoutTax">${i.Price}đ</span>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </article>`
+                    }
+                    const list1 = document.getElementById("products");
+                    while (list1.hasChildNodes()) {
+                        list1.removeChild(list1.firstChild);
+                    }
+                    $("#products").append(productHTML)
+                }
+            })
+        }
+    })
+</script>
+{{!--
+<script>
+    $("body").delegate("#categories", "change", function () {
+        const categoryID = $(this).val();
+        $.ajax({
+            type: 'GET',
+            url: '/getallpagebycategory',
+            data: { categoryID: categoryID },
+            success(data) {
+                const allpages = data.allpage;
+                const allProduct = data.firstPage.list;
+                let pagesHTML = '';
+                for (let i = 0; i < allpages.length; i++) {
+                    if (i === 0) {
+                        pagesHTML = pagesHTML + `<li class="page-item active" value = "${allpages[i].value}" aria-current="page">
+                  <span class="page-link">${allpages[i].value}</span>
+                </li>`
+                    }
+                    else {
+                        pagesHTML = pagesHTML + `<li class="page-item " value = "${allpages[i].value}" >
+                  <span class="page-link">${allpages[i].value}</span>
+                </li>`
+                    }
+                    const list = document.getElementById("pages");
+                    while (list.hasChildNodes()) {
+                        list.removeChild(list.firstChild);
+                    }
+                    $("#pages").append(pagesHTML)
+                    let productHTML = '';
+                    for (let i of allProduct) {
+                        productHTML = productHTML + `<article class="product-card card" >
+                <div class="card-content">
+                  <a href="/viewproduct?id=${i.ProductID}" class="card-content-inner">
+                    <figure class="card-figure">
+                      <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                        src="${i.Image}"
+                        alt="${i.Describe}" sizes="50px">
+                    </figure>
+                    <div class="product-card-swatch-container swatches-loaded"
+                >
+                      
+                    </div>
+                    <div class="card-body">
+                      <h4 class="card-title">${i.ProductName}</h4>
+                      <div class="card-text" data-test-info-type="price">
+                        <div class="price-section price-section--withoutTax">
+                          <span class="price price--withoutTax">${i.Price}đ</span>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </article>`
+                    }
+                    const list1 = document.getElementById("products");
+                    while (list1.hasChildNodes()) {
+                        list1.removeChild(list1.firstChild);
+                    }
+                    $("#products").append(productHTML)
+                }
+            }
+        })
+    }); --}}
+</script>

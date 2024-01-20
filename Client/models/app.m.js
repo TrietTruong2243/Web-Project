@@ -6,15 +6,16 @@ module.exports = {
         const allcategories = await categoryDB.getAllCategories();
         return allcategories
     },
-    getAllPages: async (categoryID) => {
-        const allProduct = await productDB.getProductsByCategory(categoryID);
+    getAllPages: async (categoryID,filter) => {
+        const allProduct = await productDB.getProductsByCategory(categoryID,filter);
+     
         const result = Math.ceil(Object.keys(allProduct).length * 1.0 / 3);
 
         return (Array.from({ length: result }, (_, i) => new Object({ value: i + 1, current: false })));
 
     },
-    getProductsByPage: async (categoryID, page) => {
-        const allProduct = await productDB.getProductsByCategory(categoryID);
+    getProductsByPage: async (categoryID, page,filter) => {
+        const allProduct = await productDB.getProductsByCategory(categoryID,filter);
         const result = {
             list: [],
             current: page
@@ -47,5 +48,56 @@ module.exports = {
             product.Image = ""
         }
         return product;
+    },
+    getAllFindPage: async(value)=>{
+        const allFindProduct = await productDB.findProductsByValue(value);
+        const result = Math.ceil(Object.keys(allFindProduct).length * 1.0 / 3);
+        return (Array.from({ length: result }, (_, i) => new Object({ value: i + 1, current: false })));
+       
+    },
+    getProductFindPage: async (value,page) =>{
+        const allFindProduct = await productDB.findProductsByValue(value);
+        const result = {
+            list: [],
+            current: page
+        };
+        for (let i=3 ; i > 0; i--)
+        {
+            if (allFindProduct[3*page -i])
+            {
+                const image = await imageDB.getImageSrcByProductID(allFindProduct[3*page -i].ProductID);
+                if (image)
+                {
+                    allFindProduct[3*page -i].Image  = image.Path;
+                }
+                else{
+                    allFindProduct[3*page -i].Image =""
+                }
+                result.list.push(allFindProduct[3*page -i]);
+                
+            }
+        }
+        return result
+    },
+    getRelatedProduct: async(productID)=>{
+        const result =[]
+        const categoryID = (await productDB.getProductByID(productID)).CategoryID;
+        const relatedProduct = await productDB.getRelatedProduct(productID,categoryID);
+        for (let i=0; i  < 4 ; i++)
+        {
+            if (relatedProduct[i])
+            {
+                const image = await imageDB.getImageSrcByProductID(relatedProduct[i].ProductID);
+                if (image)
+                {
+                    relatedProduct[i].Image  = image.Path;
+                }
+                else{
+                    relatedProduct[i].Image =""
+                }
+                result.push(relatedProduct[i]);
+            }
+        }
+        return result
     }
 }

@@ -12,18 +12,50 @@ const db = new pg.Client({
 });
 db.connect();
 module.exports = {
-    getProductsByCategory: async (id)=>{
-        const query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}'`
+    getProductsByCategory: async (id, filter = "default") => {
+        var query
+        switch (filter) {
+            case "default":
+                query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}'`
+                break;
+            case "under1":
+                query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}' AND "Price" <= '1000000'`
+
+                break;
+            case "under3":
+                query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}' AND "Price" > '1000000' AND "Price" <='3000000'`
+
+                break;
+            case "over3":
+                query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}' AND "Price" > '3000000'`
+
+                break;
+        }
+        //const query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}'`
         // console.log(query);
         const result = await db.query(query);
         // Check if any rows were returned
-        return result.rows; 
+        return result.rows;
     },
-    getProductByID: async (id)=>{
+    getProductByID: async (id) => {
         const query = `SELECT * FROM public."${table}" WHERE "ProductID" ='${id}'`
         // console.log(query);
         const result = await db.query(query);
         // Check if any rows were returned
-        return result.rows[0]; 
+        return result.rows[0];
+    },
+    findProductsByValue: async (value) => {
+        const query = `SELECT * FROM public."${table}" WHERE "ProductName" LIKE '%${value}%'`
+        console.log(query);
+        const result = await db.query(query);
+        // Check if any rows were returned
+        return result.rows;
+    },
+    getRelatedProduct: async (productID, categoryID) => {
+        const query = `SELECT * FROM public."${table}" WHERE "ProductID" != '${productID}' AND "CategoryID" = '${categoryID}'`
+
+        const result = await db.query(query);
+        // Check if any rows were returned
+        return result.rows;
     }
 }
