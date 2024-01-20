@@ -282,12 +282,10 @@
                             type: 'GET',
                             url: '/user/accountsettings',
                             success: function (data) {
-                                alert("check")
 
                                 $("#content").html(data)
                             },
-                            error: function(err){
-                                alert("check2")
+                            error: function (err) {
                             }
                         });
                     }
@@ -300,7 +298,7 @@
                             success: function (data) {
                             }
                         });
-                    } else if (id === "singout") {
+                    } else if (id === "signout") {
 
                         $.ajax({
                             type: 'GET',
@@ -315,7 +313,127 @@
             });
         });
     </script>
+    <script>
+        $("body").delegate("#gguserinfo", "submit", function (e) {
+            e.preventDefault()
+            const formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/user/changegguserinfo',
+                data: formData,
+                //dataType: 'string',
+                success: function (response) {
+                    $("#success").text("")
+                    $("#err").text("")
+                    $("#email_err").text("")
+                    $("#name_err").text("")
+                    $("#phone_number_err").text("")
+                    $("#home_address_err").text("")
 
+                    if (response.err) {
+
+                        const error = response.err;
+                        for (i of error) {
+                            if (i.path === 'email_address') {
+                                $("#email_err").text(i.msg);
+
+                            }
+                            if (i.path === 'name') {
+                                $("#name_err").text(i.msg);
+
+                            }
+                            if (i.path === 'phone_number') {
+                                $("#phone_number_err").text(i.msg);
+
+                            }
+                            if (i.path === 'home_address') {
+                                $("#home_address_err").text(i.msg);
+
+                            }
+                            
+                        }
+                    }
+                    else if (response.addErr) {
+                        $("#err").text(response.addErr)
+                    }
+                    else {
+                    $("#success").text(response.success)
+
+                    }
+                },
+
+                error: function (err) {
+                }
+            })
+        })
+    </script>
+    <script>
+        $("body").delegate("#userinfo", "submit", function (e) {
+            e.preventDefault()
+
+            const formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/user/changeuserinfo',
+                data: formData,
+                //dataType: 'string',
+                success: function (response) {
+                    $("#success").text("")
+                    $("#err").text("")
+                    $("#email_err").text("")
+                    $("#name_err").text("")
+                    $("#phone_number_err").text("")
+                    $("#home_address_err").text("")
+                    $("#pw_err").text("")
+                    $("#pw_confirm_err").text("")
+                    if (response.err) {
+
+                        const error = response.err;
+                        for (i of error) {
+                            if (i.path === 'email_address') {
+                                $("#email_err").text(i.msg);
+
+                            }
+                            if (i.path === 'name') {
+                                $("#name_err").text(i.msg);
+
+                            }
+                            if (i.path === 'phone_number') {
+                                $("#phone_number_err").text(i.msg);
+
+                            }
+                            if (i.path === 'home_address') {
+                                $("#home_address_err").text(i.msg);
+
+                            }
+                            if (i.path === 'password') {
+                                $("#pw_err").text(i.msg);
+
+                            }
+                            if (i.path === 'password_confirm') {
+                                $("#pw_confirm_err").text(i.msg);
+
+                            }
+                            if (i.path === 'current_password') {
+                                $("#pw_current_err").text(i.msg);
+
+                            }
+                        }
+                    }
+                    else if (response.addErr) {
+                        $("#err").text(response.addErr)
+                    }
+                    else {
+                    $("#success").text(response.success)
+
+                    }
+                },
+
+                error: function (err) {
+                }
+            })
+        })
+    </script>
 </body>
 
 

@@ -41,6 +41,19 @@ module.exports = {
         const values = [param.id,param.email, 1];
         const data =  db.query(query, values);
         return data;
+    },  
+    updateUser: async(id, userinfo)=>{
+        const query = `UPDATE public."Customer"
+        SET "CustomerName"='${userinfo.name}', "PhoneNumber"='${userinfo.phone_number}', "HomeAddress"='${userinfo.home_address}', "Email"='${userinfo.email_address}', "Password"='${userinfo.password}'
+        WHERE  "CustomerID"='${id}' RETURNING "CustomerID";`
+        const data = await  db.query(query);
+        return data;
     },
-    
+    updateGGUser: async(id, userinfo)=>{
+        const query = `UPDATE public."Customer"
+        SET  "CustomerName"='${userinfo.name}', "PhoneNumber"='${userinfo.phone_number}', "HomeAddress"= '${userinfo.home_address}' 
+        WHERE "CustomerID"='${id}' RETURNING "CustomerID";`
+        const data = await  db.query(query);
+        return data;
+    }
 }

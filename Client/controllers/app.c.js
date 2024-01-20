@@ -28,11 +28,18 @@ module.exports = {
     
     },
     viewProduct: async(req,res)=>{
+        if (req.user)
+        {
+            isDisabled = false;
+        }
+        else{
+            isDisabled =true;
+        }
         const productID = req.query.id;
         const product = await model.getProductByID(productID);
         const relatedProduct = await model.getRelatedProduct(productID);
         res.render("home", {layout: "product", productName1: product.ProductName ,productImage:product.Image,productName2:product.ProductName ,productPrice: product.Price, 
-        productDescribe: product.Describe, productQuantity: product.InventoryQuantity,relatedProduct: relatedProduct   })
+        productDescribe: product.Describe, productQuantity: product.InventoryQuantity,relatedProduct: relatedProduct,isDisabled: isDisabled   })
     },
     search: async(req,res)=>{
         res.render("home", {layout: "search"})

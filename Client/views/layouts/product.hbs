@@ -162,7 +162,11 @@
                                                 <div class="form-action productView-addToCartButton">
                                                     <button id="form-action-addToCart"
                                                         class="product-button--action button button--info js-button--addToCart"
-                                                        type="submit">Add to Cart</button>
+                                                        type="submit" 
+                                                        {{#if isDisabled}}
+                                                        disabled
+                                                        {{/if}}
+                                                        >Add to Cart</button>
                                                 </div>
                                     </div>
                                     </form>
