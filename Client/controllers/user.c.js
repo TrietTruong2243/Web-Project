@@ -36,7 +36,7 @@ module.exports = {
 
                                             <input type="text" id="form3Example1c" class="form-control"
                                                 name="email_address" value="${user.Email || ""}" readonly />
-                                                <h4 style="color:red" id="email_err"></h4>
+                                                <h4 style="color:red" id="email_err"> Không thể sửa email do đây là tài khoản đăng nhập bằng google</h4>
 
                                         </div>
                                     </div>
@@ -261,16 +261,15 @@ module.exports = {
     },
     changeUserInfo: async (req, res) => {
         var err1 = validationResult(req);
+      
         const userID = req.user.id;
-        console.log(err1);
+        
         if (err1.errors.length)
         {
-            console.log("check");
             res.json({err: err1.errors})
         }
         else{
             const changeUserInfo = await userModel.changeUserInfo(userID, req.body);
-            console.log(changeUserInfo);
             var err;
             switch (changeUserInfo) {
                 case -1:
@@ -314,7 +313,43 @@ module.exports = {
     },
     changeGGUserInfo: async (req, res) => {
         var err1 = validationResult(req);
+        
         const userID = req.user.id;
+     
+        if (err1.errors.length)
+        {
+            res.json({err: err1.errors})
+        }
+        else{
+            const changeUserInfo = await userModel.changeGGUserInfo(userID, req.body);
+
+            // const addUser = await model.addNewUser(req.body);
+            var err;
+            switch (changeUserInfo) {
+                
+                case 0:
+                    err = "Có lỗi, không thể chỉnh sửa thông tin"
+                    break;
+                case 1:
+                    break;
+            }
+            if (err)
+            {
+                res.json({addErr: err});
+
+            }else{
+                res.json({success: "Chỉnh sửa thông tin thành công"})
+            }
+    
+        }
+
+
+    },
+    addGGUserInfo: async (req, res) => {
+        var err1 = validationResult(req);
+        const email = req.cookies['email'];
+        const user = await userModel.getUserByEmail(email);
+        const userID = user.CustomerID;
      
         if (err1.errors.length)
         {

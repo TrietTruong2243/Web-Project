@@ -38,7 +38,7 @@ module.exports = {
         const productID = req.query.id;
         const product = await model.getProductByID(productID);
         const relatedProduct = await model.getRelatedProduct(productID);
-        res.render("home", {layout: "product", productName1: product.ProductName ,productImage:product.Image,productName2:product.ProductName ,productPrice: product.Price, 
+        res.render("home", {layout: "product", productName1: product.ProductName ,productImage:product.Image,productID: product.ProductID,productName2:product.ProductName ,productPrice: product.Price, 
         productDescribe: product.Describe, productQuantity: product.InventoryQuantity,relatedProduct: relatedProduct,isDisabled: isDisabled   })
     },
     search: async(req,res)=>{
@@ -61,7 +61,6 @@ module.exports = {
         const categoryID = req.query.categoryID;
         const allpage = await  model.getAllPages(categoryID,filter);
         const firstPage = await model.getProductsByPage(categoryID,1,filter);
-        console.log(firstPage);
         res.json({firstPage: firstPage, allpage: allpage})
 
     }

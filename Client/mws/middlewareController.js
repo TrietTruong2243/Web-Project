@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
+const userDB = require("../db/db_user_helpers")
 require('dotenv').config();
 const middlewareController = {
     //verifyToken
     verifyToken: (req, res, next) => {
-
         const token = req.cookies.token;
         if (token) {
             const accessToken = token;
@@ -31,6 +31,7 @@ const middlewareController = {
         
 
     },
+ 
     viewProductWithUser: (req, res, next) => {
 
         const token = req.cookies.token;
@@ -60,7 +61,8 @@ const middlewareController = {
          
         
 
-    }
+    },
+   
 
 
 }

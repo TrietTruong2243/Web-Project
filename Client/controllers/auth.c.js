@@ -38,7 +38,6 @@ module.exports = {
         res.render("home", { layout: "signin", isForgotPassword: true });
     },
     addUser: async (req, res) => {
-        // console.log(req.body);
 
         var err1 = validationResult(req);
         if (err1.errors.length)
@@ -63,7 +62,7 @@ module.exports = {
                 res.json({addErr: err});
 
             }else{
-                
+               res.json("Thêm thành công")
             }
     
         }
@@ -85,14 +84,32 @@ module.exports = {
     forgotpasswordFind: async (req, res) => {
 
     },
+    addGGUserInfo: async(req,res)=>{
+        const email = req.cookies["email"];
+        res.render("home",{layout: 'addgginfo', useremail: email})
+    },
     googlesuccesslogin: async (req, res) => {
         const user = req.user;
+        if (!user.CustomerName|| !user.PhoneNumber || !user.HomeAddress)
+        {
+            res.cookie('email' , user.Email)
+            return res.redirect("/auth/addgginfo")
+        }        
         const accessToken = jwt.sign({ id: user.CustomerID, isGoogleAccount: user.IsGoogleAccount || false }, process.env.SECRET_KEY, { expiresIn: "1h" });
         res.cookie('token', accessToken, { httpOnly: false, sameSite: true, maxAge: "3000000" });
-        res.redirect("/")
+        return res.redirect("/")
     },
     googlefailurelogin: async (req, res) => {
         req.flash('error', "Không thể đăng nhập với google");
         res.redirect("/auth/signin")
+    },
+    ggSuccessAddInfo: async (req,res)=>{
+        const email = req.cookies['email'];
+        const user = await model.getUserByEmail(email);
+        const accessToken = jwt.sign({ id: user.CustomerID, isGoogleAccount: user.IsGoogleAccount || false }, process.env.SECRET_KEY, { expiresIn: "1h" });
+        res.cookie('token', accessToken, { httpOnly: false, sameSite: true, maxAge: "3000000" });
+        res.clearCookie('email')
+        res.redirect('/');
     }
+    
 }

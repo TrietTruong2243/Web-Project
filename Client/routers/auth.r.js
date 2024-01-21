@@ -18,15 +18,13 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
 },
     async function (request, accessToken, refreshToken, profile, done) {
-        console.log(profile);
+
         request.user = profile;
         const user = await User.findOrCreateUser({ id: profile.id, email: profile.email });
-        console.log(user);
+
         return done(null, user)
 
-        // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-        //   return done(err, user);
-        // });
+       
     }
 ));
 passport.use(new LocalStrategy(async (username, password, done) => {
@@ -35,7 +33,7 @@ passport.use(new LocalStrategy(async (username, password, done) => {
 
     let auth = false;
     if (rs) {
-        console.log(rs);
+   
         if (rs.IsGoogleAccount === true) {
             return done(null, false, { message: 'invalid' })
         }
@@ -51,13 +49,13 @@ passport.use(new LocalStrategy(async (username, password, done) => {
 }));
 passport.serializeUser((user, done) => done(null, user.CustomerID));
 passport.deserializeUser((username, done) => {
-
     done(null, false)
 });
 router.get("/userinfo", mws.verifyToken, appControl.userinfo);
 router.get("/signin", appControl.signin)
 router.get("/signup", appControl.signup);
 router.get("/forgotpassword", appControl.forgotpassword)
+router.get("/addgginfo",appControl.addGGUserInfo)
 router.post("/forgotpassword/forgotpasswordFind", appControl.forgotpasswordFind);
 const { check } = require('express-validator');
 
@@ -122,4 +120,5 @@ router.get("/signout", function (req, res) {
         res.redirect('/');
     })
 })
+router.get("/ggsuccessaddinfo",appControl.ggSuccessAddInfo)
 module.exports = router;

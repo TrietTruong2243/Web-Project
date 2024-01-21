@@ -51,5 +51,6 @@ let validateGGUserInfo = () => {
 router.get("/accountsettings",mws.verifyToken, userControl.accountsettings)
 router.post("/changeuserinfo",mws.verifyToken,validateUserInfo(),userControl.changeUserInfo)
 router.post("/changegguserinfo",mws.verifyToken,validateGGUserInfo(),userControl.changeGGUserInfo)
+router.post("/addgguserinfo",validateGGUserInfo(),userControl.addGGUserInfo)
 
 module.exports = router;

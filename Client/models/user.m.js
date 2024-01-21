@@ -17,6 +17,7 @@ module.exports = {
             return findUser;
         }
         else{
+            // return -1;
             const newUser = await db.addGoogleUser(param);
             const user = await db.findUserByEmail(param.email)
             return user;
@@ -26,7 +27,6 @@ module.exports = {
     {
         const findUser = await db.findUserByID(userid);
         const oldPassword = findUser.Password;
-        console.log(userinfo.current_password);
         let checkPass =   await bcrypt.compare(userinfo.current_password,oldPassword );
         if (checkPass === false)
         {
@@ -55,5 +55,8 @@ module.exports = {
         else{
             return 0;
         }
+    },
+    getUserByEmail: async (email)=>{
+        return await db.findUserByEmail(email);
     }
 }

@@ -158,8 +158,9 @@
                     $("#home_address_err").text("")
                     $("#pw_err").text("")
                     $("#pw_confirm_err").text("")
+                    console.log(response)
                     if (response.err) {
-
+                        alert("Check1")
                         const error = response.err;
                         for (i of error) {
                             if (i.path === 'email_address') {
@@ -189,15 +190,21 @@
                         }
                     }
                     else if (response.addErr) {
+                        alert("Check2")
+
                         $("#err").text(response.addErr)
                     }
-                    else{
-                         alert("Thêm tài khoản thành công")
-                    window.location.href = "/auth/userinfo"
+                    else {
+                        alert("Check3")
+
+                        alert("Thêm tài khoản thành công")
+                        window.location.href = "/auth/userinfo"
                     }
                 },
 
                 error: function (err) {
+                                            alert("Check3")
+
                     alert("Thêm tài khoản thành công")
                     window.location.href = "/auth/userinfo"
                 }

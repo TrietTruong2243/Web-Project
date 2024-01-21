@@ -8,6 +8,7 @@ var path = require('path');
 const appRouter = require("./routers/app.r");
 const authRouter = require("./routers/auth.r")
 const userRouter = require("./routers/user.r")
+const cartRouter =require("./routers/cart.r")
 const flash = require('express-flash');
 require('dotenv').config()
 const cookieParser = require("cookie-parser");
@@ -42,4 +43,5 @@ app.set('view engine','hbs');
 app.use('/',appRouter);
 app.use('/auth',authRouter)
 app.use("/user", userRouter)
+app.use("/cart", cartRouter)
 app.listen(port,()=> console.log(`Server listening on port ${port}: localhost:3000`));

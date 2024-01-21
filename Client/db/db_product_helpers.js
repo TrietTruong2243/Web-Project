@@ -46,7 +46,6 @@ module.exports = {
     },
     findProductsByValue: async (value) => {
         const query = `SELECT * FROM public."${table}" WHERE "ProductName" LIKE '%${value}%'`
-        console.log(query);
         const result = await db.query(query);
         // Check if any rows were returned
         return result.rows;

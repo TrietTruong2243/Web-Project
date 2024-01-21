@@ -4,7 +4,6 @@ module.exports = {
       
         const email = param.email_address;
         const userCheck = await db.findUserByEmail(email);
-        console.log(userCheck);
         if (!userCheck)
         {
             const addUser = await db.addNewUser(param);
@@ -22,5 +21,13 @@ module.exports = {
         else{
             return -1;
         }
+    },
+    getUserByID: async (id)=>{
+        const user = await db.findUserByID(id);
+        return user;
+    },
+    getUserByEmail: async(email)=>{
+        const user = await db.findUserByEmail(email);
+        return user;
     }
 }
