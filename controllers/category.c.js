@@ -174,7 +174,7 @@ module.exports = {
             const id = req.params.id;
             const action = req.body.action;
             if (action === 'delete') {
-                const productIds = await Product.findAll({
+                let productIds = await Product.findAll({
                     where: {
                         categoryId: id
                     },

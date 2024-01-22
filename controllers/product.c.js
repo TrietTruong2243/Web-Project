@@ -6,7 +6,6 @@ const toDataUri = require('../helpers/dataUriConverter');
 const { parse } = require('dotenv');
 const Product = db.Product;
 const Category = db.Category;
-const User = db.User;
 const Image = db.Image;
 
 module.exports = {
@@ -91,7 +90,6 @@ module.exports = {
                 products[i].categoryUrl = `/category?name=${products[i].categoryName}`;
                 products[i].formattedCreatedAt = formattedCreatedAt;
                 products[i].formattedUpdatedAt = formattedUpdatedAt;
-                console.log(products[i]);
             }
 
             let urlParams = (new URLSearchParams(req.query));
@@ -153,7 +151,7 @@ module.exports = {
                         productId: product.id
                     });
 
-                    if(i === 0) {
+                    if (i === 0) {
                         await Product.update({
                             mainImageId: newImage.id
                         }, {
@@ -226,8 +224,7 @@ module.exports = {
             for (let i = 0; i < removeIdsArr.length; ++i) {
                 removeIdsArr[i] = parseInt(removeIdsArr[i]);
             }
-            console.log(removeIdsArr);
-            console.log(removeIdsArr[0]);
+            
             if (removeIdsArr.length > 0 && !isNaN(removeIdsArr[0])) {
                 console.log('delete images');
                 const images = await Image.findAll({
@@ -236,7 +233,7 @@ module.exports = {
                     }
                 });
                 ;
-                for(let i = 0; i < images.length; ++i) {
+                for (let i = 0; i < images.length; ++i) {
                     await cloudinary.uploader.destroy(images[i].public_id);
                 }
                 await Image.destroy({
@@ -274,8 +271,7 @@ module.exports = {
                         productId: id
                     }
                 });
-                console.log(image);
-                if (image !== null){
+                if (image !== null) {
                     await Product.update({
                         mainImageId: image.id
                     }, {

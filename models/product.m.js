@@ -15,22 +15,6 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER,
             defaultValue: 0
         },
-        categoryId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'Categories',
-                key: 'id'
-            },
-            onDelete: 'cascade'
-        },
-        mainImageId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'Images',
-                key: 'id'
-            },
-            onDelete: 'set null'
-        }
     });
 
     return Product;
