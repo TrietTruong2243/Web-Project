@@ -1,0 +1,40 @@
+.carousel-indicators {
+    position: static;
+    display: table;
+}
+
+.carousel-indicators button[data-bs-target]{
+    width: 100px;
+}
+
+.carousel-indicators button[data-bs-target]:not(.active){
+    opacity: 0.8;
+}
+
+.carousel-control-next-icon, 
+.carousel-control-prev-icon {
+    width: 30px;
+    height: 30px;
+    background-color: #000;
+    border-radius: 50%;
+    border: 1px solid #fff;
+}
+
+.image-icon {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.carousel-item {
+    height: 450px;
+}
+
+.carousel-image {
+    width: 500px;
+}
+
+.removed-image {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    opacity: 0.5;
+}
