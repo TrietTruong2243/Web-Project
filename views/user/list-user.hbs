@@ -1,0 +1,591 @@
+<link rel="stylesheet" href="/css/table.css">
+<div class="container-fluid mb-4">
+    <div class="d-flex flex-row justify-content-between align-items-center">
+        <div class="d-flex flex-row align-items-center">
+            <h3>{{#if active.Administrators}} Administrators {{else}} Customers {{/if}}</h3>
+            <p class="total-mark mt-0 mb-1 ms-2 px-3">{{ total }}</p>
+        </div>
+        <div class="d-flex flex-row">
+            <a class="btn btn-outline-info d-flex align-items-center me-4 {{#if active.Administrators}} d-none {{/if}}" href="/customer/create-new">
+                <i class="fa-solid fa-plus pe-2"></i>
+                <span>Create</span>
+            </a>
+            <div id="filter-btn" class="btn btn-outline-info d-flex align-items-center me-4" data-bs-toggle="collapse"
+                href="#collapseFilter" role="button" aria-expanded="false">
+                <i class="fa-solid fa-filter pe-2"></i>
+                <span>Filter</span>
+            </div>
+        </div>
+    </div>
+    <div class="collapse p-0 mt-1" class="collapse" id="collapseFilter">
+        <div class="row">
+            <div class="col-md-6 col-lg-3">
+                <select id="filter-status" class="form-select" aria-label="Default select example">
+                    <option {{#unless queryObj.status }} selected {{/unless}}>Select status</option>
+                    <option value="active" {{#eq queryObj.status "active" }} selected {{/eq}}>Active</option>
+                    <option value="banned" {{#eq queryObj.status "banned" }} selected {{/eq}}>Banned</option>
+                </select>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="username-addon">Username</span>
+                    <input type="text" id="filter-username" class="form-control" value="{{ queryObj.username }}"
+                        aria-label="Username" aria-describedby="username-addon">
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="fullname-addon">Fullname</span>
+                    <input type="text" id="filter-fullname" class="form-control" value="{{ queryObj.fullname }}"
+                        aria-label="Fullname" aria-describedby="fullname-addon">
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="email-addon">Email</span>
+                    <input type="text" id="filter-email" class="form-control" value="{{ queryObj.email }}"
+                        aria-label="Email" aria-describedby="email-addon">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="phone-addon">Phone</span>
+                    <input type="text" id="filter-phone" class="form-control" value="{{ queryObj.phone }}"
+                        aria-label="Phone" aria-describedby="phone-addon">
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="address-addon">Address</span>
+                    <input type="text" id="filter-address" class="form-control" value="{{ queryObj.address }}"
+                        aria-label="Address" aria-describedby="address-addon">
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="input-group">
+                    <span class="input-group-text" id="createdAtFrom-addon">Created from:</span>
+                    <input type="date" id="filter-createdAtFrom" class="form-control" value="{{ queryObj.createdAtFrom }}"
+                        aria-describedby="createdAtFrom-addon">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text" id="createdAtTo-addon">Created to:</span>
+                    <input type="date" id="filter-createdAtTo" class="form-control" value="{{ queryObj.createdAtTo }}"
+                        aria-describedby="createdAtTo-addon">
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group">
+                    <span class="input-group-text" id="updatedAtFrom-addon">Updated from:</span>
+                    <input type="date" id="filter-updatedAtFrom" class="form-control" value="{{ queryObj.updatedAtFrom }}"
+                        aria-describedby="updatedAtFrom-addon">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text" id="updatedAtTo-addon">Updated to:</span>
+                    <input type="date" id="filter-updatedAtTo" class="form-control" value="{{ queryObj.updatedAtTo }}"
+                        aria-describedby="updatedAtTo-addon">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-2">
+                <span>Number of rows:</span>
+                <select id="filter-numrows" class="form-select form-select-sm">
+                    <option value="5" {{#eq queryObj.size "5" }} selected {{/eq}}>5</option>
+                    <option value="10" {{#unless queryObj.size}} selected {{/unless}} {{#eq queryObj.size "10" }}
+                        selected {{/eq}}>10</option>
+                    <option value="20" {{#eq queryObj.size "20" }} selected {{/eq}}>20</option>
+                    <option value="50" {{#eq queryObj.size "50" }} selected {{/eq}}>50</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <span>Sort by:</span>
+                <select id="filter-sortBy" class="form-select form-select-sm">
+                    <option value="id" {{#unless queryObj.sortBy }} selected {{/unless}} {{#eq queryObj.sortBy "id" }}
+                        selected {{/eq}}>ID</option>
+                    <option value="username" {{#eq queryObj.sortBy "username" }} selected {{/eq}}>Username</option>
+                    <option value="fullname" {{#eq queryObj.sortBy "fullname" }} selected {{/eq}}>Fullname</option>
+                    <option value="updatedAt" {{#eq queryObj.sortBy "updatedAt" }} selected {{/eq}}>UpdatedAt</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <span>Sort type:</span>
+                <select id="filter-sortDir" class="form-select form-select-sm">
+                    <option value="asc" {{#unless queryObj.sortDir }} selected {{/unless}} {{#eq queryObj.sortDir "asc" }}
+                        selected {{/eq}}>ASC</option>
+                    <option value="desc" {{#eq queryObj.sortDir "desc" }} selected {{/eq}}>DESC</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="row mt-3">
+            <div class="col d-flex justify-content-end">
+                <button id="filter-reset-btn" class="btn" type="button">
+                    Reset
+                </button>
+            </div>
+            <div class="col d-flex justify-content-start align-items-center">
+                <button id="filter-apply-btn" class="btn" type="button">
+                    Apply
+                </button>
+            </div>
+        </div>
+
+    </div>
+    <form name="table-container" method="post" {{#if active.Administrators}} action="/admin/multi-action" {{else}} action="/customer/multi-action" {{/if}}>
+        <div class="multiselect-row row mt-2 mx-1 py-2 border-radius-md d-flex flex-row invisible">
+            <span class="col-2 multiselect-text">Selected</span>
+            <button id="multiselect-delete-btn" class="col-1 btn-sm btn-multiselect-row ms-2 p-0" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                <i class="fa-regular fa-trash-can pe-2"></i>
+                Delete
+            </button>
+            <button id="multiselect-activate-btn" class="col-1 btn-sm btn-multiselect-row ms-2 p-0">
+                <i class="fa-regular fa-circle-check pe-2"></i>
+                Activate
+            </button>
+            <button id="multiselect-ban-btn" class="col-1 btn-sm btn-multiselect-row ms-2 p-0">
+                <i class="fa-solid fa-ban pe-2"></i>
+                Ban
+            </button>
+            {{#if active.Administrators}}
+                <button id="multiselect-changeToCustomer-btn" class="col-3 btn-sm btn-multiselect-row ms-2 p-0">
+                    <i class="fa-solid fa-users pe-2"></i>
+                    Change to standard user
+                </button>
+            {{else}}
+                <button id="multiselect-changeToAdmin-btn" class="col-3 btn-sm btn-multiselect-row ms-2 p-0">
+                    <i class="fa-solid fa-users-gear pe-2"></i>
+                    Change to administrators
+                </button>
+            {{/if}}
+        </div>
+        <input type="hidden" name="action">
+        <div class="card">
+            <div class="card-body px-0 py-2">
+                <div class="table-responsive">
+                    <table id="data-table" class="table table-hover" page="{{ page }}" total="{{ total }}" {{#if active.Administrators}} role="admin" {{else}} role="customer" {{/if}}
+                        size="{{ queryObj.size }}" urlParams="{{ urlParams }}">
+                        <thead>
+                            <tr>
+                                <th class="px-2 font-weight-bolder">
+                                    <div class="d-flex flex-row">
+                                        <div class="form-check px-4">
+                                            <input class="form-check-input select-all" name="select-all" type="checkbox">
+                                        </div>
+                                        <span>ID</span>
+                                    </div>
+                                </th>
+                                <th class="px-6 font-weight-bolder">User</th>
+                                <th class="px-2 font-weight-bolder">Fullname</th>
+                                <th class="px-2 font-weight-border">Updated at</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="table-group-divider">
+                            {{#each users}}
+                            <tr>
+                                <td class="align-middle">
+                                    <div class="d-flex flex-row align-items-center">
+                                        <div class="form-check px-4">
+                                            <input class="form-check-input select-item" name="selectedItems[]" type="checkbox" value="{{this.id}}">
+                                        </div>
+                                        <span>{{this.id}}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="align-middle d-flex">
+                                        <div>
+                                            <img {{#if this.imageUrl}} src="{{this.imageUrl}}" {{else}}
+                                                src="img/user.png" {{/if}} class="avatar me-4" alt="user">
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <div class="d-flex">
+                                                <p class="mb-0 text-sm">{{this.username}}</p>
+                                                {{#eq this.status "banned"}}
+                                                <span class="ms-3 badge rounded-pill bg-gradient-danger">
+                                                    Banned
+                                                </span>
+                                                {{/eq}}
+                                            </div>
+                                            <p class="text-secondary m-0" style="font-size:6px">{{this.email}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle">{{this.fullname}}</td>
+                                <td class="align-middle">{{this.formattedUpdatedAt}}</td>
+                                <td class="align-middle">
+                                    <button class="btn btn-outline-info d-flex align-items-center justify-content-center"
+                                        type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithInformation" aria-controls="offcanvasWithInformation"
+                                        user-id="{{this.id}}" user-username="{{this.username}}"
+                                        user-fullname="{{this.fullname}}" user-image="{{this.imageUrl}}"
+                                        user-email="{{this.email}}" user-phone="{{this.phone}}"
+                                        user-address="{{this.address}}" user-status="{{this.status}}"
+                                        user-formattedUpdatedAt="{{this.formattedUpdatedAt}}"
+                                        user-formattedCreatedAt="{{this.formattedCreatedAt}}">
+                                        <i class="fa-regular fa-eye pe-2"></i>
+                                        Show
+                                    </button>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <nav aria-label="User pagination">
+                    <ul class="pagination justify-content-center custom-pagination mt-2" id="user-pagination">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </form>
+    
+    {{!-- Offcanvas for details --}}
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasWithInformation"
+        aria-labelledby="offcanvasWithInformationLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasWithInformationLabel">
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <button id="offcanvas-delete-btn" class="col-4 btn btn-outline-danger d-flex align-items-center justify-content-center mt-2"
+                data-bs-toggle="modal" data-bs-target="#deleteModal">
+                <i class="fa-regular fa-trash-can pe-2"></i>
+                <span>Delete</span>
+            </button>
+            {{#if active.Administrators}}
+            <button id="offcanvas-changeToCustomer-btn"
+                class="btn btn-outline-info d-flex align-items-center justify-content-center mt-2">
+                <i class="fa-solid fa-users pe-2"></i>
+                <span>Change to standard user</span>
+            </button>
+            {{else}}
+            <button id="offcanvas-edit-btn" class="col-4 btn btn-outline-success d-flex align-items-center justify-content-center mt-2">
+                <i class="fa-regular fa-pen-to-square pe-2"></i>
+                <span>Edit</span>
+            </button>
+            <button id="offcanvas-changeToAdmin-btn"
+                class="btn btn-outline-info d-flex align-items-center justify-content-center mt-2">
+                <i class="fa-solid fa-users-gear pe-2"></i>
+                <span>Change to administrator</span>
+            </button>
+            {{/if}}
+            <img class="detail-image enlarge-image image-has-modal" src="" alt="user">
+            <div class="detail-info-item">
+                <p class="detail-info-item-title">ID</p>
+                <p class="detail-info-item-content" id="detail-info-id"></p>
+            </div>
+            <div class="detail-info-item">
+                <p class="detail-info-item-title">Fullname</p>
+                <p class="detail-info-item-content" id="detail-info-fullname"></p>
+            </div>
+            <div class="detail-info-item">
+                <p class="detail-info-item-title">Email</p>
+                <p class="detail-info-item-content" id="detail-info-email"></p>
+            </div>
+            <div class="detail-info-item">
+                <p class="detail-info-item-title">Phone</p>
+                <p class="detail-info-item-content" id="detail-info-phone"></p>
+            </div>
+            <div class="detail-info-item">
+                <p class="detail-info-item-title">Address</p>
+                <p class="detail-info-item-content" id="detail-info-address"></p>
+            </div>
+            <div class="detail-info-item">
+                <p class="detail-info-item-title">Created at</p>
+                <p class="detail-info-item-content" id="detail-info-CreatedAt"></p>
+            </div>
+            <div class="detail-info-item">
+                <p class="detail-info-item-title">Updated at</p>
+                <p class="detail-info-item-content" id="detail-info-UpdatedAt"></p>
+            </div>
+            <div class="detail-info-item">
+                <p class="detail-info-item-title">Status</p>
+                <div class="detail-info-item-content d-flex flex-row justify-content-start align-items-center" id="detail-info-status">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{!-- Modal for delete --}}
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel"></h5>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+                    <button id="modal-delete-btn" type="button" class="btn bg-gradient-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<form id="single-item-action" method="post">
+    <input type="hidden" name="action">
+</form>
+
+
+<script src="/js/table.js"></script>
+<script>
+    $(() => {
+        // pagination
+        const table = $('#data-table');
+        const page = parseInt(table.attr('page'));
+        const total = parseInt(table.attr('total'));
+        const size = parseInt(table.attr('size'));
+        const role = table.attr('role');
+        const urlParams = table.attr('urlParams');
+        if(urlParams){
+            $('#filter-btn').removeClass('collapsed');
+            $('#filter-btn').attr('aria-expanded', 'true');
+            $('#collapseFilter').addClass('show');
+        }
+
+        $('#user-pagination').html(renderPagination(page, total, size, role, urlParams));
+
+        // breadcrumbs
+        const breadcrumbs = $('.breadcrumb');
+        let breadcrumbContent = '<li class="breadcrumb-item text-sm"><a class="text-dark" href="/"><span class="breadcrumb-text">Dashboard</span></a></li>';
+        if(role === "admin"){
+            breadcrumbContent += `
+                <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Administrators</li>
+            `;
+        } else {
+            breadcrumbContent += `
+                <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Customers</li>
+            `;
+        }
+        breadcrumbs.html(breadcrumbContent);
+
+        // multi select
+        const tableContainerForm = $('form[name="table-container"]');
+        const selectAll = $('.select-all');
+        const selectItems = $('input[name="selectedItems[]"]');
+        const deleteBtn = $('#multiselect-delete-btn');
+        const activateBtn = $('#multiselect-activate-btn');
+        const banBtn = $('#multiselect-ban-btn');
+        const changeToCustomerBtn = $('#multiselect-changeToCustomer-btn');
+        const changeToAdminBtn = $('#multiselect-changeToAdmin-btn');
+
+        function renderBtnMultiSelectSubmit() {
+            const multiselectRow = $('.multiselect-row');
+            const numOfSelected = $('input[name="selectedItems[]"]:checked').length;
+            if (numOfSelected > 0) {
+                multiselectRow.removeClass('invisible');
+                $('.multiselect-text').html(`Selected (${numOfSelected})`);
+            } else {
+                multiselectRow.addClass('invisible');
+            }
+        }
+        selectAll.change(() => {
+            selectItems.prop('checked', selectAll.prop('checked'));
+            renderBtnMultiSelectSubmit();
+        });
+        selectItems.change(() => {
+            selectAll.prop('checked', selectItems.length === $('input[name="selectedItems[]"]:checked').length);
+            renderBtnMultiSelectSubmit();
+        });
+        deleteBtn.click((e) => {
+            e.preventDefault();
+            tableContainerForm.find('input[name="action"]').val('delete');
+        });
+        activateBtn.click(() => {
+            tableContainerForm.find('input[name="action"]').val('activate');
+            tableContainerForm.submit();
+        });
+        banBtn.click(() => {
+            tableContainerForm.find('input[name="action"]').val('ban');
+            tableContainerForm.submit();
+        });
+        changeToCustomerBtn.click(() => {
+            console.log('change to customer')
+            tableContainerForm.find('input[name="action"]').val('changeToCustomer');
+            tableContainerForm.submit();
+        });
+        changeToAdminBtn.click(() => {
+            tableContainerForm.find('input[name="action"]').val('changeToAdmin');
+            tableContainerForm.submit();
+        });
+        
+        // offcanvas
+        const singleItemForm = $('#single-item-action');
+        let userId, username, status, fullname, image, email, phone, address, formattedUpdatedAt, formattedCreatedAt;
+        $('#offcanvasWithInformation').on('show.bs.offcanvas', (e) => {
+            const button = $(e.relatedTarget);
+            userId = button.attr('user-id');
+            username = button.attr('user-username');
+            status = button.attr('user-status');
+            fullname = button.attr('user-fullname');
+            image = button.attr('user-image') || 'img/user.png';
+            email = button.attr('user-email');
+            phone = button.attr('user-phone');
+            address = button.attr('user-address');
+            formattedUpdatedAt = button.attr('user-formattedUpdatedAt');
+            formattedCreatedAt = button.attr('user-formattedCreatedAt');
+
+            $('#offcanvasWithInformationLabel').html(`@${username}`);
+            $('.detail-image').attr('src', image);
+            $('#detail-info-id').html(userId);
+            $('#detail-info-fullname').html(fullname);
+            $('#detail-info-email').html(email);
+            $('#detail-info-phone').html(phone);
+            $('#detail-info-address').html(address);
+            $('#detail-info-CreatedAt').html(formattedCreatedAt);
+            $('#detail-info-UpdatedAt').html(formattedUpdatedAt);
+            if (status === 'active') {
+                $('#detail-info-status').html(`
+                    <span class="badge rounded-pill bg-gradient-success">Active</span>
+                    <button class="btn btn-outline-danger d-flex align-items-center justify-content-center ms-3" id="offcanvas-ban-btn">Banned</button>
+                `);
+            } else {
+                $('#detail-info-status').html(`
+                    <button class="btn btn-outline-success d-flex align-items-center justify-content-center" id="offcanvas-active-btn">Active</button>
+                    <span class="badge rounded-pill bg-gradient-danger ms-3">Banned</span>
+                `);
+            }
+
+            $('#offcanvas-changeToCustomer-btn').click(() => {
+                $('#single-item-action').attr('action', `/${role}/${userId}`);
+                $('#single-item-action').find('input[name="action"]').val('changeToCustomer');
+                $('#single-item-action').submit();
+            });
+            $('#offcanvas-changeToAdmin-btn').click(() => {
+                $('#single-item-action').attr('action', `/${role}/${userId}`);
+                $('#single-item-action').find('input[name="action"]').val('changeToAdmin');
+                $('#single-item-action').submit();
+            });
+            $('#offcanvas-edit-btn').click(() => {
+                window.location.href = `/${role}/edit/${userId}`;
+            });
+            $('#offcanvas-active-btn').click(() => {
+                $('#single-item-action').attr('action', `/${role}/${userId}`);
+                $('#single-item-action').find('input[name="action"]').val('activate');
+                $('#single-item-action').submit();
+            });
+            $('#offcanvas-ban-btn').click(() => {
+                $('#single-item-action').attr('action', `/${role}/${userId}`);
+                $('#single-item-action').find('input[name="action"]').val('ban');
+                $('#single-item-action').submit();
+            });
+
+        });
+
+        // filter
+        $('#filter-reset-btn').click(() => {
+            $('#filter-status').val('');
+            $('#filter-username').val('');
+            $('#filter-fullname').val('');
+            $('#filter-email').val('');
+            $('#filter-phone').val('');
+            $('#filter-address').val('');
+            $('#filter-createdAtFrom').val('');
+            $('#filter-createdAtTo').val('');
+            $('#filter-updatedAtFrom').val('');
+            $('#filter-updatedAtTo').val('');
+            $('#filter-numrows').val('10');
+            $('#filter-sortBy').val('id');
+            $('#filter-sortDir').val('asc');
+        });
+        $('#filter-apply-btn').click(() => {
+            const status_f = $('#filter-status').val();
+            const username_f = $('#filter-username').val();
+            const fullname_f = $('#filter-fullname').val();
+            const email_f = $('#filter-email').val();
+            const phone_f = $('#filter-phone').val();
+            const address_f = $('#filter-address').val();
+            const createdAtFrom_f = $('#filter-createdAtFrom').val();
+            const createdAtTo_f = $('#filter-createdAtTo').val();
+            const updatedAtFrom_f = $('#filter-updatedAtFrom').val();
+            const updatedAtTo_f = $('#filter-updatedAtTo').val();
+            const size_f = $('#filter-numrows').val();
+            const sortBy_f = $('#filter-sortBy').val();
+            const sortDir_f = $('#filter-sortDir').val();
+
+            let urlParams = '';
+            if (size_f && size_f !== '10') {
+                urlParams += `&size=${size}`;
+            }
+            if (status_f && status_f !== 'Select status') {
+                urlParams += `&status=${status_f}`;
+            }
+            if (sortBy_f && sortBy_f !== 'id') {
+                urlParams += `&sortBy=${sortBy_f}`;
+            }
+            if (sortDir_f && sortDir_f !== 'asc') {
+                urlParams += `&sortDir=${sortDir_f}`;
+            }
+            if (username_f) {
+                urlParams += `&username=${username_f}`;
+            }
+            if (fullname_f) {
+                urlParams += `&fullname=${fullname_f}`;
+            }
+            if (email_f) {
+                urlParams += `&email=${email_f}`;
+            }
+            if (phone_f) {
+                urlParams += `&phone=${phone_f}`;
+            }
+            if (address) {
+                urlParams += `&address=${address}`;
+            }
+            if (createdAtFrom_f) {
+                urlParams += `&createdAtFrom=${createdAtFrom_f}`;
+            }
+            if (createdAtTo_f) {
+                urlParams += `&createdAtTo=${createdAtTo_f}`;
+            }
+            if (updatedAtFrom_f) {
+                urlParams += `&updatedAtFrom=${updatedAtFrom_f}`;
+            }
+            if (updatedAtTo_f) {
+                urlParams += `&updatedAtTo=${updatedAtTo_f}`;
+            }
+
+            window.location.href = `/${role}?${urlParams}`;
+        })
+
+        // modals
+        const deleteModal = $('#deleteModal');
+        deleteModal.on('show.bs.modal', e => {
+            const button = $(e.relatedTarget);
+            const modalDeleteBtn = $('#modal-delete-btn');
+            const modalTitle = deleteModal.find('.modal-title');
+            const modalBody = deleteModal.find('.modal-body');
+
+            if(button.attr('id') === 'offcanvas-delete-btn'){
+                modalTitle.html('Delete ' + role);
+                modalBody.html(`Are you sure you want to delete this ${role} <b>${username}</b>? This action cannot be undone.`);
+                modalDeleteBtn.click(() => {
+                    singleItemForm.attr('action', `/${role}/${userId}`);
+                    singleItemForm.find('input[name="action"]').val('delete');
+                    singleItemForm.submit();
+                });
+            } else if(button.attr('id') === 'multiselect-delete-btn'){
+                const selectedItems = $('input[name="selectedItems[]"]:checked');
+                const selectedItemsIds = selectedItems.map((i, item) => {
+                    return $(item).val();
+                }).get();
+                modalTitle.html('Delete users');
+                modalBody.html(`Are you sure you want to delete these ${role}s with ids: <b>${selectedItemsIds.join(', ')}</b>? This action cannot be undone.`);
+                modalDeleteBtn.click(() => {
+                    tableContainerForm.find('input[name="action"]').val('delete');
+                    tableContainerForm.submit();
+                });
+            }
+        })
+    });
+</script>
