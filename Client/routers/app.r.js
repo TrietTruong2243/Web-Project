@@ -2,7 +2,8 @@ require("dotenv").config();
 const app = require('express');
 const router = app.Router();
 const appControl = require("../controllers/app.c");
-const mws = require("../mws/middlewareController")
+const mws = require("../mws/middlewareController");
+router.use(app.static(__dirname+'/../public'));
 router.get("/", appControl.homepage);
 router.get("/getallcategories",appControl.getAllCategories)
 router.get("/getallpagebycategory",appControl.getAllPageByCategory)

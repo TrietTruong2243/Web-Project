@@ -4,7 +4,7 @@ const router = app.Router();
 const mws = require("../mws/middlewareController")
 const userControl = require("../controllers/user.c");
 const { check } = require('express-validator');
-
+router.use(app.static(__dirname+'/../public'));
 let validateUserInfo = () => {
     return [
         check('name', 'Tên không hợp lệ!').isAlphanumeric(),
@@ -49,6 +49,7 @@ let validateGGUserInfo = () => {
     ];
 }
 router.get("/accountsettings",mws.verifyToken, userControl.accountsettings)
+router.get("/accountorders",mws.verifyToken, userControl.accountorders)
 router.post("/changeuserinfo",mws.verifyToken,validateUserInfo(),userControl.changeUserInfo)
 router.post("/changegguserinfo",mws.verifyToken,validateGGUserInfo(),userControl.changeGGUserInfo)
 router.post("/addgguserinfo",validateGGUserInfo(),userControl.addGGUserInfo)

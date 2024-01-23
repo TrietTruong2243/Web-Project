@@ -1,4 +1,5 @@
-CREATE DATABASE "SHOPPING_WEB"
+CREATE DATABASE "SHOPPING_WEB";
+\c SHOPPING_WEB
 CREATE TABLE "Customer"
 (
     "CustomerID"  BIGINT PRIMARY KEY,
@@ -6,7 +7,7 @@ CREATE TABLE "Customer"
     "PhoneNumber" CHAR(10),
     "HomeAddress" VARCHAR(255),
     "Email" VARCHAR(100),
-    "Password" VARCHAR(255)
+    "Password" VARCHAR(255),
     "IsGoogleAccount" BOOLEAN
 );
 

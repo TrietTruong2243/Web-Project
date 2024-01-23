@@ -21,18 +21,18 @@ const session = require('express-session');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()) // parse application/json
 app.use(flash())
-app.use(cors());
+app.use(cors()); 
 app.use(express.static(__dirname+'/public'));
 app.use(session({
     secret: process.env.SECRET_KEY,
     saveUninitialized:true,
-    cookie: { maxAge: 10000},
+    cookie: { maxAge: 10000}, 
     resave: false
     }));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser(process.env.SECRET_KEY));
-
+ 
 // app.set('views', path.join(__dirname, '/Presentation/WebBrowserInterface'));
 app.engine('hbs',exphbs.engine({
     extname:'.hbs',
@@ -41,7 +41,8 @@ app.engine('hbs',exphbs.engine({
 }));
 app.set('view engine','hbs');
 app.use('/',appRouter);
-app.use('/auth',authRouter)
+app.use('/auth',authRouter) 
 app.use("/user", userRouter)
 app.use("/cart", cartRouter)
-app.listen(port,()=> console.log(`Server listening on port ${port}: localhost:3000`));
+app.listen(port,()=> console.log(`Server listening on port ${port}: http://localhost:3000`));
+ 

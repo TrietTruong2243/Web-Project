@@ -2,8 +2,6 @@ const userModel = require("../models/user.m")
 var { validationResult } = require('express-validator');
 
 module.exports = {
-
-
     accountsettings: async (req, res) => {
         const id = req.user.id;
         const user = await userModel.getUserByID(id);
@@ -258,6 +256,11 @@ module.exports = {
     </div>`
         }
         res.json(jsonfile);
+    },
+    accountorders: async (req, res) => {
+        const id = req.user.id;
+        const orders = await userModel.getAllOrderOfUser(id);
+        res.json({orders: orders});
     },
     changeUserInfo: async (req, res) => {
         var err1 = validationResult(req);

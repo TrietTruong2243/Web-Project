@@ -8,6 +8,7 @@ const User = require("../models/user.m");
 const jwt = require('jsonwebtoken')
 const mws = require("../mws/middlewareController")
 var LocalStrategy = require('passport-local').Strategy;
+router.use(app.static(__dirname+'/../public'));
 router.use(passport.initialize());
 router.use(passport.session());
 var GoogleStrategy = require('passport-google-oauth2').Strategy;

@@ -1,6 +1,11 @@
-const db = require("../db/db_user_helpers")
+const db = require("../db/db_user_helpers");
+const orderDB = require("../db/db_order_helpers");
 const bcrypt = require("bcrypt")
 module.exports = {
+    getAllOrderOfUser: async(userID )=>{
+        const AllOrder = await orderDB.getAllOrderByUser(userID);
+        return AllOrder;
+    },
     getUserByID: async(id)=>{
         const user = await db.findUserByID(id);
       
