@@ -288,9 +288,18 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
     <script>
+        function formatDate(inputDate) {
+        var date = new Date(inputDate);
+        var day = date.getDate();
+        var month = date.getMonth() + 1; // Lưu ý rằng tháng trong JavaScript bắt đầu từ 0
+        var year = date.getFullYear(); // Lấy hai chữ số cuối cùng của năm
 
+        // Định dạng: dd/mm/yy
+        var formattedDate = day + "/" + month + "/" + year;
+
+        return formattedDate;
+        }
         $(function () {
-
             $(".navBar-item").click(function (e) {
                 if (!$(this).hasClass('is-active')) {
                     $(".navBar-item.is-active").removeClass("is-active");
@@ -343,14 +352,14 @@
                                 let index = 1;
                                 for (i of orders) {
                                     dataHTML = dataHTML + `
-                                                <tr class="alert" role="alert">
+                                                <tr class="alert order_detail" role="alert" id= "${i.OrderID}">
                                                     <td>
                                                         ${index}
                                                     </td>
                                                     <td class="d-flex align-items-center">
                                                         <div class="pl-3 email">
                                                             <span>${i.OrderID}</span>
-                                                            <span>${i.OrderDate}</span>
+                                                            <span> Order Date: ${formatDate(i.OrderDate)}</span>
                                                         </div>
                                                     </td>
                                                     <td class="status"><span class="${i.Status}">${i.Status}</span></td>
@@ -512,6 +521,27 @@
                 },
 
                 error: function (err) {
+                }
+            })
+        })
+    </script>
+
+    
+    <script>
+       $("body").delegate(".order_detail", "click", function (e) {
+            e.preventDefault()
+            const id = $(this).attr('id');
+            console.log(id);
+            $.ajax({
+                type: 'get',
+                url: '/order/getorderdetail',
+                data: { OrderID: id  },
+                success: function (data) {
+                    console.log(data);
+                    $.get("/order/orderdetail", {userInfo: data.userInfo, orderInfo: data.orderInfo, orderDetail: data.orderDetail});
+                },
+
+                error: function (err) { 
                 }
             })
         })
