@@ -44,7 +44,14 @@ module.exports = {
     },  
     updateUser: async(id, userinfo)=>{
         const query = `UPDATE public."Customer"
-        SET "CustomerName"='${userinfo.name}', "PhoneNumber"='${userinfo.phone_number}', "HomeAddress"='${userinfo.home_address}', "Email"='${userinfo.email_address}', "Password"='${userinfo.password}'
+        SET "CustomerName"='${userinfo.name}', "PhoneNumber"='${userinfo.phone_number}', "HomeAddress"='${userinfo.home_address}', "Email"='${userinfo.email_address}'
+        WHERE  "CustomerID"='${id}' RETURNING "CustomerID";`
+        const data = await  db.query(query);
+        return data;
+    },
+    updataUserPassword: async(id,password)=>{
+        const query = `UPDATE public."Customer"
+        SET "Password"= '${password}'
         WHERE  "CustomerID"='${id}' RETURNING "CustomerID";`
         const data = await  db.query(query);
         return data;

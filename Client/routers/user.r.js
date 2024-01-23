@@ -18,6 +18,27 @@ let validateUserInfo = () => {
 
         check('home_address', 'Địa chỉ không được trống!').not().isEmpty(),
         // check('password', 'Mật khẩu phải nhiều hơn 6 ký tự').isLength({ min: 6 }),
+        // check('password', 'Mật khẩu không được trống!').not().isEmpty(),
+
+        // check('password_confirm', 'Mật khẩu nhập lại không giống với mật khẩu ban đầu!').custom((value, { req, loc, path }) => {
+        //     if (value !== req.body.password) {
+        //         // trow error if passwords do not match
+        //         throw new Error("Mật khẩu nhập lại không giống với mật khẩu ban đầu!");
+        //     } else {
+        //         return value;
+        //     }
+        // }),
+        // check('password_confirm', 'Mật khẩu nhập lại phải nhiều hơn 6 ký tự! ').isLength({ min: 6 }),
+        // check('password_confirm', 'Mật khẩu nhập lại không được trống!').not().isEmpty(),
+        // check('current_password', 'Mật khẩu nhập lại phải nhiều hơn 6 ký tự! ').isLength({ min: 6 }),
+        // check('current_password', 'Mật khẩu nhập lại không được trống!').not().isEmpty(),
+
+    ];
+};
+let validateUserPassword = () => {
+    return [
+    
+        check('password', 'Mật khẩu phải nhiều hơn 6 ký tự').isLength({ min: 6 }),
         check('password', 'Mật khẩu không được trống!').not().isEmpty(),
 
         check('password_confirm', 'Mật khẩu nhập lại không giống với mật khẩu ban đầu!').custom((value, { req, loc, path }) => {
@@ -28,9 +49,9 @@ let validateUserInfo = () => {
                 return value;
             }
         }),
-        // check('password_confirm', 'Mật khẩu nhập lại phải nhiều hơn 6 ký tự! ').isLength({ min: 6 }),
+        check('password_confirm', 'Mật khẩu nhập lại phải nhiều hơn 6 ký tự! ').isLength({ min: 6 }),
         check('password_confirm', 'Mật khẩu nhập lại không được trống!').not().isEmpty(),
-        // check('current_password', 'Mật khẩu nhập lại phải nhiều hơn 6 ký tự! ').isLength({ min: 6 }),
+        check('current_password', 'Mật khẩu nhập lại phải nhiều hơn 6 ký tự! ').isLength({ min: 6 }),
         check('current_password', 'Mật khẩu nhập lại không được trống!').not().isEmpty(),
 
     ];
@@ -53,5 +74,6 @@ router.get("/accountorders",mws.verifyToken, userControl.accountorders)
 router.post("/changeuserinfo",mws.verifyToken,validateUserInfo(),userControl.changeUserInfo)
 router.post("/changegguserinfo",mws.verifyToken,validateGGUserInfo(),userControl.changeGGUserInfo)
 router.post("/addgguserinfo",validateGGUserInfo(),userControl.addGGUserInfo)
+router.post("/changeuserpassword",mws.verifyToken, validateUserPassword(),userControl.changeUserPassword)
 
 module.exports = router;

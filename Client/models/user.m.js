@@ -30,6 +30,27 @@ module.exports = {
     },
     changeUserInfo: async (userid, userinfo)=>
     {
+        // const findUser = await db.findUserByID(userid);
+        // const oldPassword = findUser.Password;
+        // let checkPass =   await bcrypt.compare(userinfo.current_password,oldPassword );
+        // if (checkPass === false)
+        // {
+        //     return -1;//Mật khẩu không hợp lệ
+        // }
+        // else{
+            const updateUser = await db.updateUser(userid, userinfo);
+            if (updateUser)
+            {
+                return 1;
+            }
+            else{
+                return 0;
+            }
+        // }
+    
+    },
+    changeUserPassword: async (userid, userinfo)=>
+    {
         const findUser = await db.findUserByID(userid);
         const oldPassword = findUser.Password;
         let checkPass =   await bcrypt.compare(userinfo.current_password,oldPassword );
@@ -38,7 +59,8 @@ module.exports = {
             return -1;//Mật khẩu không hợp lệ
         }
         else{
-            const updateUser = await db.updateUser(userid, userinfo);
+            const updateUser =  await db.updataUserPassword(userid,await bcrypt.hash(userinfo.password,10));
+            //await db.updateUser(userid, userinfo);
             if (updateUser)
             {
                 return 1;
