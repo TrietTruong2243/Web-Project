@@ -86,11 +86,30 @@ module.exports = {
     getUserByEmail: async (email)=>{
         return await db.findUserByEmail(email);
     },
-    findUserToChangeInfo: async (id,email)=>
+    findUserByUserName: async(username) =>
+    {
+        return await db.findUserByUserName(username)
+    },
+    findUserEmailToChangeInfo: async (id,email)=>
     {
        
         const data = await db.findUserByEmail(email);
         
+        if (!data)
+        {
+            return true;
+        }
+        if (data.CustomerID ===id)
+        {
+            return true;
+        }
+       return false;
+    },
+    findUserNameToChangeInfo: async (id,username)=>
+    {
+       
+        const data = await db.findUserByUserName(username);
+        console.log(data);
         if (!data)
         {
             return true;

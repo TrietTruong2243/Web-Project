@@ -272,7 +272,7 @@
                                             </div>
 
 
-                                            <form class="mx-1 mx-md-4" id="gguserinfo" >
+                                            <form class="mx-1 mx-md-4" id="gguserinfo">
 
                                                 <div class="d-flex flex-row align-items-center mb-4">
                                                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
@@ -288,9 +288,19 @@
                                                     </div>
                                                 </div>
                                                 <div class="d-flex flex-row align-items-center mb-4">
+                                                    <div class="form-outline flex-fill mb-0">
+                                                        <label class="form-label" for="form3Example1c">Username</label>
+
+                                                        <input type="text" id="form3Example1c" class="form-control"
+                                                            name="username" />
+                                                        <h4 style="color:red" id="username_err"></h4>
+
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex flex-row align-items-center mb-4">
                                                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                                     <div class="form-outline flex-fill mb-0">
-                                                        <label class="form-label" for="form3Example1c">Name</label>
+                                                        <label class="form-label" for="form3Example1c">FullName</label>
 
                                                         <input type="text" id="form3Example1c" class="form-control"
                                                             name="name" value="" />
@@ -359,29 +369,28 @@
         $("body").delegate("#gguserinfo", "submit", function (e) {
             e.preventDefault()
             const formData = $(this).serialize();
-            alert(formData)
+           
             $.ajax({
                 type: 'POST',
                 url: '/user/addgguserinfo',
                 data: formData,
                 //dataType: 'string',
                 success: function (response) {
-                    alert(response.err)
                     $("#success").text("")
                     $("#err").text("")
                     $("#name_err").text("")
                     $("#phone_number_err").text("")
                     $("#home_address_err").text("")
-
+                    $("#username_err").text("")
                     if (response.err) {
 
                         const error = response.err;
-                        alert(error)
                         for (i of error) {
                             if (i.path === 'email_address') {
                                 $("#email_err").text(i.msg);
 
                             }
+                            
                             if (i.path === 'name') {
                                 $("#name_err").text(i.msg);
 
@@ -392,6 +401,9 @@
                             }
                             if (i.path === 'home_address') {
                                 $("#home_address_err").text(i.msg);
+
+                            } if (i.path === 'username') {
+                                $("#username_err").text(i.msg);
 
                             }
 
@@ -412,7 +424,7 @@
             })
         })
     </script>
-    
+
 </body>
 
 

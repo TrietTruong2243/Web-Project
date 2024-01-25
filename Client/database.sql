@@ -3,6 +3,7 @@ CREATE DATABASE "SHOPPING_WEB";
 CREATE TABLE "Customer"
 (
     "CustomerID"  BIGINT PRIMARY KEY,
+    "Username" VARCHAR(50),
     "CustomerName" VARCHAR(50),
     "PhoneNumber" CHAR(10),
     "HomeAddress" VARCHAR(255),

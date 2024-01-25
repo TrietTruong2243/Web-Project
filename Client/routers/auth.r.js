@@ -30,8 +30,9 @@ passport.use(new GoogleStrategy({
 ));
 passport.use(new LocalStrategy(async (username, password, done) => {
 
-    let rs = await User.findUserByEmail(username);
-
+    // let rs = await User.findUserByEmail(username);
+    let rs = await User.findUserByUserName(username);
+    console.log(rs);
     let auth = false;
     if (rs) {
    
@@ -98,7 +99,7 @@ let validateRegisterUser = () => {
 router.post("/signup", validateRegisterUser(), appControl.addUser);
 router.post("/signin", passport.authenticate('local', { failureRedirect: '/auth/userinfo', failureFlash: 'Invalid username or password' }),
     async function (req, res) {
-        const user = await User.findUserByEmail(req.body.username);
+        const user = await User.findUserByUserName(req.body.username);
         const accessToken = jwt.sign({ id: user.CustomerID, isGoogleAccount: user.IsGoogleAccount || false }, process.env.SECRET_KEY, { expiresIn: "1h" });
         res.cookie('token', accessToken, { httpOnly: false, sameSite: true, maxAge: "3000000" });
         res.redirect("/")
