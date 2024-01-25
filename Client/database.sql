@@ -12,7 +12,7 @@ CREATE TABLE "Customer"
 );
 
 CREATE TABLE "Admin"
-(
+( 
     "AdminID" BIGINT PRIMARY KEY,
     "AdminName" VARCHAR(100),
     "Password" VARCHAR(255),
@@ -24,15 +24,16 @@ CREATE TABLE "Order"
     "OrderID" BIGINT PRIMARY KEY,
     "CustomerID" BIGINT,
     "Status" VARCHAR(30),
-    "TotalAmmount" INT,
+    "TotalAmount" INT,
     "OrderDate" DATE
 );
 
 CREATE TABLE "OrderProductDetail" 
 (
-    "OrderID" BIGINT PRIMARY KEY,
+    "OrderID" BIGINT,
     "ProductID" BIGINT,
-    "Quantity" INT
+    "Quantity" INT,
+    PRIMARY KEY("OrderID","ProductID")
 
 );
 
@@ -48,6 +49,7 @@ CREATE TABLE "Product"
     "Price" INT,
     "InventoryQuantity" INT,
     "CategoryID" BIGINT
+
 );
 
 CREATE TABLE "Image"(

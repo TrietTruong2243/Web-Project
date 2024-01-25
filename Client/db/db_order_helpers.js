@@ -19,7 +19,7 @@ module.exports = {
         // console.log(query);
         const result = await db.query(query);
         // Check if any rows were returned
-        // console.log(result.rows);
+        console.log(result.rows);
         return result.rows; 
     },
     getOrderInfo: async( orderID)=>{
@@ -27,7 +27,7 @@ module.exports = {
         // console.log(query);
         const result = await db.query(query);
         // Check if any rows were returned
-        console.log(result.rows[0]);
+        // console.log(result.rows[0]);
         return result.rows[0]; 
     },
     getOrderDetail: async( orderID)=>{

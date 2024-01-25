@@ -10,14 +10,15 @@ module.exports = {
         const userInfo = await orderModel.getUserInfo(userID);
         const orderInfo = await orderModel.getOrderInfo(orderID);
         const orderDetail = await orderModel.getOrderDetail(orderID);
-        res.json({orderInfo: orderInfo, userInfo: userInfo, orderDetail: orderDetail});
+        res.render("home",{ layout: "orderdetails", orderInfo: orderInfo, userInfo: userInfo, orderDetail: orderDetail})
+        // res.json({orderInfo: orderInfo, userInfo: userInfo, orderDetail: orderDetail});
     },
     OrderDetail: async(req,res)=>{
         const userID = req.user.id;
-
         const userInfo = req.query.userInfo;
         const orderInfo = req.query.orderInfo;
         const orderDetail = req.query.orderDetail;
-        res.render("home",{ layout: "cart", orderInfo: orderInfo, userInfo: userInfo, orderDetail: orderDetail})
-    },
+        console.log(orderDetail); 
+        res.render("home",{ layout: "OrderDetails", orderInfo: orderInfo, userInfo: userInfo, orderDetail: orderDetail})
+    }, 
 }

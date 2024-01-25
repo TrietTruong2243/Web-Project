@@ -4,10 +4,8 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
     <style>
         #dg-chat-iframe {
             position: absolute;
@@ -84,10 +82,74 @@
             text-align: left;
         }
     </style>
-    <title>Account settings</title>
+    <style type="text/css">
+        body {
+            background: #e6e6e6;
+        }
 
+        .card {
+            box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+        }
 
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0 solid rgba(0, 0, 0, .125);
+            border-radius: 1rem;
+        }
 
+        .text-reset {
+            --bs-text-opacity: 1;
+            color: inherit !important;
+        }
+
+        a {
+            color: #5465ff;
+            text-decoration: none;
+        }
+    </style>
+    <style>
+        .status span {
+            position: relative;
+            border-radius: 30px;
+            padding: 4px 10px 4px 25px;
+        }
+
+        .status span:after {
+            position: absolute;
+            top: 9px;
+            left: 10px;
+            width: 10px;
+            height: 10px;
+            content: '';
+            border-radius: 50%;
+        }
+
+        .status .Done {
+            background: #cff6dd;
+            color: #1fa750;
+        }
+
+        .status .Done:after {
+            background: #23bd5a;
+        }
+
+        .status .Waiting {
+            background: #fdf5dd;
+            color: #cfa00c;
+        }
+
+        .status .Waiting:after {
+            background: #f2be1d;
+        }
+    </style>
+
+    <title>Order Details</title>
     <style type="text/css">
         #dg-chat-container {
             display: none;
@@ -96,70 +158,133 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
     <link type="text/css" rel="stylesheet" href="/resource/theme-8c4df980-6632-013c-f3de-5e0f1ae9fa0d.css">
-    <link type="text/css" rel="stylesheet" href="/resource/widget.css">
-    <link type="text/css" rel="stylesheet" href="/resource/order_style.css">
+
 </head>
 
 <body class="productlanding US_EN  cookie-message-active   pace-done" id="productlanding">
-
-
-
-
     {{> headers/page_header}}
     <!-- body -->
+
     <div class="body" id="main-content">
         <div class="body-inner">
-            <div class="body-content">
+            <div class="body-content " style="background-color: rgb(168, 167, 167);">
+                <div class="container-fluid">
+                    <div class="container">
+                        <!-- title -->
+                        <div class="d-flex justify-content-between align-items-center py-3">
+                            <h2 class="h5 mb-0"><a href="#" class="text-muted"></a> Order #{{orderInfo.OrderID}}</h2>
+                        </div>
 
-                <nav class="navBar navBar--sub navBar--account flex-row">
-                    <ul class="navBar-section">
-                         <li class="navBar-item is-active" id="Account">
-                            <a class="navBar-action" class="p-2">Account settings</a>
+                        <div class="row">
+                            <!-- order -->
+                            <div class="col-lg-8 ">
+                                <!-- order info & detail -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class=" p-3 d-flex justify-content-between border border primary "
+                                            style="background-color: black; color:white ">
+                                            <div class="status">
+                                                <span class="me-3">{{orderInfo.Date}}</span>
+                                                <span class="me-3">#{{orderInfo.OrderID}} </span>
+                                                <span class="me-3">Visa -1234</span>
+                                                <span class=" me-3 {{orderInfo.Status}}">{{orderInfo.Status}}</span>
+                                            </div>
+                                        </div>
+                                        <table class="table " style="margin-top: 2px;">
+                                            <tbody>
+                                                {{#each orderDetail}}
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex mb-2">
+                                                                <div class="flex-shrink-0">
+                                                                    <img src="{{Image}}"
+                                                                        alt width="35" class="img-fluid">
+                                                                </div>
+                                                                <div class="flex-lg-grow-1 ms-3">
+                                                                    <h4 class="small mb-0 mt-1" style="font-weight: 700; font-size:medium">
+                                                                        <a href="#" class="text-reset"> {{ProductName}}</a>
+                                                                    </h4>
+                                                                    <span class="small">Describe: {{Describe}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td> {{Quantity}}</td>
+                                                        <td class="text-end">{{Price}} đ</td>
+                                                    </tr>
+                                                {{/each}}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="fw-bold">
+                                                    <td colspan="2">TOTAL</td>
+                                                    <td class="text-end">{{orderInfo.Total}} đ</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
 
+                                <!-- payment & user address -->
+                                <div class="card mb-4">
+                                    <div class="card-body bg-light rounded-4">
+                                        <div class="row">
+                                            <div class="col-lg-6 text-start ps-4">
+                                                <h3 class="h6">Payment Method</h3>
+                                                <p>Visa -1234 <br>
+                                                    Total: {{orderInfo.Total}} đ
+                                                    {{#if orderInfo.Check}}
+                                                    <span class="badge bg-success rounded-pill">PAID</span></p>
+                                                    {{else}}
+                                                     <span class="badge bg-warning rounded-pill">WAIT</span></p>
+                                                    {{/if}}
 
-                        </li>
-                        <li class="navBar-item " id="Order">
-                            <a class="navBar-action " class="p-2">Orders</a>
+                                            </div>
+                                            <div class="col-lg-6 text-start ps-5">
+                                                <h3 style="font-weight: 700; font-size:medium">Billing address</h3>
+                                                <address>
+                                                    <strong style="font-weight: 500; font-size:medium">{{userInfo.Name}}</strong><br>
+                                                    <abbr title="Address">Addr:</abbr> {{userInfo.Address}}<br>
+                                                    <abbr title="Phone Number">P.:</abbr> {{userInfo.PhoneNumber}}
+                                                </address>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <!-- user info -->
+                            <div class="col-lg-4 rounded-4">
+                                <div class="card mb-4 bg-light mt-3">
 
-                        </li>
-                       
-
-                        <li class="navBar-item" id="signout" onclick="signout()">
-                            <a class="navBar-action" class="p-2" href="/auth/signout">Sign Out</a>
-                        </li>
-
-                    </ul>
-                </nav>
-
-                <div id="content">
-                    <style>
-                        .table tbody td.status .Done {
-                            background: #cff6dd;
-                            color: #1fa750;
-                        }
-
-                        .table tbody td.status .Done:after {
-                            background: #23bd5a;
-                        }
-
-                        .table tbody td.status .Waiting {
-                            background: #fdf5dd;
-                            color: #cfa00c;
-                        }
-
-                        .table tbody td.status .Waiting:after {
-                            background: #f2be1d;
-                        }
-                    </style>
+                                    <div class="card-body text-start ps-5 pb-2 ">
+                                        <h4 class="text-primary"> Customer Information</h4>
+                                            <strong style="font-weight: 700; font-size:medium"> {{userInfo.Name}}</strong> <br>
+                                            <span>
+                                                Address:{{userInfo.Address}}
+                                            </span> <br>
+                                            <span>
+                                                Email:
+                                                <a href="#" class="text-decoration-underline"
+                                                    target="_blank">{{userInfo.Email}}</a> <i
+                                                    class="bi bi-box-arrow-up-right"></i>
+                                            </span> <br>
+                                            <span>
+                                                Phone Number:{{userInfo.PhoneNumber}}
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     {{> footers/page_footer}}
+
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<script>
+    {{!--
+    <script>
         window.onload = function () {
             $.ajax({
                 type: 'GET',
@@ -174,15 +299,15 @@
     </script>
     <script>
         function formatDate(inputDate) {
-        var date = new Date(inputDate);
-        var day = date.getDate();
-        var month = date.getMonth() + 1; // Lưu ý rằng tháng trong JavaScript bắt đầu từ 0
-        var year = date.getFullYear(); // Lấy hai chữ số cuối cùng của năm
+            var date = new Date(inputDate);
+            var day = date.getDate();
+            var month = date.getMonth() + 1; // Lưu ý rằng tháng trong JavaScript bắt đầu từ 0
+            var year = date.getFullYear(); // Lấy hai chữ số cuối cùng của năm
 
-        // Định dạng: dd/mm/yy
-        var formattedDate = day + "/" + month + "/" + year;
+            // Định dạng: dd/mm/yy
+            var formattedDate = day + "/" + month + "/" + year;
 
-        return formattedDate;
+            return formattedDate;
         }
         $(function () {
             $(".navBar-item").click(function (e) {
@@ -285,10 +410,6 @@
         });
     </script>
 
-
-
-
-
     <script>
         $("body").delegate("#gguserinfo", "submit", function (e) {
             e.preventDefault()
@@ -342,7 +463,7 @@
             })
         })
     </script>
-<script>
+    <script>
         $("body").delegate("#userinfo", "submit", function (e) {
             e.preventDefault()
 
@@ -485,25 +606,26 @@
         })
     </script>
 
-    
+
     <script>
-       $("body").delegate(".order_detail", "click", function (e) {
+        $("body").delegate(".order_detail", "click", function (e) {
             e.preventDefault()
             const id = $(this).attr('id');
-
+            console.log(id);
             $.ajax({
                 type: 'get',
                 url: '/order/getorderdetail',
-                data: { OrderID: id  },
+                data: { OrderID: id },
                 success: function (data) {
-                    $.get("/order/orderdetail", {userInfo: data.userInfo, orderInfo: data.orderInfo, orderDetail: data.orderDetail});
+                    console.log(data);
+                    $.get("/order/orderdetail", { userInfo: data.userInfo, orderInfo: data.orderInfo, orderDetail: data.orderDetail });
                 },
 
-                error: function (err) { 
+                error: function (err) {
                 }
             })
         })
-    </script>
+    </script> --}}
 </body>
 
 
