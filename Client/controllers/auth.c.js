@@ -48,6 +48,9 @@ module.exports = {
             const addUser = await model.addNewUser(req.body);
             var err;
             switch (addUser) {
+                case -2:
+                    err = "Username đã tồn tại, không thể tạo tài khoản "
+                    break;
                 case -1:
                     err = "Email đã tồn tại, không thể tạo tài khoản "
                     break;

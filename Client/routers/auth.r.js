@@ -64,6 +64,10 @@ let validateRegisterUser = () => {
     return [
         check('name', 'Tên không hợp lệ!').isAlphanumeric(),
         check('name', 'Tên không được trống!').not().isEmpty(),
+        
+        check('username', 'Username phải nhiều hơn 6 ký tự!').isLength({ min: 6 }),
+        check('username', 'Username không được trống!').not().isEmpty(),
+
         check('email_address', 'Định dạng email không hợp lệ!').isEmail(),
         check('email_address', 'Email không được trống').not().isEmpty(),
 

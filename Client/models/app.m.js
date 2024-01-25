@@ -9,8 +9,7 @@ module.exports = {
     getAllPages: async (categoryID,filter) => {
         const allProduct = await productDB.getProductsByCategory(categoryID,filter);
      
-        const result = Math.ceil(Object.keys(allProduct).length * 1.0 / 3);
-
+        const result = Math.ceil(Object.keys(allProduct).length * 1.0 / 5);
         return (Array.from({ length: result }, (_, i) => new Object({ value: i + 1, current: false })));
 
     },
@@ -20,23 +19,26 @@ module.exports = {
             list: [],
             current: page
         };
-        for (let i=3 ; i > 0; i--)
+        for (let i=5 ; i > 0; i--)
         {
-            if (allProduct[3*page -i])
+            if (allProduct[5*page -i])
             {
-                const image = await imageDB.getImageSrcByProductID(allProduct[3*page -i].ProductID);
+                const image = await imageDB.getImageSrcByProductID(allProduct[5*page -i].ProductID);
                 if (image)
                 {
-                    allProduct[3*page -i].Image  = image.Path;
+                    allProduct[5*page -i].Image  = image.Path;
                 }
                 else{
-                    allProduct[3*page -i].Image =""
+                    allProduct[5*page -i].Image =""
                 }
-                result.list.push(allProduct[3*page -i]);
+                result.list.push(allProduct[5*page -i]);
                 
             }
         }
         return result
+    },
+    getAllProduct: async() =>{
+        return await productDB.getAllProduct();
     },
     getProductByID:async(productID)=>{
         const product = await productDB.getProductByID(productID);
@@ -51,7 +53,7 @@ module.exports = {
     },
     getAllFindPage: async(value)=>{
         const allFindProduct = await productDB.findProductsByValue(value);
-        const result = Math.ceil(Object.keys(allFindProduct).length * 1.0 / 3);
+        const result = Math.ceil(Object.keys(allFindProduct).length * 1.0 / 5);
         return (Array.from({ length: result }, (_, i) => new Object({ value: i + 1, current: false })));
        
     },
@@ -61,19 +63,19 @@ module.exports = {
             list: [],
             current: page
         };
-        for (let i=3 ; i > 0; i--)
+        for (let i=5 ; i > 0; i--)
         {
-            if (allFindProduct[3*page -i])
+            if (allFindProduct[5*page -i])
             {
-                const image = await imageDB.getImageSrcByProductID(allFindProduct[3*page -i].ProductID);
+                const image = await imageDB.getImageSrcByProductID(allFindProduct[5*page -i].ProductID);
                 if (image)
                 {
-                    allFindProduct[3*page -i].Image  = image.Path;
+                    allFindProduct[5*page -i].Image  = image.Path;
                 }
                 else{
-                    allFindProduct[3*page -i].Image =""
+                    allFindProduct[5*page -i].Image =""
                 }
-                result.list.push(allFindProduct[3*page -i]);
+                result.list.push(allFindProduct[5*page -i]);
                 
             }
         }
@@ -99,5 +101,6 @@ module.exports = {
             }
         }
         return result
-    }
+    },
+    
 }

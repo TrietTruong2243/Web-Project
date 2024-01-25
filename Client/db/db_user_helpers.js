@@ -62,5 +62,17 @@ module.exports = {
         WHERE "CustomerID"='${id}' RETURNING "CustomerID";`
         const data = await  db.query(query);
         return data;
+    },
+    findAllUserByEmail: async(email)=>{
+        const query = `SELECT * FROM public."${userTable}" WHERE "Email" = '${email}'`
+        const result = await db.query(query);
+        // Check if any rows were returned
+        return result.rows; 
+    },
+    findUserByUserName: async(username)=>{
+        const query = `SELECT * FROM public."${userTable}" WHERE "Username" = '${username}'`
+        const result = await db.query(query);
+        // Check if any rows were returned
+        return result.rows; 
     }
 }

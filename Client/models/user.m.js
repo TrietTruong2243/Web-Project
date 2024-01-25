@@ -85,5 +85,20 @@ module.exports = {
     },
     getUserByEmail: async (email)=>{
         return await db.findUserByEmail(email);
+    },
+    findUserToChangeInfo: async (id,email)=>
+    {
+       
+        const data = await db.findUserByEmail(email);
+        
+        if (!data)
+        {
+            return true;
+        }
+        if (data.CustomerID ===id)
+        {
+            return true;
+        }
+       return false;
     }
 }

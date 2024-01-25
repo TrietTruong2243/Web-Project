@@ -292,6 +292,12 @@ module.exports = {
             res.json({err: err1.errors})
         }
         else{
+            const checkEmail = await userModel.findUserToChangeInfo(userID,req.body.email_address)
+            if (checkEmail==false)
+            {
+                return res.json({addErr: "Email đã tồn tại"});
+
+            }
             const changeUserInfo = await userModel.changeUserInfo(userID, req.body);
             var err;
             switch (changeUserInfo) {

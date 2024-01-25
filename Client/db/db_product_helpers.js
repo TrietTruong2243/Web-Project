@@ -12,25 +12,46 @@ const db = new pg.Client({
 });
 db.connect();
 module.exports = {
-    getProductsByCategory: async (id, filter = "default") => {
-        var query
-        switch (filter) {
-            case "default":
-                query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}'`
-                break;
-            case "under1":
-                query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}' AND "Price" <= '1000000'`
+    getProductsByCategory: async (id, filter) => {
+        var query;
+        console.log(filter);
+        if (id == 0) {
+            if (!filter || (filter.minPrice=='' && filter.maxPrice=='')) {
+                query = `SELECT * FROM public."${table}" `
+            }
+            else if (!filter.minPrice || filter.minPrice=='') {
+                query = `SELECT * FROM public."${table}" WHERE "Price" < '${filter.maxPrice}'`
 
-                break;
-            case "under3":
-                query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}' AND "Price" > '1000000' AND "Price" <='3000000'`
+            }
+            else if (!filter.maxPrice ||filter.maxPrice=='') {
+                query = `SELECT * FROM public."${table}" WHERE"Price" > '${filter.minPrice}'`
 
-                break;
-            case "over3":
-                query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}' AND "Price" > '3000000'`
+            }
+            else {
+                query = `SELECT * FROM public."${table}" WHERE "Price" < '${filter.maxPrice}'AND "Price" > '${filter.minPrice}'`
 
-                break;
+            }
+            console.log(query);
+            const result = await db.query(query);
+            // Check if any rows were returned
+            return result.rows;
         }
+        if (!filter || (filter.minPrice=='' && filter.maxPrice=='')) {
+            query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}'`
+        }
+        else if (!filter.minPrice|| filter.minPrice=='') {
+            query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}' AND "Price" < '${filter.maxPrice}'`
+
+        }
+        else if (!filter.maxPrice ||filter.maxPrice=='') {
+            query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}' AND "Price" > '${filter.minPrice}'`
+
+        }
+        else {
+            query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}' AND "Price" < '${filter.maxPrice}'AND "Price" > '${filter.minPrice}'`
+
+        }
+        console.log(query);
         //const query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}'`
         // console.log(query);
         const result = await db.query(query);
@@ -52,6 +73,13 @@ module.exports = {
     },
     getRelatedProduct: async (productID, categoryID) => {
         const query = `SELECT * FROM public."${table}" WHERE "ProductID" != '${productID}' AND "CategoryID" = '${categoryID}'`
+
+        const result = await db.query(query);
+        // Check if any rows were returned
+        return result.rows;
+    },
+    getAllProduct: async () => {
+        const query = `SELECT * FROM public."${table}"`
 
         const result = await db.query(query);
         // Check if any rows were returned
