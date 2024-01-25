@@ -14,7 +14,7 @@ const LocalsMiddleware = require('./middlewares/locals');
 const ErrorHandlerMiddleware = require('./middlewares/errorHandler');
 const db = require('./models');
 // uncomment these line to create new tables and insert first admin
-// db.sequelize.sync({ force: true });
+// db.sequelize.sync({ force: true })
 // db.User.create({
 //     username: 'admin',
 //     email: 'abc@gmail.com',

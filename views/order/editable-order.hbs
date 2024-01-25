@@ -1,0 +1,300 @@
+<link rel="stylesheet" href="/css/table.css">
+<link rel="stylesheet" href="/css/input.css">
+<div class="container-fluid mb-4">
+    <div class="d-flex flex-row justify-content-between align-items-center">
+        <div class="d-flex flex-row align-items-center">
+            <h3>{{#if editable}} Edit {{else}} Create new {{/if}}</h3>
+        </div>
+    </div>
+    <div class="card mt-4">
+        <form name="product-form" method="post" class="p-4" {{#if editable}} editable="true" {{/if}} user-id="{{ order.user.id }}">
+            <div class="row mb-2">
+                <h4>Order Details</h4>
+                <div class="form-group col-md-6 has-danger">
+                    <label class="form-label">Username *</label>
+                    <input list="usernames" name="customername" type="text" class="form-control" value="{{ order.user.username }}" {{#if editable}} disabled {{else}} required {{/if}}/>
+                    <datalist id="usernames">
+                    </datalist>
+                </div>
+            </div>
+            <button class="btn btn-info" id="triggerModalBtn" data-bs-toggle="modal" data-bs-target="#addItemModal">Add item</button>
+            <div class="table-responsive">
+                <table class="table caption-top">
+                    <caption>List of order items</caption>
+                    <thead>
+                        <tr>
+                            <th class="align-middle font-weight-bolder ps-6">Product</th>
+                            <th class="align-middle font-weight-bolder ps-2">Price</th>
+                            <th class="align-middle font-weight-bolder ps-2">Number</th>
+                            <th class="align-middle font-weight-bolder ps-2">Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-table-body">
+                        {{#each order.orderItems}}
+                        <tr>
+                            <td class="align-middle">
+                                <div class="d-flex flex-row align-items-center">
+                                    <img {{#if this.product.mainImage}} src="{{this.product.mainImage.url}}" {{else}} src="/img/no-image-icon.png" {{/if}} class="avatar me-3" alt="user">
+                                    <span>{{ this.product.name }}</span>
+                                </div>
+                            </td>
+                            <td class="align-middle">{{ this.product.formattedPrice }}</td>
+                            <td class="align-middle">{{ this.quantity }}</td>
+                            <td id="orderItem-total" class="align-middle">{{ this.formattedAmount }}</td>
+                            <td class="align-middle">
+                                <button class="btn btn-outline-danger btn-sm removeOrderItem d-flex align-items-center justify-content-center"><i class="fa-regular fa-trash-can"></i></button>
+                            </td>
+                            <input type="hidden" name="productIds[]" value="{{ this.product.id }}">
+                            <input type="hidden" name="quantities[]" value="{{ this.quantity }}">
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end text-bolder">Total</td>
+                            <td id="order-total" value="{{ order.totalAmount }}">{{ orderformattedTotalAmount }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            
+            <div class="d-flex mb-4 justify-content-center text-center">
+                <span id="badge-error" class="badge-error border-radius-xl center mx-auto">{{ message }}</span>
+            </div>
+            <div class="d-md-flex justify-content-center text-center">
+                <button id="submitBtn" type="submit" class="btn btn-primary btn-sm">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addProductModalLabel">Add order item</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="item-product" class="col-form-label">Product</label>
+                        <input list="products" type="text" class="form-control" id="item-product">
+                        <datalist id="products">
+                        </datalist>
+                        <input type="hidden" name="productId">
+                    </div>
+                    <div class="mb-3">
+                        <label for="item-number" class="col-form-label">Number</label>
+                        <input type="number" class="form-control" id="item-number">
+                    </div>
+                </form>
+            </div>
+            <div class="d-flex mb-4 justify-content-center text-center">
+                <span id="badge-error1" class="badge-error border-radius-xl center mx-auto"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="addItemBtn" type="button" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const CurrencyOptions = { style: "currency", currency: "VND" };
+    const editable = $('form[name="product-form"]').attr('editable') === 'true';
+    // breadcrumbs
+    const breadcrumbs = $('.breadcrumb');
+    let breadcrumbContent = `
+            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/"><span class="breadcrumb-text">Dashboard</span></a></li>
+            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/order"><span class="breadcrumb-text">Orders</span></a></li>
+        `;
+    if ($('form[name="product-form"]').attr('editable') === 'true') {
+        breadcrumbContent += `
+            <li class="breadcrumb-item text-sm text-dark active">Edit</li>
+        `;
+    } else {
+        breadcrumbContent += `
+            <li class="breadcrumb-item text-sm text-dark active">Create new</li>
+        `;
+    }
+    breadcrumbs.html(breadcrumbContent);
+
+    // order user input
+    let users = [];
+    $.ajax({
+        url: '/customer/api/data/username',
+        type: 'GET',
+        success: function (data) {
+            users = data;
+            let userOptions = '';
+            for (let i = 0; i < users.length; i++) {
+                userOptions += `<option value="${data[i]}"></option>`;
+            }
+            $('#usernames').html(userOptions);
+        }
+    });
+
+    // order item input
+    let products = [];
+    $.ajax({
+        url: '/product/api/data',
+        type: 'GET',
+        success: function (data) {
+            products = data;
+            let productOptions = '';
+            for (let i = 0; i < products.length; i++) {
+                const name = products[i].name.replace(/[\"'<>]/g, (char) => {
+                    switch (char) {
+                        case '"':
+                            return '&quot;';
+                        case "'":
+                            return '&#039;';
+                        case '<':
+                            return '&lt;';
+                        case '>':
+                            return '&gt;';
+                    }
+                });
+                productOptions += `<option value="${name}"></option>`;
+            }
+            $('#products').html(productOptions);
+            console.log(products);
+        }
+    });
+
+    $('#triggerModalBtn').click(function (e) {
+        e.preventDefault();
+        $('#addItemModal').modal('show');
+    });
+
+    $('#item-product').on('input', function (e) {
+        const productName = $(this).val();
+        console.log(productName);
+        const product = products.find(p => p.name.localeCompare(productName) === 0);
+        if (product) {
+            $('input[name="productId"]').val(product.id);
+            $('#item-number').attr('max', product.quantity);
+            $('#item-number').attr('min', 1);
+        } else {
+            $('input[name="productId"]').val('');
+            $('#item-number').attr('max', 0);
+            $('#item-number').attr('min', 0);
+        }
+    });
+    
+    $('#addItemBtn').click(function (e) {
+        e.preventDefault();
+        const productId = $('input[name="productId"]').val();
+        const number = $('#item-number').val();
+        const maxNumber = parseInt($('#item-number').attr('max'));
+        if (number > maxNumber) {
+            $('#item-number').addClass('is-invalid');
+            $('#badge-error1').text(`The quantity of this product is ${maxNumber}`);
+            return;
+        }
+        if (productId && number) {
+            const product = products.find(p => p.id == productId);
+            $('#order-table-body').append(`
+                <tr>
+                    <td class="align-middle">
+                        <div class="d-flex flex-row align-items-center">
+                            <img src=${product.mainImage ? `"${product.mainImage.url}"` : "/img/no-image-icon.png"} class="avatar me-3" alt="product">
+                            <span>${product.name}</span>
+                        </div>
+                    </td>
+                    <td class="align-middle">${new Intl.NumberFormat('vi', CurrencyOptions).format(product.price)}</td>
+                    <td class="align-middle">${number}</td>
+                    <td id="orderItem-total" class="align-middle">${new Intl.NumberFormat('vi', CurrencyOptions).format(product.price * number)}</td>
+                    <td class="align-middle">
+                        <button class="btn btn-outline-danger removeOrderItem btn-sm d-flex align-items-center justify-content-center" type="button"><i class="fa-regular fa-trash-can"></i></button>
+                    </td>
+                    <input type="hidden" name="productIds[]" value="${product.id}">
+                    <input type="hidden" name="quantities[]" value="${number}">
+                </tr>
+            `);
+            let currentTotal = parseInt($('#order-total').attr('value'));
+            if(isNaN(currentTotal)) currentTotal = 0;
+            $('#order-total').text(new Intl.NumberFormat('vi', CurrencyOptions).format(currentTotal + product.price * number));
+        }
+        $('#item-product').val('');
+        $('#item-number').val('');
+        $('#badge-error1').text('');
+        $('#addItemModal').modal('hide');
+    });
+
+    document.addEventListener('click', function (e) {
+        let target = e.target.closest('.removeOrderItem');
+        if(target){
+            e.preventDefault();
+            target = $(target);
+            const orderItem = target.parent().parent();
+            const amount = parseInt(orderItem.find('#orderItem-total').text());
+            let currentTotal = parseInt($('#order-total').attr('value'));
+            if (isNaN(currentTotal)) currentTotal = 0;
+            $('#order-total').text(new Intl.NumberFormat('vi', CurrencyOptions).format(currentTotal - amount));
+            orderItem.remove();
+        }
+    });
+
+    // submit form
+    $('#submitBtn').click(function(e){
+        e.preventDefault();
+        if ($('#order-table-body').children().length === 0) {
+            $('#badge-error').text('Please add at least one order item');
+            return;
+        }
+        if($('input[name="customername"]').val() === ''){
+            e.preventDefault();
+            $('input[name="customername"]').addClass('is-invalid');
+            $('#badge-error').text('Please enter username');
+            return;
+        }
+        if(editable){
+            $.ajax({
+                url: '/order/api/edit/' + $('form[name="product-form"]').attr('user-id'),
+                type: 'PATCH',
+                data: $('form[name="product-form"]').serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        window.location.href = '/order';
+                    } else {
+                        $('#badge-error').text(data.message);
+                    }
+                },
+                error: function (err) {
+                    $('#badge-error').text(err.message);
+                }
+            });
+        } else {
+            $.ajax({
+                url: '/order/api/create-new',
+                type: 'POST',
+                data: $('form[name="product-form"]').serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        window.location.href = '/order';
+                    } else {
+                        $('#badge-error').text(data.message);
+                    }
+                },
+                error: function (err) {
+                    $('#badge-error').text(err.message);
+                }
+            });
+        }
+    })
+
+    // empty error message when typing
+    $('input').on('keyup', function (e) {
+        $(this).removeClass('is-invalid');
+        $(this).removeClass('is-valid');
+        $('#badge-error').text('');
+    });
+    $('select').on('change', function (e) {
+        $(this).removeClass('is-invalid');
+        $(this).removeClass('is-valid');
+        $('#badge-error').text('');
+    });
+</script>

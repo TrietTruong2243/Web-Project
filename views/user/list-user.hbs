@@ -179,7 +179,7 @@
                                 <th class="px-6 font-weight-bolder">User</th>
                                 <th class="px-2 font-weight-bolder">Fullname</th>
                                 <th class="px-2 font-weight-border">Updated at</th>
-                                <th></th>
+                                <th class="px-0"></th>
                             </tr>
                         </thead>
 
@@ -197,7 +197,7 @@
                                 <td>
                                     <div class="align-middle d-flex">
                                         <div>
-                                            <img {{#if this.imageUrl}} src="{{this.imageUrl}}" {{else}}
+                                            <img {{#if this.image}} src="{{this.image.url}}" {{else}}
                                                 src="img/user.png" {{/if}} class="avatar me-4" alt="user">
                                         </div>
                                         <div class="d-flex flex-column justify-content-center">
@@ -217,10 +217,10 @@
                                 <td class="align-middle">{{this.fullname}}</td>
                                 <td class="align-middle">{{this.formattedUpdatedAt}}</td>
                                 <td class="align-middle">
-                                    <button class="btn btn-outline-info d-flex align-items-center justify-content-center"
+                                    <button class="btn btn-outline-info d-flex align-items-center justify-content-center px-2"
                                         type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithInformation" aria-controls="offcanvasWithInformation"
                                         user-id="{{this.id}}" user-username="{{this.username}}"
-                                        user-fullname="{{this.fullname}}" user-image="{{this.imageUrl}}"
+                                        user-fullname="{{this.fullname}}" {{#if this.image}} user-image="{{this.image.url}}" {{/if}}
                                         user-email="{{this.email}}" user-phone="{{this.phone}}"
                                         user-address="{{this.address}}" user-status="{{this.status}}"
                                         user-formattedUpdatedAt="{{this.formattedUpdatedAt}}"
@@ -279,12 +279,12 @@
                 <p class="detail-info-item-content" id="detail-info-id"></p>
             </div>
             <div class="detail-info-item">
-                <p class="detail-info-item-title">Fullname</p>
-                <p class="detail-info-item-content" id="detail-info-fullname"></p>
-            </div>
-            <div class="detail-info-item">
                 <p class="detail-info-item-title">Email</p>
                 <p class="detail-info-item-content" id="detail-info-email"></p>
+            </div>
+            <div class="detail-info-item">
+                <p class="detail-info-item-title">Fullname</p>
+                <p class="detail-info-item-content" id="detail-info-fullname"></p>
             </div>
             <div class="detail-info-item">
                 <p class="detail-info-item-title">Phone</p>
@@ -438,10 +438,22 @@
             $('#offcanvasWithInformationLabel').html(`@${username}`);
             $('.detail-image').attr('src', image);
             $('#detail-info-id').html(userId);
-            $('#detail-info-fullname').html(fullname);
             $('#detail-info-email').html(email);
-            $('#detail-info-phone').html(phone);
-            $('#detail-info-address').html(address);
+            if(fullname){
+                $('#detail-info-fullname').html(fullname);
+            } else {
+                $('#detail-info-fullname').parent().addClass('d-none');
+            }
+            if(phone){
+                $('#detail-info-phone').html(phone);
+            } else {
+                $('#detail-info-phone').parent().addClass('d-none');
+            }
+            if(address){
+                $('#detail-info-address').html(address);
+            } else {
+                $('#detail-info-address').parent().addClass('d-none');
+            }
             $('#detail-info-CreatedAt').html(formattedCreatedAt);
             $('#detail-info-UpdatedAt').html(formattedUpdatedAt);
             if (status === 'active') {

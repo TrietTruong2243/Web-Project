@@ -1,7 +1,5 @@
 const db = require('../models');
-const bcrypt = require('bcrypt');
 const passport = require('passport');
-const Admin = db.Admin;
 
 module.exports = {
     // [GET] /login

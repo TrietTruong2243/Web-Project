@@ -5,19 +5,30 @@ const cloudinary = require('../config/cloudinary');
 const toDataUri = require('../helpers/dataUriConverter');
 const User = db.User;
 const Image = db.Image;
+const DateOptions = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false
+}
 
 module.exports = {
     // [GET] /:role
     showAll: (role) => {
         return async (req, res, next) => {
             try {
-                let { page, size, status, sortBy, sortDir, email, username, fullname, phone, address, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query;
+                let { id, page, size, status, sortBy, sortDir, email, username, fullname, phone, address, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query;
                 page = page || 1;
                 size = size || 10;
                 sortBy = sortBy || 'id';
                 sortDir = sortDir || 'asc';
                 let filters = { role };
 
+                if (id) {
+                    filters.id = id;
+                }
                 if (status) {
                     filters.status = status;
                 }
@@ -70,26 +81,28 @@ module.exports = {
                     order: [
                         [sortBy, sortDir]
                     ],
+                    include: [
+                        {
+                            model: Image,
+                            as: 'image'
+                        }
+                    ],
                     limit: size,
                     offset: (page - 1) * size
                 });
+                
                 for (let i = 0; i < users.length; ++i) {
-                    const image = await Image.findOne({
-                        where: {
-                            userId: users[i].id
-                        }
-                    });
                     users[i] = users[i].dataValues;
-                    users[i].imageUrl = image ? image.url : null;
+                    if(users[i].image) {
+                        users[i].image = users[i].image.dataValues;
+                    }
+                    users[i].formattedCreatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(users[i].createdAt);
+                    users[i].formattedUpdatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(users[i].updatedAt);
                 }
-                for (let i = 0; i < users.length; ++i) {
-                    const createdAt = new Date(users[i].createdAt);
-                    const updatedAt = new Date(users[i].updatedAt);
-                    const formattedCreatedAt = `${createdAt.getDate()}-${createdAt.getMonth() + 1}-${createdAt.getFullYear()} ${createdAt.getHours()}:${createdAt.getMinutes()}`;
-                    const formattedUpdatedAt = `${updatedAt.getDate()}-${updatedAt.getMonth() + 1}-${updatedAt.getFullYear()} ${updatedAt.getHours()}:${updatedAt.getMinutes()}`;
-                    users[i].formattedCreatedAt = formattedCreatedAt;
-                    users[i].formattedUpdatedAt = formattedUpdatedAt;
-                }
+
+                const total = await User.count({
+                    where: filters
+                });
 
                 let urlParams = (new URLSearchParams(req.query));
                 urlParams.delete('page');
@@ -104,7 +117,7 @@ module.exports = {
                 res.render('user/list-user', {
                     active,
                     users,
-                    total: users.length,
+                    total,
                     page,
                     queryObj: req.query,
                     urlParams: urlParams.toString()
@@ -121,7 +134,6 @@ module.exports = {
             res.render('user/editable-user', {
                 active: { Customers: true },
                 editable: false,
-                action: 'create'
             });
         } catch (err) {
             next(err);
@@ -178,14 +190,24 @@ module.exports = {
     getEditUser: async (req, res, next) => {
         try {
             const id = req.params.id;
-            let user = await User.findByPk(id);
-            const image = await Image.findOne({
+            // skip for the super admin
+            if (id === '1') {
+                res.redirect('/customer');
+                return;
+            }
+            let user = await User.findOne({
                 where: {
-                    userId: id
-                }
+                    id
+                },
+                include: [
+                    {
+                        model: Image,
+                        as: 'image'
+                    }
+                ]
             });
             user = user.dataValues;
-            user.imageUrl = image ? image.url : null;
+            user.image = user.image.dataValues;
             res.render('user/editable-user', {
                 active: { Customers: true },
                 editable: true,
@@ -285,6 +307,11 @@ module.exports = {
     handleSingleItem: async (req, res, next) => {
         try {
             const id = req.params.id;
+            // skip for the super admin
+            if (id === '1') {
+                res.redirect('back');
+                return;
+            }
             const { action } = req.body;
             if (action === 'delete') {
                 // delete image
@@ -342,6 +369,10 @@ module.exports = {
     handleMultiItems: async (req, res, next) => {
         try {
             const { action, selectedItems } = req.body;
+            // skip for the super admin
+            if (selectedItems.includes('1')) {
+                selectedItems.splice(selectedItems.indexOf('1'), 1);
+            }
             if (action === 'delete') {
                 // delete images
                 const images = await Image.findAll({
@@ -394,7 +425,7 @@ module.exports = {
         }
     },
 
-    // api
+    // API
     // [GET] /check-username/:username
     checkUsername: async (req, res, next) => {
         try {
@@ -414,5 +445,17 @@ module.exports = {
             next(err);
         }
     },
+
+    // [GET] /customer/api/data
+    getAllUsernames: async (req, res, next) => {
+        try {
+            let users = await User.findAll({});
+            users = users.map(user => user.dataValues.username);
+            res.status(200).json(users);
+        } catch (err) {
+            console.log(err);
+            next(err);
+        }
+    }
 
 }

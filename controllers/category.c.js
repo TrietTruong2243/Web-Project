@@ -3,10 +3,17 @@ const bcrypt = require('bcrypt');
 const e = require('express');
 const { Op, UniqueConstraintError } = require('sequelize');
 const cloudinary = require('../config/cloudinary');
-const toDataUri = require('../helpers/dataUriConverter');
 const Category = db.Category;
 const Product = db.Product;
 const Image = db.Image;
+const DateOptions = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+}
 
 module.exports = {
     // [GET] /category
@@ -62,17 +69,14 @@ module.exports = {
                     }
                 });
                 const productsUrl = `/product?categoryId=${categories[i].id}`;
-                const createdAt = new Date(categories[i].createdAt);
-                const updatedAt = new Date(categories[i].updatedAt);
-                const formattedCreatedAt = `${createdAt.getDate()}-${createdAt.getMonth() + 1}-${createdAt.getFullYear()} ${createdAt.getHours()}:${createdAt.getMinutes()}`;
-                const formattedUpdatedAt = `${updatedAt.getDate()}-${updatedAt.getMonth() + 1}-${updatedAt.getFullYear()} ${updatedAt.getHours()}:${updatedAt.getMinutes()}`;
+                
                 categories[i] = categories[i].dataValues;
                 categories[i].products = {
                     number: productsNum,
                     url: productsUrl
                 }
-                categories[i].formattedCreatedAt = formattedCreatedAt;
-                categories[i].formattedUpdatedAt = formattedUpdatedAt;
+                categories[i].formattedCreatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(categories[i].createdAt);
+                categories[i].formattedUpdatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(categories[i].updatedAt);
             }
 
             if(sortBy === 'productsNum') {
@@ -85,12 +89,17 @@ module.exports = {
                 });
             }
 
+            const total = await Category.count({
+                where: filters
+            });
+
             const urlParams = new URLSearchParams(req.query);
             urlParams.delete('page');
+
             res.render('category/list-category', {
                 active: { Categories: true },
                 categories,
-                total: categories.length,
+                total,
                 page,
                 queryObj: req.query,
                 urlParams: urlParams.toString()
@@ -121,7 +130,14 @@ module.exports = {
             });
             res.redirect('/category');
         } catch (err) {
-            next(err);
+            if(err instanceof UniqueConstraintError) {
+                res.render('category/editable-category', {
+                    active: { Categories: true },
+                    editable: false,
+                    category: req.body,
+                    message: 'Category name already exists'
+                });
+            } else next(err);
         }
     },
 
@@ -211,7 +227,7 @@ module.exports = {
         }
     },
 
-    // [POST] /:role/multiselect-handle
+    // [POST] /category/multiselect-handle
     handleMultiItems: async (req, res, next) => {
         try {
             const { action, selectedItems } = req.body;

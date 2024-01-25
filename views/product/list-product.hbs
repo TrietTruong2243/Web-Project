@@ -21,10 +21,10 @@
     <div class="collapse p-0 mt-1" class="collapse" id="collapseFilter">
         <div class="row">
             <div class="col-md-6 col-lg-3">
-                <select id="filter-category" class="form-select" aria-label="Default select example">
+                <select id="filter-category" class="form-select" aria-label="Default select example" initCategoryId="{{ queryObj.category }}">
                     <option {{#unless queryObj.category }} selected {{/unless}}>Select category</option>
                     {{#each categories}}
-                    <option value="{{this.id}}" {{#eq this.id queryObj.category }} selected {{/eq}}>
+                    <option value="{{this.id}}">
                         {{this.name}}
                     </option>
                     {{/each}}
@@ -78,8 +78,8 @@
                 <select id="filter-sortBy" class="form-select form-select-sm">
                     <option value="id" {{#unless queryObj.sortBy }} selected {{/unless}} {{#eq queryObj.sortBy "id" }}
                         selected {{/eq}}>ID</option>
-                    <option value="username" {{#eq queryObj.sortBy "name" }} selected {{/eq}}>Name</option>
-                    <option value="fullname" {{#eq queryObj.sortBy "price" }} selected {{/eq}}>Price</option>
+                    <option value="name" {{#eq queryObj.sortBy "name" }} selected {{/eq}}>Name</option>
+                    <option value="price" {{#eq queryObj.sortBy "price" }} selected {{/eq}}>Price</option>
                     <option value="quantity" {{#eq queryObj.sortBy "quantity" }} selected {{/eq}}>Quantity</option>
                     <option value="updatedAt" {{#eq queryObj.sortBy "updatedAt" }} selected {{/eq}}>UpdatedAt</option>
                 </select>
@@ -157,7 +157,7 @@
                                 <th class="px-2 font-weight-bolder">Category</th>
                                 <th class="px-2 font-weight-border">Price</th>
                                 <th class="px-2 font-weight-bolder">Updated At</th>
-                                <th></th>
+                                <th class="px-0"></th>
                             </tr>
                         </thead>
 
@@ -182,14 +182,14 @@
                                         <span>{{this.name}}</span>
                                     </div>
                                 </td>
-                                <td class="align-middle">{{this.categoryName}}</td>
-                                <td class="align-middle">{{this.price}}</td>
+                                <td class="align-middle">{{this.category.name}}</td>
+                                <td class="align-middle">{{this.formattedPrice}}</td>
                                 <td class="align-middle">{{this.formattedUpdatedAt}}</td>
                                 <td class="align-middle">
                                     <button
-                                        class="btn btn-outline-info d-flex align-items-center justify-content-center"
+                                        class="btn btn-outline-info d-flex align-items-center justify-content-center px-2"
                                         type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithInformation{{ this.id }}" 
-                                        aria-controls="offcanvasWithInformation" product-id="{{ this.id }}" product-name="{{ this.name }}">
+                                        aria-controls="offcanvasWithInformation{{ this.id }}" product-id="{{ this.id }}" product-name="{{ this.name }}">
                                         <i class="fa-regular fa-eye pe-2"></i>
                                         Show
                                     </button>
@@ -200,19 +200,19 @@
                     </table>
                 </div>
                 <nav aria-label="Product pagination">
-                    <ul class="pagination justify-content-center custom-pagination mt-2" id="user-pagination">
+                    <ul class="pagination justify-content-center custom-pagination mt-2" id="product-pagination">
                     </ul>
                 </nav>
             </div>
         </div>
     </form>
 
-    {{#each products}}
     {{!-- Offcanvas for details --}}
+    {{#each products}}
     <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasWithInformation{{ this.id }}"
-        aria-labelledby="offcanvasWithInformationLabel">
+        aria-labelledby="offcanvasWithInformation{{this.id}}Label">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasWithInformationLabel">
+            <h5 class="offcanvas-title" id="offcanvasWithInformation{{this.id}}Label">
                 Product details
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -224,20 +224,20 @@
                 <i class="fa-regular fa-trash-can pe-2"></i>
                 <span>Delete</span>
             </button>
-            <a id="offcanvas-edit-btn" href="/product/edit/{{ this.id }}"
+            <a id="offcanvas-edit-btn" href="/product/edit/{{this.id}}"
                 class="col-4 btn btn-outline-success d-flex align-items-center justify-content-center mt-2">
                 <i class="fa-regular fa-pen-to-square pe-2"></i>
                 <span>Edit</span>
             </a>
-            <img class="detail-image enlarge-image image-has-modal" src="{{ this.mainImage.url }}" alt="product">
-            <div class="list-image">
+            <img class="detail-image enlarge-image image-has-modal" {{#if this.mainImage }} src="{{ this.mainImage.url }}" {{else}} src="/img/no-image-icon.png" {{/if}} alt="product">
+            {{#if this.images }}
                 <p class="detail-info-item-title">Images</p>
                 {{#each this.images}}
                 <img class="detail-info-image mx-1 mt-1 enlarge-image image-has-modal" src="{{ this.url }}"
                     alt="product-image{{@index}}">
                 {{/each}}
-            </div>
-            <div class="detail-info-item">
+            {{/if}}
+            <div class="detail-info-item mt-4">
                 <p class="detail-info-item-title">ID</p>
                 <p class="detail-info-item-content">{{ this.id }}</p>
             </div>
@@ -248,7 +248,7 @@
             <div class="detail-info-item">
                 <p class="detail-info-item-title">Category</p>
                 <p class="detail-info-item-content">
-                    <a href="{{ this.categoryUrl }}">{{ this.categoryName }}</a>
+                    <a href="/category?id={{ this.category.id }}">{{ this.category.name }}</a>
                 </p>
             </div>
             <div class="detail-info-item">
@@ -257,12 +257,14 @@
             </div>
             <div class="detail-info-item">
                 <p class="detail-info-item-title">Price</p>
-                <p class="detail-info-item-content">{{ this.price }}</p>
+                <p class="detail-info-item-content">{{ this.formattedPrice }}</p>
             </div>
+            {{#if this.description}}
             <div class="detail-info-item">
                 <p class="detail-info-item-title">Description</p>
-                <p class="detail-info-item-content w-100">{{ this.description }}</p>
+                <p class="detail-info-item-content">{{ this.description }}</p>
             </div>
+            {{/if}}
             <div class="detail-info-item">
                 <p class="detail-info-item-title">Created at</p>
                 <p class="detail-info-item-content">{{ this.formattedCreatedAt}}</p>
@@ -305,6 +307,11 @@
 <script src="/js/table.js"></script>
 <script>
     $(() => {
+        const initCategoryId = $('#filter-category').attr('initCategoryId');
+        if (initCategoryId) {
+            $('#filter-category').val(initCategoryId);
+        }
+
         // pagination
         const table = $('#data-table');
         const page = parseInt(table.attr('page'));
@@ -317,7 +324,7 @@
             $('#collapseFilter').addClass('show');
         }
 
-        $('#user-pagination').html(renderPagination(page, total, size, 'product', urlParams));
+        $('#product-pagination').html(renderPagination(page, total, size, 'product', urlParams));
 
         // breadcrumbs
         const breadcrumbs = $('.breadcrumb');
@@ -363,10 +370,6 @@
             const button = $(e.relatedTarget);
             productId = button.attr('product-id');
             productName = button.attr('product-name');
-            
-            $('#offcanvas-edit-btn').click(() => {
-                window.location.href = `/product/edit/${productId}`;
-            });
         })
 
         // filter
@@ -386,6 +389,7 @@
         });
         $('#filter-apply-btn').click(() => {
             const name_f = $('#filter-name').val();
+            const category_f = $('#filter-category').val();
             const quantityFrom_f = $('#filter-quantityFrom').val();
             const quantityTo_f = $('#filter-quantityTo').val();
             const priceFrom_f = $('#filter-priceFrom').val();
@@ -410,6 +414,9 @@
             }
             if (name_f) {
                 urlParams += `&name=${name_f}`;
+            }
+            if (category_f && category_f !== 'Select category') {
+                urlParams += `&category=${category_f}`;
             }
             if (quantityFrom_f) {
                 urlParams += `&quantityFrom=${quantityFrom_f}`;

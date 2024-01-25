@@ -1,18 +1,28 @@
 const db = require('../models');
-const bcrypt = require('bcrypt');
 const { Op, UniqueConstraintError } = require('sequelize');
 const cloudinary = require('../config/cloudinary');
 const toDataUri = require('../helpers/dataUriConverter');
-const { parse } = require('dotenv');
 const Product = db.Product;
 const Category = db.Category;
 const Image = db.Image;
+const DateOptions = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+}
+const CurrencyOptions = {
+    style: 'currency',
+    currency: 'VND'
+}
 
 module.exports = {
     // [GET] /product
     showAll: async (req, res, next) => {
         try {
-            let { page, size, sortBy, sortDir, name, category, quantityFrom, quantityTo, priceFrom, priceTo, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query;
+            let { id, page, size, sortBy, sortDir, name, category, quantityFrom, quantityTo, priceFrom, priceTo, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query;
             page = page || 1;
             size = size || 10;
             sortBy = sortBy || 'id';
@@ -20,6 +30,9 @@ module.exports = {
             let filters = {};
 
             // filter
+            if (id) {
+                filters.id = id;
+            }
             if (name) {
                 filters.name = {
                     [Op.like]: `%${name}%`
@@ -64,6 +77,20 @@ module.exports = {
 
             const products = await Product.findAll({
                 where: filters,
+                include: [
+                    {
+                        model: Category,
+                        as: 'category'
+                    },
+                    {
+                        model: Image,
+                        as: 'mainImage'
+                    },
+                    {
+                        model: Image,
+                        as: 'images'
+                    }
+                ],
                 order: [
                     [sortBy, sortDir]
                 ],
@@ -71,26 +98,18 @@ module.exports = {
                 offset: (page - 1) * size
             });
             for (let i = 0; i < products.length; ++i) {
-                let images = await Image.findAll({
-                    where: {
-                        productId: products[i].id
-                    }
-                });
-                images = images.map(image => image.dataValues);
-
-                const mainImage = images.find(image => image.id === products[i].mainImageId);
-                const createdAt = new Date(products[i].createdAt);
-                const updatedAt = new Date(products[i].updatedAt);
-                const formattedCreatedAt = `${createdAt.getDate()}-${createdAt.getMonth() + 1}-${createdAt.getFullYear()} ${createdAt.getHours()}:${createdAt.getMinutes()}`;
-                const formattedUpdatedAt = `${updatedAt.getDate()}-${updatedAt.getMonth() + 1}-${updatedAt.getFullYear()} ${updatedAt.getHours()}:${updatedAt.getMinutes()}`;
                 products[i] = products[i].dataValues;
-                products[i].images = images;
-                products[i].mainImage = mainImage;
-                products[i].categoryName = categories.find(category => category.id === products[i].categoryId).name;
-                products[i].categoryUrl = `/category?name=${products[i].categoryName}`;
-                products[i].formattedCreatedAt = formattedCreatedAt;
-                products[i].formattedUpdatedAt = formattedUpdatedAt;
+                products[i].category = products[i].category.dataValues;
+                products[i].images = products[i].images.map(image => image.dataValues);
+                if(products[i].mainImage) products[i].mainImage = products[i].mainImage.dataValues;
+                products[i].formattedCreatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(products[i].createdAt);
+                products[i].formattedUpdatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(products[i].updatedAt);
+                products[i].formattedPrice = new Intl.NumberFormat('vi', CurrencyOptions).format(products[i].price);
             }
+
+            const total = await Product.count({
+                where: filters
+            });
 
             let urlParams = (new URLSearchParams(req.query));
             urlParams.delete('page');
@@ -99,7 +118,7 @@ module.exports = {
                 active: { Products: true },
                 products,
                 categories,
-                total: products.length,
+                total,
                 page,
                 urlParams: urlParams.toString(),
                 queryObj: req.query
@@ -114,7 +133,6 @@ module.exports = {
         try {
             let categories = await Category.findAll();
             categories = categories.map(category => category.dataValues);
-            console.log(categories);
             res.render('product/editable-product', {
                 active: { Products: true },
                 editable: false,
@@ -133,8 +151,8 @@ module.exports = {
             const images = req.files;
             const product = await Product.create({
                 name,
-                price,
-                quantity,
+                price: isNaN(parseInt(price)) ? 0 : parseInt(price),
+                quantity: isNaN(parseInt(quantity)) ? 0 : parseInt(quantity),
                 categoryId: category,
                 description,
             });
@@ -210,8 +228,8 @@ module.exports = {
 
             const product = await Product.update({
                 name,
-                price,
-                quantity,
+                price: isNaN(parseInt(price)) ? 0 : parseInt(price),
+                quantity: isNaN(parseInt(quantity)) ? 0 : parseInt(quantity),
                 categoryId: category,
                 description,
             }, {
@@ -220,27 +238,28 @@ module.exports = {
                 }
             });
 
-            const removeIdsArr = removeIds.split(',');
-            for (let i = 0; i < removeIdsArr.length; ++i) {
-                removeIdsArr[i] = parseInt(removeIdsArr[i]);
-            }
-            
-            if (removeIdsArr.length > 0 && !isNaN(removeIdsArr[0])) {
-                console.log('delete images');
-                const images = await Image.findAll({
-                    where: {
-                        id: removeIdsArr
-                    }
-                });
-                ;
-                for (let i = 0; i < images.length; ++i) {
-                    await cloudinary.uploader.destroy(images[i].public_id);
+            if(removeIds) {
+                const removeIdsArr = removeIds.split(',');
+                for (let i = 0; i < removeIdsArr.length; ++i) {
+                    removeIdsArr[i] = parseInt(removeIdsArr[i]);
                 }
-                await Image.destroy({
-                    where: {
-                        id: removeIdsArr
+
+                if (removeIdsArr.length > 0 && !isNaN(removeIdsArr[0])) {
+                    console.log('delete images');
+                    const images = await Image.findAll({
+                        where: {
+                            id: removeIdsArr
+                        }
+                    });
+                    for (let i = 0; i < images.length; ++i) {
+                        await cloudinary.uploader.destroy(images[i].public_id);
                     }
-                });
+                    await Image.destroy({
+                        where: {
+                            id: removeIdsArr
+                        }
+                    });
+                }
             }
 
             if (images) {
@@ -256,7 +275,7 @@ module.exports = {
                 }
             }
 
-            if (mainId !== '') {
+            if (mainId && !isNaN(parseInt(mainId))) {
                 await Product.update({
                     mainImageId: mainId
                 }, {
@@ -271,7 +290,7 @@ module.exports = {
                         productId: id
                     }
                 });
-                if (image !== null) {
+                if (image) {
                     await Product.update({
                         mainImageId: image.id
                     }, {
@@ -360,6 +379,81 @@ module.exports = {
                 });
             }
             res.redirect('back');
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    // API
+    // [GET] /product/api/data/:id
+    getProductData: async (req, res, next) => {
+        try {
+            const id = req.params.id;
+            const product = await Product.findOne({
+                where: {
+                    id
+                },
+                include: [
+                    {
+                        model: Image,
+                        as: 'images'
+                    },
+                    {
+                        model: Category,
+                        as: 'category'
+                    },
+                    {
+                        model: Image,
+                        as: 'mainImage'
+                    }
+                ]
+            });
+            product = product.dataValues;
+            // format date
+            product.formattedCreatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(product.createdAt);
+            product.formattedUpdatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(product.updatedAt);
+            // format price
+            product.formattedPrice = new Intl.NumberFormat('vi', CurrencyOptions).format(product.price);
+            // clean data
+            if(product.images.length > 0) product.images = product.images.map(image => image.dataValues);
+            product.category = product.category.dataValues;
+            if(product.mainImage) product.mainImage = product.mainImage.dataValues;
+
+            res.json(product);
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    // [GET] /product/api/data/
+    getAllProducts: async (req, res, next) => {
+        try {
+            const products = await Product.findAll({
+                include: [
+                    {
+                        model: Image,
+                        as: 'images'
+                    },
+                    {
+                        model: Category,
+                        as: 'category'
+                    },
+                    {
+                        model: Image,
+                        as: 'mainImage'
+                    }
+                ]
+            });
+
+            for (let i = 0; i < products.length; ++i) {
+                products[i] = products[i].dataValues;
+                // clean data
+                if(products[i].images.length > 0) products[i].images = products[i].images.map(image => image.dataValues);
+                products[i].category = products[i].category.dataValues;
+                if(products[i].mainImage) products[i].mainImage = products[i].mainImage.dataValues; 
+            }
+
+            res.json(products);
         } catch (err) {
             next(err);
         }
