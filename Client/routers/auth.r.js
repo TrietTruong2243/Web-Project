@@ -19,7 +19,7 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
 },
     async function (request, accessToken, refreshToken, profile, done) {
-        console.log(profile);
+        // console.log(profile);
         request.user = profile;
         const user = await User.findOrCreateUser({ id: profile.id, email: profile.email });
 
@@ -32,7 +32,7 @@ passport.use(new LocalStrategy(async (username, password, done) => {
 
     // let rs = await User.findUserByEmail(username);
     let rs = await User.findUserByUserName(username);
-    console.log(rs);
+    // console.log(rs);
     let auth = false;
     if (rs) {
    
@@ -82,7 +82,7 @@ let validateRegisterUser = () => {
 
         check('password_confirm', 'Mật khẩu nhập lại không giống với mật khẩu ban đầu!').custom((value, { req, loc, path }) => {
             if (value !== req.body.password) {
-                console.log(req.body);
+                // console.log(req.body);
                 // trow error if passwords do not match
                 throw new Error("Mật khẩu nhập lại không giống với mật khẩu ban đầu!");
             } else {

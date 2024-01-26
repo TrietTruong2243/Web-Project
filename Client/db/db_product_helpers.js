@@ -14,7 +14,7 @@ db.connect();
 module.exports = {
     getProductsByCategory: async (id, filter) => {
         var query;
-        console.log(filter);
+        // console.log(filter);
         if (id == 0) {
             if (!filter || (filter.minPrice=='' && filter.maxPrice=='')) {
                 query = `SELECT * FROM public."${table}" `
@@ -51,7 +51,7 @@ module.exports = {
             query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}' AND "Price" < '${filter.maxPrice}'AND "Price" > '${filter.minPrice}'`
 
         }
-        console.log(query);
+        // console.log(query);
         //const query = `SELECT * FROM public."${table}" WHERE "CategoryID" ='${id}'`
         // console.log(query);
         const result = await db.query(query);

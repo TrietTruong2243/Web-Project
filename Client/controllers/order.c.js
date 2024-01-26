@@ -18,7 +18,7 @@ module.exports = {
         const userInfo = req.query.userInfo;
         const orderInfo = req.query.orderInfo;
         const orderDetail = req.query.orderDetail;
-        console.log(orderDetail); 
+        // console.log(orderDetail); 
         res.render("home",{ layout: "orderdetails", orderInfo: orderInfo, userInfo: userInfo, orderDetail: orderDetail})
     }, 
 }

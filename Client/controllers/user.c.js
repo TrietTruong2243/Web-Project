@@ -349,7 +349,6 @@ module.exports = {
         }
     },
     changeUserPassword: async (req, res) => {
-        console.log("object");
         var err1 = validationResult(req);
 
         const userID = req.user.id;

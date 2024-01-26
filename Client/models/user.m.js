@@ -109,7 +109,7 @@ module.exports = {
     {
        
         const data = await db.findUserByUserName(username);
-        console.log(data);
+        // console.log(data);
         if (!data)
         {
             return true;
