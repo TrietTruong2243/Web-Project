@@ -22,11 +22,16 @@ module.exports = {
         return data;
     },
     getOrderInfo: async( orderID )=>{
-        const order = await orderDB.getOrderInfo(orderID);
+        let  order = await orderDB.getOrderInfo(orderID);
+        order.TotalAmount = await orderDB.calculateTotal(orderID);
         if(!order) return;
         let check = true;
+        let refund = false;
+        let cancel = false;
+        if(order.Status === "cancelled") cancel =true;
+        if(order.Status === "refunded") refund = true;
         if(order.Status === "Wait" || order.Status === "Processing" || order.Status === "pending"|| order.Status === "confirmed"|| order.Status === "unpaid") check = false;
-        const data = { OrderID: order.OrderID, Date: formatDate(order.OrderDate), Total: order.TotalAmount, Status: order.Status, Check: check };
+        const data = { OrderID: order.OrderID, Date: formatDate(order.OrderDate), Total: order.TotalAmount, Status: order.Status, Check: check, Cancel: cancel, Refund: refund};
         return data; 
     },
     getOrderDetail: async( orderID )=>{
@@ -48,5 +53,10 @@ module.exports = {
             result.push(res);
         }
         return result; 
+    },
+    calculateTotal: async( orderID )=>{
+        let total = await orderDB.calculateTotal(orderID);
+        return total;
+
     },
 }

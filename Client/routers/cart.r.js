@@ -9,4 +9,5 @@ router.post("/addtocart",mws.verifyToken, cartControl.addToCart);
 router.get("/getcartinfo",mws.verifyToken, cartControl.getCartInfo);
 router.get("/changecartquantity",mws.verifyToken, cartControl.changeCartQuantity)
 router.get("/removeitem",mws.verifyToken, cartControl.removeCartItem)
+router.get("/checkout",mws.verifyToken, cartControl.checkoutCart)
 module.exports = router;

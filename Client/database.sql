@@ -22,16 +22,18 @@ CREATE TABLE "Admin"
 );
 CREATE TABLE "Order"
 (
-    "OrderID" BIGINT PRIMARY KEY,
+    "OrderID" SERIAL PRIMARY KEY,
     "CustomerID" BIGINT,
     "Status" VARCHAR(30),
-    "TotalAmount" INT,
-    "OrderDate" DATE
+    "OrderDate" TIMESTAMP DEFAULT now()
 );
+ALTER TABLE "Order"
+ALTER COLUMN "Status" SET DEFAULT 'pending';
+ 
 
 CREATE TABLE "OrderProductDetail" 
 (
-    "OrderID" BIGINT,
+    "OrderID" INT,
     "ProductID" BIGINT,
     "Quantity" INT,
     PRIMARY KEY("OrderID","ProductID")
@@ -56,11 +58,7 @@ CREATE TABLE "Product"
 CREATE TABLE "Image"(
     "ImageID" BIGINT PRIMARY KEY,
     "Path" VARCHAR(300),
-    "Path" VARCHAR(300),
     "ProductID" BIGINT
-);
-CREATE TABLE "Cart" (
-    "CustomerID" BIGINT PRIMARY KEY
 );
 
 CREATE TABLE "CartItem"(
@@ -81,8 +79,6 @@ ALTER TABLE "Product"
 ADD FOREIGN KEY ("CategoryID") REFERENCES "Category"("CategoryID");
 ALTER TABLE "Image"
 ADD FOREIGN KEY ("ProductID") REFERENCES "Product"("ProductID");
-ALTER TABLE "Cart"
-ADD FOREIGN KEY ("CustomerID") REFERENCES "Customer"("CustomerID");
 ALTER TABLE "CartItem"
 ADD FOREIGN KEY ("CustomerID") REFERENCES "Customer"("CustomerID");
 ALTER TABLE "CartItem"
@@ -109,15 +105,5 @@ INSERT INTO public."Image"("ImageID", "Path", "ProductID")
         (4000000000000001,	'https://www.huntingandknives.co.uk/pub/media/catalog/product/cache/459300f1b5bd3c38ffb32210b0c2c42e/f/u/functional-medieval-sword-740.jpg',	3000000000000002),
 		(4000000000000002,	'https://img.freepik.com/free-vector/vintage-dutch-bible-illustration-vector-remixed-from-artwork-by-david-s-de-vault_53876-139983.jpg?size=626&ext=jpg&ga=GA1.1.632798143.1705968000&semt=ais',	3000000000000001),
 		(4000000000000003,	'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Out_of_ink.jpg/1024px-Out_of_ink.jpg',	3000000000000003);
-INSERT INTO public."Order"("OrderID", "CustomerID", "Status", "TotalAmount", "OrderDate")
-	VALUES 
-		(9000000000000001,	3578081079992320,	'Done',	200000,	'1999-01-08'), 
-		(9000000000000002,	3578081079992320,	'Waiting',	500000,	'2023-12-29'),
-		(9000000000000003,	3578081079992320,	'Done',	100000,	'2024-01-08');
-INSERT INTO public."OrderProductDetail"("OrderID", "ProductID", "Quantity")
-	VALUES 
-		(9000000000000001,	3000000000000001,	2),
-		(9000000000000001,	3000000000000003,	2),
-		(9000000000000002,	3000000000000002,	1),
-		(9000000000000003,	3000000000000001,   5);
+
 

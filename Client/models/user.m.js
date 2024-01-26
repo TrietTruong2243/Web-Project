@@ -1,10 +1,20 @@
 const db = require("../db/db_user_helpers");
 const orderDB = require("../db/db_order_helpers");
+const productDB = require("../db/db_product_helpers");
 const bcrypt = require("bcrypt")
+
+
 module.exports = {
     getAllOrderOfUser: async(userID )=>{
         const AllOrder = await orderDB.getAllOrderByUser(userID);
-        return AllOrder;
+        let result = AllOrder;
+        for (i of result)
+        {
+            i.TotalAmount =  await orderDB.calculateTotal(i.OrderID);
+
+        }
+        console.log(result);
+        return result;
     },
     getUserByID: async(id)=>{
         const user = await db.findUserByID(id);
@@ -20,7 +30,7 @@ module.exports = {
         if (findUser)
         {
             return findUser;
-        }
+        } 
         else{
             // return -1;
             const newUser = await db.addGoogleUser(param);

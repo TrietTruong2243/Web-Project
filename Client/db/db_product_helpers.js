@@ -31,7 +31,7 @@ module.exports = {
                 query = `SELECT * FROM public."${table}" WHERE "Price" < '${filter.maxPrice}'AND "Price" > '${filter.minPrice}'`
 
             }
-            console.log(query);
+            // console.log(query);
             const result = await db.query(query);
             // Check if any rows were returned
             return result.rows;
@@ -60,7 +60,8 @@ module.exports = {
     },
     getProductByID: async (id) => {
         const query = `SELECT * FROM public."${table}" WHERE "ProductID" ='${id}'`
-        // console.log(query);
+        // console.log(query); 
+        
         const result = await db.query(query);
         // Check if any rows were returned
         return result.rows[0];
@@ -84,5 +85,16 @@ module.exports = {
         const result = await db.query(query);
         // Check if any rows were returned
         return result.rows;
+    },
+    subProductInventoryQuantity: async (ProductID, Quantity) =>{
+        let res = await db.query(`SELECT * FROM public."${table}" WHERE "ProductID" = '${ProductID}'`)
+
+        const INVQuantity = res.rows[0].InventoryQuantity - Quantity;
+
+        const query = `UPDATE public."${table}" SET "InventoryQuantity" = '${INVQuantity}' WHERE  "ProductID" = '${ProductID}' ;`
+        const result = await db.query(query);
+        res = await db.query(`SELECT * FROM public."${table}" WHERE "ProductID" = '${ProductID}'`)
+        // Check if any rows were returned
+        return res.rows;
     }
 }

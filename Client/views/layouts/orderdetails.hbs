@@ -147,6 +147,7 @@
         .status .Processing:after {
             background: #f2be1d;
         }
+
         .status .Waiting {
             background: #fdf5dd;
             color: #cfa00c;
@@ -155,77 +156,78 @@
         .status .Waiting:after {
             background: #f2be1d;
         }
-        
-/* red */
-.status .cancelled {
-  background: #f2481d88;
-  color: #ff2600;
-  }
 
-  .status .cancelled:after {
-  background: #f73200;
-  }
-.status .refunded {
-  background: #f2481d88;
-  color: #c42004;
-}
+        /* red */
+        .status .cancelled {
+            background: #f2481d88;
+            color: #ff2600;
+        }
 
-.status .refunded:after {
-  background: #f2481d88;
-}
-/* yellow */
+        .status .cancelled:after {
+            background: #f73200;
+        }
 
+        .status .refunded {
+            background: #f2481d88;
+            color: #ff2600;
+        }
 
-.status .Waiting {
-  background: #fdf5dd;
-  color: #cfa00c;
-}
+        .status .refunded:after {
+            background: #f73200;
+        }
 
-.status .Waiting:after {
-  background: #f2be1d;
-}
-
-.status .pending {
-  background: #fdf5dd;
-  color: #cfa00c;
-}
-
-.status .pending:after {
-  background: #f2be1d;
-}
-
-.status .unpaid {
-  background: #fdf5dd;
-  color: #cfa00c;
-}
-
-.status .unpaid:after {
-  background: #f2be1d;
-}
-
-.status .shipping {
-  background: #fdf5dd;
-  color: #cfa00c;
-}
-
-.status .shipping:after {
-  background: #f2be1d;
-}
+        /* yellow */
 
 
+        .status .Waiting {
+            background: #fdf5dd;
+            color: #cfa00c;
+        }
+
+        .status .Waiting:after {
+            background: #f2be1d;
+        }
+
+        .status .pending {
+            background: #fdf5dd;
+            color: #cfa00c;
+        }
+
+        .status .pending:after {
+            background: #f2be1d;
+        }
+
+        .status .unpaid {
+            background: #fdf5dd;
+            color: #cfa00c;
+        }
+
+        .status .unpaid:after {
+            background: #f2be1d;
+        }
+
+        .status .shipping {
+            background: #fdf5dd;
+            color: #cfa00c;
+        }
+
+        .status .shipping:after {
+            background: #f2be1d;
+        }
 
 
-/* Green */
 
-.status .completed {
-  background: #cff6dd;
-  color: #1fa750;
-}
 
-.status .completed:after {
-  background: #23bd5a;
-}
+        /* Green */
 
+        .status .completed {
+            background: #cff6dd;
+            color: #1fa750;
+        }
+
+        .status .completed:after {
+            background: #23bd5a;
+        }
     </style>
 
     <title>Order Details</title>
@@ -272,24 +274,24 @@
                                         <table class="table " style="margin-top: 2px;">
                                             <tbody>
                                                 {{#each orderDetail}}
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex mb-2">
-                                                                <div class="flex-shrink-0">
-                                                                    <img src="{{Image}}"
-                                                                        alt width="35" class="img-fluid">
-                                                                </div>
-                                                                <div class="flex-lg-grow-1 ms-3">
-                                                                    <h4 class="small mb-0 mt-1" style="font-weight: 700; font-size:medium">
-                                                                        <a href="#" class="text-reset"> {{ProductName}}</a>
-                                                                    </h4>
-                                                                    <span class="small">Describe: {{Describe}}</span>
-                                                                </div>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex mb-2">
+                                                            <div class="flex-shrink-0">
+                                                                <img src="{{Image}}" alt width="35" class="img-fluid">
                                                             </div>
-                                                        </td>
-                                                        <td> {{Quantity}}</td>
-                                                        <td class="text-end">{{Price}} đ</td>
-                                                    </tr>
+                                                            <div class="flex-lg-grow-1 ms-3">
+                                                                <h4 class="small mb-0 mt-1"
+                                                                    style="font-weight: 700; font-size:medium">
+                                                                    <a href="#" class="text-reset"> {{ProductName}}</a>
+                                                                </h4>
+                                                                <span class="small">Describe: {{Describe}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td> {{Quantity}}</td>
+                                                    <td class="text-end">{{Price}} đ</td>
+                                                </tr>
                                                 {{/each}}
                                             </tbody>
                                             <tfoot>
@@ -306,21 +308,39 @@
                                 <div class="card mb-4">
                                     <div class="card-body bg-light rounded-4">
                                         <div class="row">
+
+                                            {{#if orderInfo.Check}}
                                             <div class="col-lg-6 text-start ps-4">
-                                                <h3 class="h6">Payment Method</h3>
+                                                <h3 class="h6">Payment Status </h3>
+                                                <p>
+                                                    Total: {{orderInfo.Total}} đ
+                                                    {{#if orderInfo.Refund}}
+                                                    <span class="badge bg-danger rounded-pill">REFUND</span>
+                                                    {{else}}    
+                                                        {{#if orderInfo.Cancel}}
+                                                        <span class="badge bg-danger rounded-pill">CANCEL</span>
+                                                        {{else}}
+                                                        <span class="badge bg-success rounded-pill">PAID</span>
+                                                        {{/if}}
+                                                    {{/if}}
+                                                </p>
+                                            </div>
+                                            {{else}}
+                                            <div class="col-lg-6 text-start ps-4">
+                                                <h3 class="h6">Payment Method </h3>
                                                 <p>Visa -1234 <br>
                                                     Total: {{orderInfo.Total}} đ
-                                                    {{#if orderInfo.Check}}
-                                                    <span class="badge bg-success rounded-pill">PAID</span></p>
-                                                    {{else}}
-                                                     <span class="badge bg-warning rounded-pill">WAIT</span></p>
-                                                    {{/if}}
 
+                                                    <span class="badge bg-warning rounded-pill">UNPAID</span>
+                                                </p>
                                             </div>
+                                            {{/if}}
+
                                             <div class="col-lg-6 text-start ps-5">
                                                 <h3 style="font-weight: 700; font-size:medium">Billing address</h3>
                                                 <address>
-                                                    <strong style="font-weight: 500; font-size:medium">{{userInfo.Name}}</strong><br>
+                                                    <strong
+                                                        style="font-weight: 500; font-size:medium">{{userInfo.Name}}</strong><br>
                                                     <abbr title="Address">Addr:</abbr> {{userInfo.Address}}<br>
                                                     <abbr title="Phone Number">P.:</abbr> {{userInfo.PhoneNumber}}
                                                 </address>
@@ -336,19 +356,20 @@
 
                                     <div class="card-body text-start ps-5 pb-2 ">
                                         <h4 class="text-primary"> Customer Information</h4>
-                                            <strong style="font-weight: 700; font-size:medium"> {{userInfo.Name}}</strong> <br>
-                                            <span>
-                                                Address:{{userInfo.Address}}
-                                            </span> <br>
-                                            <span>
-                                                Email:
-                                                <a href="#" class="text-decoration-underline"
-                                                    target="_blank">{{userInfo.Email}}</a> <i
-                                                    class="bi bi-box-arrow-up-right"></i>
-                                            </span> <br>
-                                            <span>
-                                                Phone Number:{{userInfo.PhoneNumber}}
-                                            </span>
+                                        <strong style="font-weight: 700; font-size:medium"> {{userInfo.Name}}</strong>
+                                        <br>
+                                        <span>
+                                            Address:{{userInfo.Address}}
+                                        </span> <br>
+                                        <span>
+                                            Email:
+                                            <a href="#" class="text-decoration-underline"
+                                                target="_blank">{{userInfo.Email}}</a> <i
+                                                class="bi bi-box-arrow-up-right"></i>
+                                        </span> <br>
+                                        <span>
+                                            Phone Number:{{userInfo.PhoneNumber}}
+                                        </span>
                                     </div>
                                 </div>
                             </div>

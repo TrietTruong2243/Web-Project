@@ -45,5 +45,6 @@ module.exports = {
         WHERE  "CustomerID"='${userID}' AND "ProductID" = '${productID}';`
         const data = await  db.query(query);
         return data;
-    }
+    },
+
 }
