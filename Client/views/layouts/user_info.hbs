@@ -49,6 +49,7 @@
             margin: 2px;
             padding: 2px;
             background-color: white;
+
         }
 
         @media only screen and (max-width: 800px) {
@@ -64,6 +65,7 @@
                 border-radius: 0;
             }
         }
+
 
         #dg-chat-widget-launcher {
             position: fixed;
@@ -133,32 +135,6 @@
                 </nav>
 
                 <div id="content">
-                    <style>
-                        .table tbody td.status .Done {
-                            background: #cff6dd;
-                            color: #1fa750;
-                        }
-
-                        .table tbody td.status .Done:after {
-                            background: #23bd5a;
-                        }
-                        .table tbody td.status .Processing{
-                            background: #fdf5dd;
-                            color: #cfa00c;
-                        }
-
-                        .table tbody td.status .Processing:after {
-                            background: #f2be1d;
-                        }
-                        .table tbody td.status .Waiting {
-                            background: #fdf5dd;
-                            color: #cfa00c;
-                        }
-
-                        .table tbody td.status .Waiting:after {
-                            background: #f2be1d;
-                        }
-                    </style>
 
                 </div>
             </div>
@@ -217,6 +193,7 @@
                             type: 'GET',
                             url: '/user/accountorders',
                             success: function (data) {
+                                console.log("Status order trong order_style.css")
                                 const orders = data.orders;
                                 let dataHTML =
                                     `
@@ -258,7 +235,7 @@
                                                         </div>
                                                     </td>
                                                     <td class="status"><span class="${i.Status}">${i.Status}</span></td>
-                                                    <td>
+                                                    <td> 
                                                         ${i.TotalAmount} đ
                                                     </td>
                                                 </tr>
