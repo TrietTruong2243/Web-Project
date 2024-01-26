@@ -25,7 +25,7 @@ module.exports = {
         const order = await orderDB.getOrderInfo(orderID);
         if(!order) return;
         let check = true;
-        if(order.Status === "Done") check = false;
+        if(order.Status === "Wait" || order.Status === "Processing") check = false;
         const data = { OrderID: order.OrderID, Date: formatDate(order.OrderDate), Total: order.TotalAmount, Status: order.Status, Check: check };
         return data; 
     },

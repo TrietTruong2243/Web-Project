@@ -8225,6 +8225,14 @@
       color: #1fa750; }
     .table tbody td.status .Done:after {
         background: #23bd5a; }
+    .table tbody td.status .Processing{
+          background: #fdf5dd;
+          color: #cfa00c;
+      }
+
+    .table tbody td.status .Processing:after {
+          background: #f2be1d;
+      }
     .table tbody td.status .Waiting {
       background: #fdf5dd;
       color: #cfa00c; }

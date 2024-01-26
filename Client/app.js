@@ -24,7 +24,7 @@ app.use(bodyParser.json()) // parse application/json
 app.use(flash())
 app.use(cors()); 
 app.use(express.static(__dirname+'/public'));
-app.use(session({
+app.use(session({ 
     secret: process.env.SECRET_KEY,
     saveUninitialized:true,
     cookie: { maxAge: 10000}, 

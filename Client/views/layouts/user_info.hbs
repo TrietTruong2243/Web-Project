@@ -142,7 +142,14 @@
                         .table tbody td.status .Done:after {
                             background: #23bd5a;
                         }
+                        .table tbody td.status .Processing{
+                            background: #fdf5dd;
+                            color: #cfa00c;
+                        }
 
+                        .table tbody td.status .Processing:after {
+                            background: #f2be1d;
+                        }
                         .table tbody td.status .Waiting {
                             background: #fdf5dd;
                             color: #cfa00c;
@@ -152,6 +159,7 @@
                             background: #f2be1d;
                         }
                     </style>
+
                 </div>
             </div>
         </div>
@@ -236,7 +244,9 @@
                                 `;
                                 let index = 1;
                                 for (i of orders) {
+                                    
                                     dataHTML = dataHTML + `
+         
                                                 <tr class="alert order_detail" role="alert" id= "${i.OrderID}">
                                                     <td>
                                                         ${index}
@@ -500,18 +510,9 @@
         $("body").delegate(".order_detail", "click", function (e) {
             e.preventDefault()
             const id = $(this).attr('id');
-
-            $.ajax({
-                type: 'get',
-                url: '/order/getorderdetail',
-                data: { OrderID: id },
-                success: function (data) {
-                    $.get("/order/orderdetail", { userInfo: data.userInfo, orderInfo: data.orderInfo, orderDetail: data.orderDetail });
-                },
-
-                error: function (err) {
-                }
-            })
+            const url = "/order/getorderdetail?OrderID=" + id;
+            console.log(url);
+            window.location.href = url;
         })
     </script>
 </body>
