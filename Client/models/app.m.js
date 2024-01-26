@@ -49,6 +49,7 @@ module.exports = {
     },
     getProductByID:async(productID)=>{
         const product = await productDB.getProductByID(productID);
+        console.log(product.mainImageId);
         const image = await imageDB.getImageByImageID(product.mainImageId);
         if (image){
             product.Image = image.Path;
@@ -56,7 +57,7 @@ module.exports = {
         else{
             product.Image = ""
         }
-        return product;
+        return product; 
     },
     getAllFindPage: async(value)=>{
         const allFindProduct = await productDB.findProductsByValue(value);

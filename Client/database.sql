@@ -51,8 +51,8 @@ CREATE TABLE "Product"
     "Describe" VARCHAR(255),
     "Price" INT,
     "InventoryQuantity" INT,
-    "CategoryID" BIGINT
-
+    "CategoryID" BIGINT,
+    "mainImageId" BIGINT
 );
 
 CREATE TABLE "Image"(
@@ -77,8 +77,6 @@ ALTER TABLE "OrderProductDetail"
 ADD FOREIGN KEY ("OrderID") REFERENCES "Order"("OrderID");
 ALTER TABLE "Product"
 ADD FOREIGN KEY ("CategoryID") REFERENCES "Category"("CategoryID");
-ALTER TABLE "Image"
-ADD FOREIGN KEY ("ProductID") REFERENCES "Product"("ProductID");
 ALTER TABLE "CartItem"
 ADD FOREIGN KEY ("CustomerID") REFERENCES "Customer"("CustomerID");
 ALTER TABLE "CartItem"
@@ -95,11 +93,11 @@ INSERT INTO public."Customer"("CustomerID", "Username" , "CustomerName", "PhoneN
 VALUES (3578081079992320, 'TestUser0427', 'Nguyen Dinh Nam Thuan'	,'1234567891',
     	'ABC',	'nthuan2609@gmail.com',	'$2b$10$tuoUaIcsB37nuYwLg4deXOHe22W2oTBF.nOlzC2WNEciKxZUydVWu',false);
 INSERT INTO public."Product"(
-	"ProductID", "ProductName", "Describe", "Price", "InventoryQuantity", "CategoryID")
+	"ProductID", "ProductName", "Describe", "Price", "InventoryQuantity", "CategoryID", "mainImageId")
 	VALUES 
-		(3000000000000001,	'Quill',	'A quill is a feather and ink. Now go buy some ink',	50000,	1000,	1),
-		(3000000000000002,	'Sword',	'Made in China. Enchanted: Emotional Dmg +5',	99999,	1,	2),
-		(3000000000000003,	'Book', 	'Just a normal book. You might need a quill to write on it :>',	50000,	1000,	1);
+		(3000000000000001,	'Quill',	'A quill is a feather and ink. Now go buy some ink',	50000,	1000,	1, 4000000000000002),
+		(3000000000000002,	'Sword',	'Made in China. Enchanted: Emotional Dmg +5',	99999,	1,	2,4000000000000001),
+		(3000000000000003,	'Book', 	'Just a normal book. You might need a quill to write on it :>',	50000,	1000,	1,4000000000000003);
 INSERT INTO public."Image"("ImageID", "Path", "ProductID")
 	VALUES 
         (4000000000000001,	'https://www.huntingandknives.co.uk/pub/media/catalog/product/cache/459300f1b5bd3c38ffb32210b0c2c42e/f/u/functional-medieval-sword-740.jpg',	3000000000000002),
