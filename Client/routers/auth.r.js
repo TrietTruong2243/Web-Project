@@ -19,7 +19,7 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
 },
     async function (request, accessToken, refreshToken, profile, done) {
-
+        console.log(profile);
         request.user = profile;
         const user = await User.findOrCreateUser({ id: profile.id, email: profile.email });
 

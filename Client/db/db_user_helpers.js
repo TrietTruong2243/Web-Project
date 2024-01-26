@@ -30,7 +30,7 @@ module.exports = {
         const generator = UUID(id);
         const uuid = generator.uuid();
         const hashedPassword = await bcrypt.hash(param.password, 10);
-        const query = `INSERT INTO public."${userTable}" ("CustomerID", "CustomerName", "PhoneNumber", "HomeAddress", "Email", "Password","Username","IsGoogleAccount") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING "CustomerID"`;
+        const query = `INSERT INTO public."${userTable}" ("CustomerID", "CustomerName", "PhoneNumber", "HomeAddress", "Email", "Password","Username","IsGoogleAccount") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING "CustomerID"`;
         const values = [uuid,param.name,param.phone_number,param.home_address,param.email_address, hashedPassword,param.username,0];
         // console.log(values);
         const data =  db.query(query, values);

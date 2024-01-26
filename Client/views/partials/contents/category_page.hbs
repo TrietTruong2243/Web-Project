@@ -371,7 +371,7 @@
           $("#pages").append(pagesHTML)
           let productHTML = '';
           for (let i of allProduct) {
-            productHTML = productHTML + `<div class="p-1 ">
+            productHTML = productHTML + `<div class="p-1">
               <article class="product-card card rounded-4" >
                   <div class="card-content">
                     <a href="/viewproduct?id=${i.ProductID}" class="card-content-inner">
@@ -394,7 +394,8 @@
                       </div>
                     </a>
                   </div>
-                </article>`
+                </article>
+                </div>`
           }
           const list1 = document.getElementById("products");
           while (list1.hasChildNodes()) {
