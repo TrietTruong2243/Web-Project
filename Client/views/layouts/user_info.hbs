@@ -113,7 +113,7 @@
 
                 <nav class="navBar navBar--sub navBar--account flex-row">
                     <ul class="navBar-section">
-                         <li class="navBar-item is-active" id="Account">
+                        <li class="navBar-item is-active" id="Account">
                             <a class="navBar-action" class="p-2">Account settings</a>
 
 
@@ -123,7 +123,7 @@
 
 
                         </li>
-                       
+
 
                         <li class="navBar-item" id="signout" onclick="signout()">
                             <a class="navBar-action" class="p-2" href="/auth/signout">Sign Out</a>
@@ -159,7 +159,7 @@
 
     {{> footers/page_footer}}
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<script>
+    <script>
         window.onload = function () {
             $.ajax({
                 type: 'GET',
@@ -174,15 +174,15 @@
     </script>
     <script>
         function formatDate(inputDate) {
-        var date = new Date(inputDate);
-        var day = date.getDate();
-        var month = date.getMonth() + 1; // Lưu ý rằng tháng trong JavaScript bắt đầu từ 0
-        var year = date.getFullYear(); // Lấy hai chữ số cuối cùng của năm
+            var date = new Date(inputDate);
+            var day = date.getDate();
+            var month = date.getMonth() + 1; // Lưu ý rằng tháng trong JavaScript bắt đầu từ 0
+            var year = date.getFullYear(); // Lấy hai chữ số cuối cùng của năm
 
-        // Định dạng: dd/mm/yy
-        var formattedDate = day + "/" + month + "/" + year;
+            // Định dạng: dd/mm/yy
+            var formattedDate = day + "/" + month + "/" + year;
 
-        return formattedDate;
+            return formattedDate;
         }
         $(function () {
             $(".navBar-item").click(function (e) {
@@ -304,7 +304,7 @@
                     $("#name_err").text("")
                     $("#phone_number_err").text("")
                     $("#home_address_err").text("")
-
+                    $("#username_err").text("")
                     if (response.err) {
 
                         const error = response.err;
@@ -324,6 +324,9 @@
                             if (i.path === 'home_address') {
                                 $("#home_address_err").text(i.msg);
 
+                            } if (i.path === 'username') {
+                                $("#username_err").text(i.msg);
+
                             }
 
                         }
@@ -342,7 +345,7 @@
             })
         })
     </script>
-<script>
+    <script>
         $("body").delegate("#userinfo", "submit", function (e) {
             e.preventDefault()
 
@@ -359,6 +362,8 @@
                     $("#name_err").text("")
                     $("#phone_number_err").text("")
                     $("#home_address_err").text("")
+                    $("#username_err").text("")
+
                     $("#pw_err").text("")
                     $("#pw_confirm_err").text("");
                     $("#pw_current_err").text("");
@@ -382,6 +387,10 @@
                             }
                             if (i.path === 'home_address') {
                                 $("#home_address_err").text(i.msg);
+
+                            } 
+                            if (i.path === 'username') {
+                                $("#username_err").text(i.msg);
 
                             }
                             /*
@@ -428,6 +437,7 @@
                     $("#err").text("")
                     $("#email_err").text("")
                     $("#name_err").text("")
+                    $("#username_err").text("")
                     $("#phone_number_err").text("")
                     $("#home_address_err").text("")
                     $("#pw_err").text("")
@@ -485,21 +495,21 @@
         })
     </script>
 
-    
+
     <script>
-       $("body").delegate(".order_detail", "click", function (e) {
+        $("body").delegate(".order_detail", "click", function (e) {
             e.preventDefault()
             const id = $(this).attr('id');
 
             $.ajax({
                 type: 'get',
                 url: '/order/getorderdetail',
-                data: { OrderID: id  },
+                data: { OrderID: id },
                 success: function (data) {
-                    $.get("/order/orderdetail", {userInfo: data.userInfo, orderInfo: data.orderInfo, orderDetail: data.orderDetail});
+                    $.get("/order/orderdetail", { userInfo: data.userInfo, orderInfo: data.orderInfo, orderDetail: data.orderDetail });
                 },
 
-                error: function (err) { 
+                error: function (err) {
                 }
             })
         })

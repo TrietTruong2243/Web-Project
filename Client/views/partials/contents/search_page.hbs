@@ -41,7 +41,7 @@
                     <main class="category-products" id="product-listing-container">
 
                         <!-- item template here ->  -->
-                        <div class="productGrid" id="products">
+                        <div class="row row-cols-5" id="products">
                             {{!-- <article class="product-card card">
                                 <div class="card-content">
                                     <a href="/viewproduct" class="card-content-inner">
@@ -133,7 +133,8 @@
                         $("#pages").append(pagesHTML)
                         let productHTML = '';
                         for (let i of allProduct) {
-                            productHTML = productHTML + `<article class="product-card card" >
+                            productHTML = productHTML + `<div class="p-1 ">
+                                <article class="product-card card rounded-4" >
                 <div class="card-content">
                   <a href="/viewproduct?id=${i.ProductID}" class="card-content-inner">
                     <figure class="card-figure">
@@ -155,7 +156,8 @@
                     </div>
                   </a>
                 </div>
-              </article>`
+              </article>
+              </div>`
                         }
                         const list1 = document.getElementById("products");
                         while (list1.hasChildNodes()) {
@@ -267,7 +269,9 @@
                     const allProduct = data.pagedata.list
                     let productHTML = '';
                     for (let i of allProduct) {
-                        productHTML = productHTML + `<article class="product-card card" >
+                        productHTML = productHTML + `
+                        <div class="p-1 ">
+                        <article class="product-card card rounded-4" >
                 <div class="card-content">
                   <a href="/viewproduct?id=${i.ProductID}" class="card-content-inner">
                     <figure class="card-figure">
@@ -289,7 +293,8 @@
                     </div>
                   </a>
                 </div>
-              </article>`
+              </article>
+              </div>`
                     }
                     const list1 = document.getElementById("products");
                     while (list1.hasChildNodes()) {

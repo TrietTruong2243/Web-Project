@@ -39,6 +39,17 @@ module.exports = {
                                         </div>
                                     </div>
                                     <div class="d-flex flex-row align-items-center mb-4">
+                                    <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="form3Example1c">Username</label>
+
+                                                <input type="text" id="form3Example1c" class="form-control" name="username" value="${user.Username || ""}"/>
+                                                <h4 style="color:red" id="username_err"></h4>
+
+                                            </div>
+                                        </div>
+                                    <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
                                             <label class="form-label" for="form3Example1c">Name</label>
@@ -135,9 +146,20 @@ module.exports = {
                                             </div>
                                         </div>
                                         <div class="d-flex flex-row align-items-center mb-4">
+                                        <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="form3Example1c">Username</label>
+
+                                                <input type="text" id="form3Example1c" class="form-control" name="username" value="${user.Username || ""}"/>
+                                                <h4 style="color:red" id="username_err"></h4>
+
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
-                                                <label class="form-label" for="form3Example1c">Name</label>
+                                                <label class="form-label" for="form3Example1c">Fullname</label>
 
                                                 <input type="text" id="form3Example1c" class="form-control"
                                         name="name" value="${user.CustomerName || ""}"/>
@@ -292,6 +314,18 @@ module.exports = {
             res.json({err: err1.errors})
         }
         else{
+            const checkEmail = await userModel.findUserEmailToChangeInfo(userID,req.body.email_address)
+            if (checkEmail==false)
+            {
+                return res.json({addErr: "Email đã tồn tại"});
+
+            }
+            const checkUsername = await userModel.findUserNameToChangeInfo(userID,req.body.username)
+            if (checkUsername==false)
+            {
+                return res.json({addErr: "Username đã tồn tại"});
+
+            }
             const changeUserInfo = await userModel.changeUserInfo(userID, req.body);
             var err;
             switch (changeUserInfo) {
@@ -355,6 +389,12 @@ module.exports = {
             res.json({err: err1.errors})
         }
         else{
+            const checkUsername = await userModel.findUserNameToChangeInfo(userID,req.body.username)
+            if (checkUsername==false)
+            {
+                return res.json({addErr: "Username đã tồn tại, không thể thay đổi!"});
+
+            }
             const changeUserInfo = await userModel.changeGGUserInfo(userID, req.body);
 
             // const addUser = await model.addNewUser(req.body);
@@ -390,6 +430,12 @@ module.exports = {
             res.json({err: err1.errors})
         }
         else{
+            const checkUsername = await userModel.findUserNameToChangeInfo(userID,req.body.username)
+            if (checkUsername==false)
+            {
+                return res.json({addErr: "Username đã tồn tại, không thể thêm vào"});
+
+            }
             const changeUserInfo = await userModel.changeGGUserInfo(userID, req.body);
 
             // const addUser = await model.addNewUser(req.body);
@@ -407,7 +453,7 @@ module.exports = {
                 res.json({addErr: err});
 
             }else{
-                res.json({success: "Chỉnh sửa thông tin thành công"})
+                res.json({success: "Thêm thông tin thành công"})
             }
     
         }

@@ -43,9 +43,18 @@
 
                                         </div>
                                     </div>
+                                     <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="form3Example1c">Username</label>
+
+                                            <input type="text" id="form3Example1c" class="form-control" name="username" />
+                                            <h4 style="color:red" id="username_err"></h4>
+
+                                        </div>
+                                    </div>
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <div class="form-outline flex-fill mb-0">
-                                            <label class="form-label" for="form3Example1c">Name</label>
+                                            <label class="form-label" for="form3Example1c">Fullname</label>
 
                                             <input type="text" id="form3Example1c" class="form-control" name="name" />
                                             <h4 style="color:red" id="name_err"></h4>
@@ -154,13 +163,13 @@
                     $("#err").text("")
                     $("#email_err").text("")
                     $("#name_err").text("")
+                    $("#username_err").text("")
                     $("#phone_number_err").text("")
                     $("#home_address_err").text("")
                     $("#pw_err").text("")
                     $("#pw_confirm_err").text("")
                     console.log(response)
                     if (response.err) {
-                        alert("Check1")
                         const error = response.err;
                         for (i of error) {
                             if (i.path === 'email_address') {
@@ -169,6 +178,10 @@
                             }
                             if (i.path === 'name') {
                                 $("#name_err").text(i.msg);
+
+                            }
+                            if (i.path === 'username') {
+                                $("#username_err").text(i.msg);
 
                             }
                             if (i.path === 'phone_number') {

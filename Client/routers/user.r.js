@@ -9,6 +9,9 @@ let validateUserInfo = () => {
     return [
         check('name', 'Tên không hợp lệ!').isAlphanumeric(),
         check('name', 'Tên không được trống!').not().isEmpty(),
+        check('username', 'Tên phải dài hơn 6 ký tự!').isLength({min: 6}),
+        check('username', 'Tên không được trống!').not().isEmpty(),
+
         check('email_address', 'Định dạng email không hợp lệ!').isEmail(),
         check('email_address', 'Email không được trống').not().isEmpty(),
 
@@ -60,6 +63,8 @@ let validateGGUserInfo = () => {
     return [
         check('name', 'Tên không hợp lệ!').isAlphanumeric(),
         check('name', 'Tên không được trống!').not().isEmpty(),
+        check('username', 'Username phải dài hơn 6 ký tự!').isLength({min: 6}),
+        check('username', 'Username không được trống!').not().isEmpty(),
         check('email_address', 'Định dạng email không hợp lệ!').isEmail(),
         check('email_address', 'Email không được trống').not().isEmpty(),
         check('phone_number', 'Phonenumber phải đủ 10 số!').isLength(10),
