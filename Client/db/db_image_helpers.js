@@ -17,7 +17,7 @@ module.exports = {
         // console.log(query);
         const result = await db.query(query);
         // Check if any rows were returned
-        return result.rows 
+        return result.rows;
         
     },
     getImageByImageID: async (id)=>{

@@ -53,7 +53,6 @@ module.exports = {
         const product = await model.getProductByID(productID);
         const relatedProduct = await model.getRelatedProduct(productID);
         const allImages = await model.getAllImageByProduct(productID);
-        console.log(allImages);
         res.render("home", {
             layout: "product", productName1: product.ProductName,product:product, relatedProduct: relatedProduct, isDisabled: isDisabled, allImages: allImages
         })
