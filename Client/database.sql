@@ -56,6 +56,7 @@ CREATE TABLE "Product"
 CREATE TABLE "Image"(
     "ImageID" BIGINT PRIMARY KEY,
     "Path" VARCHAR(300),
+    "Path" VARCHAR(300),
     "ProductID" BIGINT
 );
 CREATE TABLE "Cart" (
