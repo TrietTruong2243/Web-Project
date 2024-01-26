@@ -10,6 +10,8 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    <link rel="stylesheet" href="/resources/css/custom-carousel.css">
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -95,61 +97,38 @@
     <div class="body" id="main-content">
         <div class="body-inner">
             <div class="body-content">
-
                 <div class="productEnhanced productEnhanced--full productEnhanced--2021 js-productEnhanced productView loading-pdp-image"
                     style="background-color: rgb(190, 191, 186);">
-
                     <div>
-
                         <div class="productEnhanced-hero js-productEnhanced-hero"
                             style="background-color: rgb(190, 191, 186);">
-                            <div class="productEnhanced-heroImage-container js-productEnhanced-heroImage-container">
+                            <div class="container-fluid ">
 
-                                <section class="show-for-large-up">
-                                    <div data-photo-gallery="desktop" data-slick=""
-                                        class="slick-initialized slick-slider">
+                                {{!-- <div class="productEnhanced-heroInfo"> --}}
+                                    <form id="addtocartform" class="form">
 
-                                        <div class="slick-list draggable">
-
-                                            <div class="slick-track"
-                                                style="opacity: 1; width: 13824px; transform: translate3d(-880px, 0px, 0px);">
-                                                <div class="slick-slide slick-cloned" aria-hidden="true"
-                                                    style="width: 1900px;" tabindex="-1">
-                                                    {{!-- <img
-                                                        src="./source/3bd3f6bf93a92c8ef50cc3eae30a14e68949017626dffd298d4f145.jpg"
-                                                        class="" alt=""> --}}
-                                                </div>
-                                                <div class="slick-slide slick-current slick-active" aria-hidden="false"
-                                                    style="width: 900px;" tabindex="0">
-                                                    <img src="{{productImage}}" class="" alt="">
-                                                </div>
-
+                                        <input name="id" value="{{product.ProductID}}" style="display: none;" />
+                                        <div>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <img src="{{product.Image}}" id ="imageShow"style="width:900px;height:700px;">
                                             </div>
+                                            <div class="d-flex justify-content-center">
+                                                <div class="d-flex flex-wrap justify-content-center" style="width: 50%">
+                                                    {{#each allImages}}
+                                                    <div class="card m-1" style="width: 90px;height:90px">
+                                                        <img src="{{Path}}" value="{{Path}}" class="allImages"
+                                                            style="width: 90px; height:90px;" alt="...">
+                                                    </div>
+                                                    {{/each}}
+
+                                                   
+                                                </div>
+                                            </div>
+
                                         </div>
-                                    </div>
-
-                                </section>
-
-                            </div>
-
-                            <div class="container productEnhanced-hero-container js-productEnhanced-hero-container">
-                                <div class="show-for-large-up productEnhanced-hero-background js-productEnhanced-hero-background"
-                                    style="background-color: rgb(190, 191, 186);"></div>
-                                <div class="productEnhanced-hero-position js-productEnhanced-hero-position">
-                                    <div class="productEnhanced-buyGrid">
-                                        <form id="addtocartform" class="form">
-
-                                            <div class="productEnhanced-heroInfo">
-                                                <input name="id" value="{{productID}}" style="display: none;">
-
-                                                {{!-- <h2 class="h1 productEnhanced-tagline notranslate" translate="no">
-                                                    <span class="desktop-title">Upgradable tech, unbeatable
-                                                        sound.</span>
-                                                </h2> --}}
-
-                                                <h1 class="productView-title h2">
-                                                    <span class="desktop-title">{{productName2}}</span>
-                                                </h1>
+                                        <h1 class="productView-title h2">
+                                            <span class="desktop-title">{{product.ProductName}}</span>
+                                        </h1>
 
                                                 <h3 class="price-section price-section--withoutTax">
                                                     <span data-product-price-without-tax=""
@@ -164,124 +143,56 @@
                                                     <button id="form-action-addToCart"
                                                         class="product-button--action button button--info js-button--addToCart"
                                                         type="submit" {{#if isDisabled}} disabled {{/if}}>Add to
-                                                        Cart </button>
+                                                        Cart</button>
                                                 </div>
                                     </div>
                                     </form>
                                 </div>
 
-                                <section
-                                    class="productIcons productEnhanced-at-a-glance js-productEnhanced-at-a-glance  hide-on-image-loading">
-                                    <div class="productIcons-contents">
-                                        <div class="">
-                                            <div class="productIcons-list">
+                                        <section
+                                            class="productIcons productEnhanced-at-a-glance js-productEnhanced-at-a-glance  hide-on-image-loading">
+                                            <div class="productIcons-contents container container-fluid">
+                                                <div class="">
+                                                    <div class="productIcons-list">
+                                                        <div class="productIcon">
+                                                            <span class="productIcon-title">Giá:
+                                                                {{product.Price}} đ</span>
 
-                                                <div class="productIcon">
+                                                        </div>
+                                                        <div class="productIcon">
 
-                                                    <span class="productIcon-title">Mô tả về sản phẩm:
-                                                        {{productDescribe}}</span>
+                                                            <span class="productIcon-title">Mô tả về sản phẩm:
+                                                                {{product.Describe}}</span>
+                                                        </div>
+                                                        <div class="productIcon">
+
+                                                            <span class="productIcon-title">Số lượng:
+                                                                {{product.InventoryQuantity}}</span>
+                                                        </div>
+
+                                                    </div>
                                                 </div>
-                                                <div class="productIcon">
+                                            </div>
+                                        </section>
+                                        <div class="productView-addToCartRow">
+                                            <div class="form-action productView-addToCartButton">
 
-                                                    <span class="productIcon-title">Số lượng: {{productQuantity}}</span>
-                                                </div>
-
+                                                <button id="form-action-addToCart"
+                                                    class="product-button--action button button--info js-button--addToCart"
+                                                    type="submit" {{#if isDisabled}} disabled {{/if}}>Add to
+                                                    Cart</button>
                                             </div>
                                         </div>
-                                    </div>
-                                </section>
-
-                                <section class="productInTheBox">
-                                </section>
-                                {{!-- <div style="width: 80%" class="justify-content-center">
-                                    <h2>Sản phẩm liên quan</h2>
-                                    <div class="productGrid" id="products">
-                                        <main class="category-products" id="product-listing-container">
-                                            <article class="product-card card">
-                                                <div class="card-content">
-                                                    <a href="/viewproduct" class="card-content-inner">
-                                                        <figure class="card-figure">
-                                                            <img class="card-image lazyautosizes lazyloaded"
-                                                                data-sizes="auto"
-                                                                src="./resource/c9f4f7654b39e3c01e29a3146f83481093b9663f9fa6b924806eb035e249362b__21647.jpg"
-                                                                alt="" sizes="50px">
-                                                        </figure>
-
-                                                        <div class="card-body">
-                                                            <h4 class="card-title">Ink’d+ Earbuds with Microphone</h4>
-                                                            <div class="card-text" data-test-info-type="price">
-                                                                <div class="price-section price-section--withoutTax">
-                                                                    <span data-product-price-without-tax=""
-                                                                        class="price price--withoutTax">$17.99</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </article>
-                                            <article class="product-card card">
-                                                <div class="card-content">
-                                                    <a href="/viewproduct" class="card-content-inner">
-                                                        <figure class="card-figure">
-                                                            <img class="card-image lazyautosizes lazyloaded"
-                                                                data-sizes="auto"
-                                                                src="./resource/c9f4f7654b39e3c01e29a3146f83481093b9663f9fa6b924806eb035e249362b__21647.jpg"
-                                                                alt="" sizes="50px">
-                                                        </figure>
-
-                                                        <div class="card-body">
-                                                            <h4 class="card-title">Ink’d+ Earbuds with Microphone</h4>
-                                                            <div class="card-text" data-test-info-type="price">
-                                                                <div class="price-section price-section--withoutTax">
-                                                                    <span data-product-price-without-tax=""
-                                                                        class="price price--withoutTax">$17.99</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </article>
-
-                                            <article class="product-card card">
-                                                <div class="card-content">
-                                                    <a href="/viewproduct" class="card-content-inner">
-                                                        <figure class="card-figure">
-                                                            <img class="card-image lazyautosizes lazyloaded"
-                                                                data-sizes="auto"
-                                                                src="./resource/c9f4f7654b39e3c01e29a3146f83481093b9663f9fa6b924806eb035e249362b__21647.jpg"
-                                                                alt="" sizes="50px">
-                                                        </figure>
-
-                                                        <div class="card-body">
-                                                            <h4 class="card-title">Ink’d+ Earbuds with Microphone</h4>
-                                                            <div class="card-text" data-test-info-type="price">
-                                                                <div class="price-section price-section--withoutTax">
-                                                                    <span data-product-price-without-tax=""
-                                                                        class="price price--withoutTax">$17.99</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </article>
-
-                                        </main>
-                                    </div>
+                                    </form>
+                                    {{!--
                                 </div> --}}
+
                             </div>
                         </div>
                     </div>
-
-
-
-
                 </div>
-
-
             </div>
-
         </div>
-    </div>
     </div>
     <div class="footer bg-light text-dark" role="contentinfo">
         <div class="footer-main u-negative  bg-light text-dark">
@@ -312,92 +223,6 @@
                                 </div>
                             </article>
                             {{/each}}
-                            {{!-- <article class="product-card card p-5">
-                                <div class="card-content ">
-                                    <a href="/viewproduct" class="card-content-inner">
-                                        <figure class="card-figure">
-                                            <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
-                                                src="./resource/c9f4f7654b39e3c01e29a3146f83481093b9663f9fa6b924806eb035e249362b__21647.jpg"
-                                                alt="" sizes="50px">
-                                        </figure>
-
-                                        <div class="card-body text-dark">
-                                            <h4 class="card-title text-dark">Ink’d+ Earbuds with Microphone</h4>
-                                            <div class="card-text" data-test-info-type="price">
-                                                <div class="price-section price-section--withoutTax">
-                                                    <span data-product-price-without-tax=""
-                                                        class="price price--withoutTax">$17.99</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </article>
-                            <article class="product-card card p-5">
-                                <div class="card-content ">
-                                    <a href="/viewproduct" class="card-content-inner">
-                                        <figure class="card-figure">
-                                            <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
-                                                src="./resource/c9f4f7654b39e3c01e29a3146f83481093b9663f9fa6b924806eb035e249362b__21647.jpg"
-                                                alt="" sizes="50px">
-                                        </figure>
-
-                                        <div class="card-body text-dark">
-                                            <h4 class="card-title text-dark">Ink’d+ Earbuds with Microphone</h4>
-                                            <div class="card-text" data-test-info-type="price">
-                                                <div class="price-section price-section--withoutTax">
-                                                    <span data-product-price-without-tax=""
-                                                        class="price price--withoutTax">$17.99</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </article>
-                            <article class="product-card card p-5">
-                                <div class="card-content ">
-                                    <a href="/viewproduct" class="card-content-inner">
-                                        <figure class="card-figure">
-                                            <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
-                                                src="./resource/c9f4f7654b39e3c01e29a3146f83481093b9663f9fa6b924806eb035e249362b__21647.jpg"
-                                                alt="" sizes="50px">
-                                        </figure>
-
-                                        <div class="card-body text-dark">
-                                            <h4 class="card-title text-dark">Ink’d+ Earbuds with Microphone</h4>
-                                            <div class="card-text" data-test-info-type="price">
-                                                <div class="price-section price-section--withoutTax">
-                                                    <span data-product-price-without-tax=""
-                                                        class="price price--withoutTax">$17.99</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </article>
-
-                            <article class="product-card card p-5">
-                                <div class="card-content ">
-                                    <a href="/viewproduct" class="card-content-inner">
-                                        <figure class="card-figure">
-                                            <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
-                                                src="./resource/c9f4f7654b39e3c01e29a3146f83481093b9663f9fa6b924806eb035e249362b__21647.jpg"
-                                                alt="" sizes="50px">
-                                        </figure>
-
-                                        <div class="card-body text-dark">
-                                            <h4 class="card-title text-dark">Ink’d+ Earbuds with Microphone</h4>
-                                            <div class="card-text" data-test-info-type="price">
-                                                <div class="price-section price-section--withoutTax">
-                                                    <span data-product-price-without-tax=""
-                                                        class="price price--withoutTax">$17.99</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </article> --}}
-
                         </main>
                     </div>
                 </div>
@@ -414,61 +239,65 @@
 
         $("body").delegate("#addtocartform", "submit", function (e) {
             const formData = $(this).serialize();
-             $.ajax({
+            $.ajax({
                 type: 'POST',
                 url: '/cart/addtocart',
                 data: formData,
-                success(data)
-                {
+                success(data) {
                     alert(data)
                 }
-             })
+            })
+        })
+    </script>
+<script>
+
+        $("body").delegate(".allImages", "click", function (e) {
+            $("#imageShow").attr("src",$(this).attr("src") )
         })
     </script>
 
-
     <style>
         .clyde - fade -in {
-        opacity: 0;
-        - webkit - animation: fadeIn ease -in 1;
-        -moz - animation: fadeIn ease -in 1;
-        animation: fadeIn ease -in 1;
-        -webkit - animation - fill - mode: forwards;
-        -moz - animation - fill - mode: forwards;
-        animation - fill - mode: forwards;
-        -webkit - animation - duration: .3s;
-        -moz - animation - duration: .3s;
-        animation - duration: .3s;
+            opacity: 0;
+            - webkit - animation: fadeIn ease -in 1;
+            -moz - animation: fadeIn ease -in 1;
+            animation: fadeIn ease -in 1;
+            -webkit - animation - fill - mode: forwards;
+            -moz - animation - fill - mode: forwards;
+            animation - fill - mode: forwards;
+            -webkit - animation - duration: .3s;
+            -moz - animation - duration: .3s;
+            animation - duration: .3s;
         }
 
         @-webkit - keyframes fadeIn {
-        from {
-        opacity: 0;
-        }
+            from {
+                opacity: 0;
+            }
 
-        to {
-        opacity: 1;
-        }
+            to {
+                opacity: 1;
+            }
         }
 
         @-moz - keyframes fadeIn {
-        from {
-        opacity: 0;
-        }
+            from {
+                opacity: 0;
+            }
 
-        to {
-        opacity: 1;
-        }
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes fadeIn {
-        from {
-        opacity: 0;
-        }
+            from {
+                opacity: 0;
+            }
 
-        to {
-        opacity: 1;
+            to {
+                opacity: 1;
+            }
         }
-        }
-        </style>
+    </style>
 </body>
