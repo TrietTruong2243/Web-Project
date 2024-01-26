@@ -55,7 +55,7 @@ CREATE TABLE "Product"
 
 CREATE TABLE "Image"(
     "ImageID" BIGINT PRIMARY KEY,
-    "Path" VARCHAR(100),
+    "Path" VARCHAR(300),
     "ProductID" BIGINT
 );
 CREATE TABLE "Cart" (
@@ -97,7 +97,12 @@ INSERT INTO public."Customer"("CustomerID", "Username" , "CustomerName", "PhoneN
  "HomeAddress", "Email", "Password", "IsGoogleAccount")
 VALUES (3578081079992320, 'TestUser0427', 'Nguyen Dinh Nam Thuan'	,'1234567891',
     	'ABC',	'nthuan2609@gmail.com',	'$2b$10$tuoUaIcsB37nuYwLg4deXOHe22W2oTBF.nOlzC2WNEciKxZUydVWu',false);
-
+INSERT INTO public."Product"(
+	"ProductID", "ProductName", "Describe", "Price", "InventoryQuantity", "CategoryID")
+	VALUES 
+		(3000000000000001,	'Quill',	'A quill is a feather and ink. Now go buy some ink',	50000,	1000,	1),
+		(3000000000000002,	'Sword',	'Made in China. Enchanted: Emotional Dmg +5',	99999,	1,	2),
+		(3000000000000003,	'Book', 	'Just a normal book. You might need a quill to write on it :>',	50000,	1000,	1);
 INSERT INTO public."Image"("ImageID", "Path", "ProductID")
 	VALUES 
         (4000000000000001,	'https://www.huntingandknives.co.uk/pub/media/catalog/product/cache/459300f1b5bd3c38ffb32210b0c2c42e/f/u/functional-medieval-sword-740.jpg',	3000000000000002),
@@ -115,9 +120,3 @@ INSERT INTO public."OrderProductDetail"("OrderID", "ProductID", "Quantity")
 		(9000000000000002,	3000000000000002,	1),
 		(9000000000000003,	3000000000000001,   5);
 
-INSERT INTO public."Product"(
-	"ProductID", "ProductName", "Describe", "Price", "InventoryQuantity", "CategoryID")
-	VALUES 
-		(3000000000000001,	'Quill',	"A quill is a feather and ink. Now go buy some ink",	50000,	1000,	1),
-		(3000000000000002,	'Sword',	"Made in China. Enchanted: Emotional Dmg +5",	99999,	1,	2),
-		(3000000000000003,	'Book', 	"Just a normal book. You might need a quill to write on it :>",	50000,	1000,	1);
