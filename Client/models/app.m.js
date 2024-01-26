@@ -23,10 +23,17 @@ module.exports = {
         {
             if (allProduct[5*page -i])
             {
-                const image = await imageDB.getImageSrcByProductID(allProduct[5*page -i].ProductID);
-                if (image)
+                if (allProduct[5*page -i].mainImageId)
                 {
-                    allProduct[5*page -i].Image  = image.Path;
+                    const image= await imageDB.getImageByImageID(allProduct[5*page -i].mainImageId);
+                    // const image = await imageDB.getImageSrcByProductID(allProduct[5*page -i].ProductID);
+                    if (image)
+                    {
+                        allProduct[5*page -i].Image  = image.Path;
+                    }else{
+                        allProduct[5*page -i].Image =""
+                    }
+                    
                 }
                 else{
                     allProduct[5*page -i].Image =""
@@ -42,7 +49,7 @@ module.exports = {
     },
     getProductByID:async(productID)=>{
         const product = await productDB.getProductByID(productID);
-        const image = await imageDB.getImageSrcByProductID(productID);
+        const image = await imageDB.getImageByImageID(product.mainImageId);
         if (image){
             product.Image = image.Path;
         }
@@ -67,10 +74,17 @@ module.exports = {
         {
             if (allFindProduct[5*page -i])
             {
-                const image = await imageDB.getImageSrcByProductID(allFindProduct[5*page -i].ProductID);
-                if (image)
+                if (allFindProduct[5*page -i].mainImageId)
                 {
-                    allFindProduct[5*page -i].Image  = image.Path;
+                    const image= await imageDB.getImageByImageID(allFindProduct[5*page -i].mainImageId);
+                    // const image = await imageDB.getImageSrcByProductID(allProduct[5*page -i].ProductID);
+                    if (image)
+                    {
+                        allFindProduct[5*page -i].Image  = image.Path;
+                    }else{
+                        allFindProduct[5*page -i].Image =""
+                    }
+                    
                 }
                 else{
                     allFindProduct[5*page -i].Image =""
@@ -89,18 +103,36 @@ module.exports = {
         {
             if (relatedProduct[i])
             {
-                const image = await imageDB.getImageSrcByProductID(relatedProduct[i].ProductID);
-                if (image)
+                if (relatedProduct[i].mainImageId)
                 {
-                    relatedProduct[i].Image  = image.Path;
+                    const image= await imageDB.getImageByImageID(relatedProduct[i].mainImageId);
+                    // const image = await imageDB.getImageSrcByProductID(allProduct[5*page -i].ProductID);
+                    if (image)
+                    {
+                        relatedProduct[i].Image  = image.Path;
+                    }else{
+                        relatedProduct[i].Image =""
+                    }
+                    
                 }
                 else{
                     relatedProduct[i].Image =""
                 }
+                // const image = await imageDB.getImageSrcByProductID(relatedProduct[i].ProductID);
+                // if (image)
+                // {
+                //     relatedProduct[i].Image  = image.Path;
+                // }
+                // else{
+                //     relatedProduct[i].Image =""
+                // }
                 result.push(relatedProduct[i]);
             }
         }
         return result
     },
+    getAllImageByProduct: async(productID)=>{
+        return await imageDB.getImageSrcByProductID(productID)
+    }
     
 }

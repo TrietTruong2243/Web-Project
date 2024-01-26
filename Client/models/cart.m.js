@@ -16,14 +16,28 @@ module.exports = {
         for (i of cart)
         {
             const res = await productDB.getProductByID(i.ProductID);
-            const image = await imageDB.getImageSrcByProductID(i.ProductID);
-            if (image)
+            if (res.mainImageId)
             {
-                res.Image = image.Path
-            }
-            else{
+                const image = await imageDB.getImageByImageID(res.mainImageId);
+                if (image)
+                {
+                    res.Image = image.Path
+                }
+                else{
+                    res.Image = "https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_640.png"
+                }
+            }else{
                 res.Image = "https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_640.png"
             }
+           
+            // const image = await imageDB.getImageSrcByProductID(i.ProductID);
+            // if (image)
+            // {
+            //     res.Image = image.Path
+            // }
+            // else{
+            //     res.Image = "https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_640.png"
+            // }
             res.CartQuantity = i.Quantity;
             result.push(res);
         }

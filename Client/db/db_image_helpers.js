@@ -17,7 +17,14 @@ module.exports = {
         // console.log(query);
         const result = await db.query(query);
         // Check if any rows were returned
-        return result.rows[0]; 
+        return result.rows 
         
+    },
+    getImageByImageID: async (id)=>{
+        const query = `SELECT * FROM public."${table}" WHERE "ImageID" = '${id}'`
+        // console.log(query);
+        const result = await db.query(query);
+        // Check if any rows were returned
+        return result.rows[0]; 
     }
 }

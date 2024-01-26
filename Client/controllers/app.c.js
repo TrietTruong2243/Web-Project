@@ -52,9 +52,10 @@ module.exports = {
         const productID = req.query.id;
         const product = await model.getProductByID(productID);
         const relatedProduct = await model.getRelatedProduct(productID);
+        const allImages = await model.getAllImageByProduct(productID);
+        console.log(allImages);
         res.render("home", {
-            layout: "product", productName1: product.ProductName, productImage: product.Image, productID: product.ProductID, productName2: product.ProductName, productPrice: product.Price,
-            productDescribe: product.Describe, productQuantity: product.InventoryQuantity, relatedProduct: relatedProduct, isDisabled: isDisabled
+            layout: "product", productName1: product.ProductName,product:product, relatedProduct: relatedProduct, isDisabled: isDisabled, allImages: allImages
         })
     },
     search: async (req, res) => {

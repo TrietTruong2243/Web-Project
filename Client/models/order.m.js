@@ -35,7 +35,7 @@ module.exports = {
         for (i of order)
         {
             let res = await productDB.getProductByID(i.ProductID);
-            const image = await imageDB.getImageSrcByProductID(i.ProductID);
+            const image = await imageDB.getImageByImageID(res.mainImageId);
             if (image)
             {
                 res.Image = image.Path
