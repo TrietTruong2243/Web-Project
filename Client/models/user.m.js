@@ -13,7 +13,7 @@ module.exports = {
             i.TotalAmount =  await orderDB.calculateTotal(i.OrderID);
 
         }
-        console.log(result);
+        //console.log(result);
         return result;
     },
     getUserByID: async(id)=>{

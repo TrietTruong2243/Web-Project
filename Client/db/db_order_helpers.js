@@ -56,7 +56,7 @@ module.exports = {
         const query = `INSERT INTO public."${table}" ("CustomerID") VALUES ($1) RETURNING "OrderID"`
         const values = [userID];
         const res = await db.query(query,values);
-        console.log(res.rows[0].OrderID);
+    //    console.log(res.rows[0].OrderID);
         return res.rows[0].OrderID; 
     },
     addOrderItem: async (OrderID, ProductID, Quantity) => {
