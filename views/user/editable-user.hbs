@@ -65,8 +65,9 @@
                             <div class="row g-2">
                                 <h5 class="mt-0">Profile photo</h5>
                                 <div class="text-center">
-                                    {{#if user.imageUrl}}
-                                    <img id="previewImage" initUrl="{{ user.imageUrl }}" src="{{ user.imageUrl }}" alt="avatar" class="d-block m-auto enlarge-image image-has-modal">
+                                   
+                                    {{#if user.image}}
+                                    <img id="previewImage" initUrl="{{ user.image.url }}" src="{{ user.image.url }}" alt="avatar" class="d-block m-auto enlarge-image image-has-modal">
                                     {{else}}
                                     <img id="previewImage" src="/img/no-image-icon.png" alt="avatar" class="d-block m-auto enlarge-image image-has-modal">
                                     {{/if}}
@@ -92,8 +93,8 @@
     // breadcrumbs
     const breadcrumbs = $('.breadcrumb');
         let breadcrumbContent = `
-            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/"><span class="breadcrumb-text">Dashboard</span></a></li>
-            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/customer"><span class="breadcrumb-text">Customers</span></a></li>
+            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/admin/"><span class="breadcrumb-text">Dashboard</span></a></li>
+            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/admin/customer"><span class="breadcrumb-text">Customers</span></a></li>
         `;
         if($('form[name="user-form"]').attr('editable') === 'true') {
             breadcrumbContent += `
@@ -142,7 +143,7 @@
         const username = $('input[name="username"]').val();
         if(!username) return;
         $.ajax({
-            url: `/customer/check-username/${username}`,
+            url: `/admin/customer/api/check-username/${username}`,
             method: 'GET',
             success: res => {
                 if(!res.valid) {

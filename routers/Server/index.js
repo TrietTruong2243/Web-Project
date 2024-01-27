@@ -15,5 +15,5 @@ module.exports = (app) => {
     app.use('/admin/customer', CustomerRouter);
     app.use('/admin/category', CategoryRouter);
     app.use('/admin/product', ProductRouter);
-    // app.use('/order', OrderRouter);
+    app.use('/admin/order', OrderRouter);
 }

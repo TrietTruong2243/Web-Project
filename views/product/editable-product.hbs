@@ -107,8 +107,8 @@
     // breadcrumbs
     const breadcrumbs = $('.breadcrumb');
     let breadcrumbContent = `
-            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/"><span class="breadcrumb-text">Dashboard</span></a></li>
-            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/product"><span class="breadcrumb-text">Products</span></a></li>
+            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/admin/"><span class="breadcrumb-text">Dashboard</span></a></li>
+            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/admin/product"><span class="breadcrumb-text">Products</span></a></li>
         `;
     if ($('form[name="product-form"]').attr('editable') === 'true') {
         breadcrumbContent += `

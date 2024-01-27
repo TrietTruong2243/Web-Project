@@ -8,12 +8,14 @@ module.exports = (sequelize) => {
         },
         price: {
             type: DataTypes.INTEGER,
-            defaultValue: 0
-        },
+            defaultValue: 0,
+            min: 0
+                },
         description: DataTypes.TEXT,
         quantity: {
             type: DataTypes.INTEGER,
-            defaultValue: 0
+            defaultValue: 0,
+            min: 0
         },
     });
 

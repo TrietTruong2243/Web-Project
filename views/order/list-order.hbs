@@ -1,0 +1,585 @@
+<link rel="stylesheet" href="/css/table.css">
+<div class="container-fluid mb-4">
+    <div class="d-flex flex-row justify-content-between align-items-center">
+        <div class="d-flex flex-row align-items-center">
+            <h3>Orders</h3>
+            <p class="total-mark mt-0 mb-1 ms-2 px-3">{{ total }}</p>
+        </div>
+        <div class="d-flex flex-row">
+            <a class="btn btn-outline-info d-flex align-items-center me-4" href="/order/create-new">
+                <i class="fa-solid fa-plus pe-2"></i>
+                <span>Create</span>
+            </a>
+            <div id="filter-btn" class="btn btn-outline-info d-flex align-items-center me-4" data-bs-toggle="collapse"
+                href="#collapseFilter" role="button" aria-expanded="false">
+                <i class="fa-solid fa-filter pe-2"></i>
+                <span>Filter</span>
+            </div>
+        </div>
+    </div>
+    <div class="collapse p-0 mt-1" class="collapse" id="collapseFilter">
+        <div class="row">
+            <div class="col-md-6 col-lg-3">
+                <select id="filter-status" class="form-select" aria-label="Default select example">
+                    <option value="all" {{#unless queryObj.status }} selected {{/unless}}>Select status</option>
+                    <option value="pending" {{#eq queryObj.status "pending"}} selected {{/eq}}>
+                        Pending
+                    </option>
+                    <option value="confirmed" {{#eq queryObj.status "confirmed" }} selected {{/eq}}>
+                        Confirmed
+                    </option>
+                    <option value="awaiting payment" {{#eq queryObj.status "awaiting payment" }} selected {{/eq}}>
+                        Awaiting payment
+                    </option>
+                    <option value="shipping" {{#eq queryObj.status "shipping" }} selected {{/eq}}>
+                        Shipping
+                    </option>
+                    <option value="completed" {{#eq queryObj.status "completed" }} selected {{/eq}}>
+                        Completed
+                    </option>
+                    <option value="cancelled" {{#eq queryObj.status "cancelled" }} selected {{/eq}}>
+                        Cancelled
+                    </option>
+                    <option value="refunded" {{#eq queryObj.status "refunded" }} selected {{/eq}}>
+                        Refunded
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="name-addon">Username</span>
+                    <input type="text" id="filter-username" class="form-control" value="{{ queryObj.username }}"
+                        aria-label="Name" aria-describedby="name-addon">
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group">
+                    <span class="input-group-text" id="totalPriceFrom-addon">Total price from</span>
+                    <input type="number" id="filter-totalPriceFrom" class="form-control"
+                        value="{{ queryObj.totalPriceFrom }}" aria-describedby="totalPriceFrom-addon"
+                        aria-label="totalPriceFrom">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text" id="totalPriceTo-addon">Total price to</span>
+                    <input type="number" id="filter-totalPriceTo" class="form-control" value="{{ queryObj.totalPriceTo }}"
+                        aria-describedby="totalPriceTo-addon" aria-label="totalPriceTo">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-2">
+                <span>Number of rows:</span>
+                <select id="filter-numrows" class="form-select form-select-sm">
+                    <option value="5" {{#eq queryObj.size "5" }} selected {{/eq}}>5</option>
+                    <option value="10" {{#unless queryObj.size}} selected {{/unless}} {{#eq queryObj.size "10" }}
+                        selected {{/eq}}>10</option>
+                    <option value="20" {{#eq queryObj.size "20" }} selected {{/eq}}>20</option>
+                    <option value="50" {{#eq queryObj.size "50" }} selected {{/eq}}>50</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <span>Sort by:</span>
+                <select id="filter-sortBy" class="form-select form-select-sm">
+                    <option value="id" {{#unless queryObj.sortBy }} selected {{/unless}} {{#eq queryObj.sortBy "id" }}
+                        selected {{/eq}}>ID</option>
+                    <option value="username" {{#eq queryObj.sortBy "name" }} selected {{/eq}}>Username</option>
+                    <option value="fullname" {{#eq queryObj.sortBy "totalPrice" }} selected {{/eq}}>Total price</option>
+                    <option value="quantity" {{#eq queryObj.sortBy "createdAt" }} selected {{/eq}}>CreatedAt</option>
+                    <option value="updatedAt" {{#eq queryObj.sortBy "updatedAt" }} selected {{/eq}}>UpdatedAt</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <span>Sort type:</span>
+                <select id="filter-sortDir" class="form-select form-select-sm">
+                    <option value="asc" {{#unless queryObj.sortDir }} selected {{/unless}} {{#eq queryObj.sortDir "asc"
+                        }} selected {{/eq}}>ASC</option>
+                    <option value="desc" {{#eq queryObj.sortDir "desc" }} selected {{/eq}}>DESC</option>
+                </select>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group mt-3">
+                    <span class="input-group-text" id="createdAtFrom-addon">Created from:</span>
+                    <input type="date" id="filter-createdAtFrom" class="form-control"
+                        value="{{ queryObj.createdAtFrom }}" aria-describedby="createdAtFrom-addon">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text" id="createdAtTo-addon">Created to:</span>
+                    <input type="date" id="filter-createdAtTo" class="form-control" value="{{ queryObj.createdAtTo }}"
+                        aria-describedby="createdAtTo-addon">
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group mt-3">
+                    <span class="input-group-text" id="updatedAtFrom-addon">Updated from:</span>
+                    <input type="date" id="filter-updatedAtFrom" class="form-control"
+                        value="{{ queryObj.updatedAtFrom }}" aria-describedby="updatedAtFrom-addon">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text" id="updatedAtTo-addon">Updated to:</span>
+                    <input type="date" id="filter-updatedAtTo" class="form-control" value="{{ queryObj.updatedAtTo }}"
+                        aria-describedby="updatedAtTo-addon">
+                </div>
+            </div>
+
+        </div>
+        <div class="row mt-3">
+            <div class="col d-flex justify-content-end">
+                <button id="filter-reset-btn" class="btn" type="button">
+                    Reset
+                </button>
+            </div>
+            <div class="col d-flex justify-content-start align-items-center">
+                <button id="filter-apply-btn" class="btn" type="button">
+                    Apply
+                </button>
+            </div>
+        </div>
+
+    </div>
+    <form name="table-container" method="post" action="/order/multi-action">
+        <div class="multiselect-row row mt-2 mx-1 py-2 border-radius-md d-flex flex-row invisible">
+            <span class="col-2 multiselect-text">Selected</span>
+            <button id="multiselect-delete-btn" class="col-2 btn-sm btn-multiselect-row ms-2 p-0" data-bs-toggle="modal"
+                data-bs-target="#deleteModal">
+                <i class="fa-regular fa-trash-can pe-2"></i>
+                Delete
+            </button>
+        </div>
+        <input type="hidden" name="action">
+        <div class="card">
+            <div class="card-body px-0 py-2">
+                <div class="table">
+                    <table id="data-table" class="table table-hover" page="{{ page }}" total="{{ total }}"
+                        size="{{ queryObj.size }}" urlParams="{{ urlParams }}">
+                        <thead>
+                            <tr>
+                                <th class="px-2 font-weight-bolder">
+                                    <div class="d-flex flex-row">
+                                        <div class="form-check px-4">
+                                            <input class="form-check-input select-all" name="select-all"
+                                                type="checkbox">
+                                        </div>
+                                        <span>ID</span>
+                                    </div>
+                                </th>
+                                <th class="px-2 font-weight-bolder">Username</th>
+                                <th class="px-2 font-weight-bolder">Total price</th>
+                                <th class="px-2 font-weight-bolder">Updated At</th>
+                                <th class="px-2 font-weight-bolder">Status</th>
+                                <th class="px-0"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="table-group-divider">
+                            {{#each orders}}
+                            <tr>
+                                <td class="align-middle">
+                                    <div class="d-flex flex-row align-items-center">
+                                        <div class="form-check px-4">
+                                            <input class="form-check-input select-item" name="selectedItems[]"
+                                                type="checkbox" value="{{this.id}}">
+                                        </div>
+                                        <span>{{this.id}}</span>
+                                    </div>
+                                </td>
+                                <td class="align-middle">{{this.user.username}}</td>
+                                <td class="align-middle">{{this.formattedTotalAmount}}</td>
+                                <td class="align-middle">{{this.formattedUpdatedAt}}</td>
+                                <td class="align-middle" id="order-status" order-id="{{ this.id }}">
+                                    {{#eq this.status "pending"}}
+                                    <span class="badge badge-pill bg-gradient-secondary">Pending</span>
+                                    {{/eq}}
+                                    {{#eq this.status "confirmed"}}
+                                    <span class="badge badge-pill bg-gradient-info">Confirmed</span>
+                                    {{/eq}}
+                                    {{#eq this.status "awaiting payment"}}
+                                    <span class="badge badge-pill bg-gradient-info">Awaiting payment</span>
+                                    {{/eq}}
+                                    {{#eq this.status "shipping"}}
+                                    <span class="badge badge-pill bg-gradient-info">Shipping</span>
+                                    {{/eq}}
+                                    {{#eq this.status "completed"}}
+                                    <span class="badge badge-pill bg-gradient-success">Completed</span>
+                                    {{/eq}}
+                                    {{#eq this.status "cancelled"}}
+                                    <span class="badge badge-pill bg-gradient-danger">Cancelled</span>
+                                    {{/eq}}
+                                    {{#eq this.status "refunded"}}
+                                    <span class="badge badge-pill bg-gradient-danger">Refunded</span>
+                                    {{/eq}}
+                                </td>
+                                <td class="align-middle d-flex flex-row justify-content-evenly">
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-info d-flex align-items-center px-1 dropdown-toggle" type="button"
+                                            id="dropdownMenuStatusButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Change status
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuStatusButton" order-id="{{ this.id }}">
+                                            <li><button class="dropdown-item btn-change-status">Pending</button></li>
+                                            <li><button class="dropdown-item btn-change-status">Confirmed</button></li>
+                                            <li><button class="dropdown-item btn-change-status">Shipping</button></li>
+                                            <li><button class="dropdown-item btn-change-status">Completed</button></li>
+                                            <li><button class="dropdown-item btn-change-status">Awaiting payment</button></li>
+                                            <li><button class="dropdown-item btn-change-status">Cancelled</button></li>
+                                            <li><button class="dropdown-item btn-change-status">Refunded</button></li>
+                                        </ul>
+                                    </div>
+                                    <button
+                                        class="btn btn-outline-info d-flex align-items-center justify-content-center px-2"
+                                        type="button" data-bs-toggle="modal" data-bs-target="#detailModal" order-id="{{ this.id }}">
+                                        <i class="fa-regular fa-eye pe-2"></i>
+                                        Show
+                                    </button>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <nav aria-label="Order pagination">
+                    <ul class="pagination justify-content-center custom-pagination mt-2" id="order-pagination">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </form>
+
+    {{!-- Modal for details --}}
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel"></h5>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="detail-status">
+                    </div>
+                    <span class="text-bolder">Customer: </span>
+                    <a id="detail-customer" href=""></a>
+                    <br>
+                    <span class="text-bolder">Created at: </span>
+                    <span id="detail-createdAt"></span>
+                    <br>
+                    <span class="text-bolder">Updated at: </span>
+                    <span id="detail-updatedAt"></span>
+                    <br>    
+                    <div class="table-responsive">
+                        <table class="table caption-top">
+                            <caption>List of order items</caption>
+                            <thead>
+                                <tr>
+                                    <th class="px-2">#</th>
+                                    <th class="px-2">Product</th>
+                                    <th class="px-2">Price</th>
+                                    <th class="px-2">Amount</th>
+                                    <th class="px-2">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="items-table-body" class="table-group-divider">
+                                
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4" class="text-end text-bolder">Total amount:</td>
+                                    <td id="totalAmount"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="detail-modal-delete-btn" type="button" class="btn bg-gradient-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                    <button id="detail-modal-edit-btn" type="button" class="btn bg-gradient-success">Edit</button>
+                    <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{!-- Modal for delete --}}
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel"></h5>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+                    <button id="modal-delete-btn" type="button" class="btn bg-gradient-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<form id="single-item-action" method="post">
+    <input type="hidden" name="action">
+</form>
+
+<script src="/js/table.js"></script>
+<script>
+    $(() => {
+        const CurrencyOptions = { style: "currency", currency: "VND" };
+        const DateOptions = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+        // pagination
+        const table = $('#data-table');
+        const page = parseInt(table.attr('page'));
+        const total = parseInt(table.attr('total'));
+        const size = parseInt(table.attr('size'));
+        const urlParams = table.attr('urlParams');
+        if (urlParams) {
+            $('#filter-btn').removeClass('collapsed');
+            $('#filter-btn').attr('aria-expanded', 'true');
+            $('#collapseFilter').addClass('show');
+        }
+
+        $('#order-pagination').html(renderPagination(page, total, size, 'order', urlParams));
+
+        // breadcrumbs
+        const breadcrumbs = $('.breadcrumb');
+        let breadcrumbContent = `
+            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/"><span class="breadcrumb-text">Dashboard</span></a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Orders</li>
+        `;
+        breadcrumbs.html(breadcrumbContent);
+
+        // multi select
+        const tableContainerForm = $('form[name="table-container"]');
+        const selectAll = $('.select-all');
+        const selectItems = $('input[name="selectedItems[]"]');
+        const deleteBtn = $('#multiselect-delete-btn');
+
+        function renderBtnMultiSelectSubmit() {
+            const multiselectRow = $('.multiselect-row');
+            const numOfSelected = $('input[name="selectedItems[]"]:checked').length;
+            if (numOfSelected > 0) {
+                multiselectRow.removeClass('invisible');
+                $('.multiselect-text').html(`Selected (${numOfSelected})`);
+            } else {
+                multiselectRow.addClass('invisible');
+            }
+        }
+        selectAll.change(() => {
+            selectItems.prop('checked', selectAll.prop('checked'));
+            renderBtnMultiSelectSubmit();
+        });
+        selectItems.change(() => {
+            selectAll.prop('checked', selectItems.length === $('input[name="selectedItems[]"]:checked').length);
+            renderBtnMultiSelectSubmit();
+        });
+        deleteBtn.click((e) => {
+            e.preventDefault();
+            tableContainerForm.find('input[name="action"]').val('delete');
+        });
+
+        // filter
+        $('#filter-reset-btn').click(() => {
+            $('#filter-status').val('');
+            $('#filter-username').val('');
+            $('#filter-totalPriceFrom').val('');
+            $('#filter-totalPriceTo').val('');
+            $('#filter-createdAtFrom').val('');
+            $('#filter-createdAtTo').val('');
+            $('#filter-updatedAtFrom').val('');
+            $('#filter-updatedAtTo').val('');
+            $('#filter-numrows').val('10');
+            $('#filter-sortBy').val('id');
+            $('#filter-sortDir').val('asc');
+        });
+        $('#filter-apply-btn').click(() => {
+            const status_f = $('#filter-status').val();
+            const username_f = $('#filter-username').val();
+            const totalPriceFrom_f = $('#filter-totalPriceFrom').val();
+            const totalPriceTo_f = $('#filter-totalPriceTo').val();
+            const createdAtFrom_f = $('#filter-createdAtFrom').val();
+            const createdAtTo_f = $('#filter-createdAtTo').val();
+            const updatedAtFrom_f = $('#filter-updatedAtFrom').val();
+            const updatedAtTo_f = $('#filter-updatedAtTo').val();
+            const size_f = $('#filter-numrows').val();
+            const sortBy_f = $('#filter-sortBy').val();
+            const sortDir_f = $('#filter-sortDir').val();
+
+            let urlParams = '';
+            if (size_f && size_f !== '10') {
+                urlParams += `&size=${size_f}`;
+            }
+            if (sortBy_f && sortBy_f !== 'id') {
+                urlParams += `&sortBy=${sortBy_f}`;
+            }
+            if (sortDir_f && sortDir_f !== 'asc') {
+                urlParams += `&sortDir=${sortDir_f}`;
+            }
+            if (status_f && status_f !== 'all') {
+                urlParams += `&status=${status_f}`;
+            }
+            if (username_f) {
+                urlParams += `&username=${username_f}`;
+            }
+            if (totalPriceFrom_f) {
+                urlParams += `&totalPriceFrom=${totalPriceFrom_f}`;
+            }
+            if (totalPriceTo_f) {
+                urlParams += `&totalPriceTo=${totalPriceTo_f}`;
+            }
+            if (createdAtFrom_f) {
+                urlParams += `&createdAtFrom=${createdAtFrom_f}`;
+            }
+            if (createdAtTo_f) {
+                urlParams += `&createdAtTo=${createdAtTo_f}`;
+            }
+            if (updatedAtFrom_f) {
+                urlParams += `&updatedAtFrom=${updatedAtFrom_f}`;
+            }
+            if (updatedAtTo_f) {
+                urlParams += `&updatedAtTo=${updatedAtTo_f}`;
+            }
+
+            window.location.href = `/order?${urlParams}`;
+        });
+
+        const singleItemForm = $('#single-item-action');
+        // detail modal
+        let orderId;
+        $('#detailModal').on('show.bs.modal', function(e){
+            orderId = $(e.relatedTarget).attr('order-id');
+            // load order data
+            $.ajax({
+                url: `/order/api/data/${orderId}`,
+                method: 'GET',
+                success: (res) => {
+                    const order = res.data;
+                    console.log(order);
+                    $('#detailModalLabel').html(`Order ${order.id}`);
+                    switch(order.status){
+                        case 'pending':
+                            $('#detail-status').html(`<span class="badge badge-pill bg-gradient-secondary">Pending</span>`);
+                            break;
+                        case 'confirmed':
+                            $('#detail-status').html(`<span class="badge badge-pill bg-gradient-info">Confirmed</span>`);
+                            break;
+                        case 'awaiting payment':
+                            $('#detail-status').html(`<span class="badge badge-pill bg-gradient-info">Awaiting payment</span>`);
+                            break;
+                        case 'shipping':
+                            $('#detail-status').html(`<span class="badge badge-pill bg-gradient-info">Shipping</span>`);
+                            break;
+                        case 'completed':
+                            $('#detail-status').html(`<span class="badge badge-pill bg-gradient-success">Completed</span>`);
+                            break;
+                        case 'cancelled':
+                            $('#detail-status').html(`<span class="badge badge-pill bg-gradient-danger">Cancelled</span>`);
+                            break;
+                        case 'refunded':
+                            $('#detail-status').html(`<span class="badge badge-pill bg-gradient-danger">Refunded</span>`);
+                            break;
+                    }
+                    $('#detail-customer').html(`${order.user.username}`);
+                    if(order.user.role == 'admin'){
+                        $('#detail-customer').attr('href', `/admin?id=${order.user.id}`);
+                    } else {
+                        $('#detail-customer').attr('href', `/customer?id=${order.user.id}`);
+                    }
+                    $('#detail-createdAt').html(`${new Intl.DateTimeFormat('vi', DateOptions).format(new Date(order.createdAt))}`);
+                    $('#detail-updatedAt').html(`${new Intl.DateTimeFormat('vi', DateOptions).format(new Date(order.updatedAt))}`);
+                    const itemData = order.orderItems.map((item, index) => {
+                        return `
+                            <tr>
+                                <td class="align-middle">${index + 1}</td>
+                                <td class="align-middle"><a href="/product?id=${item.product.id}">${item.product.name}</a></td>
+                                <td class="align-middle">${new Intl.NumberFormat('vi', CurrencyOptions).format(item.product.price)}</td>
+                                <td class="align-middle">${item.quantity}</td>
+                                <td class="align-middle">${new Intl.NumberFormat('vi', CurrencyOptions).format(item.product.price * item.quantity)}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                    $('#items-table-body').html(itemData);
+                    $('#totalAmount').html(`${new Intl.NumberFormat('vi', CurrencyOptions).format(order.totalAmount)}`);
+                }
+            });
+            // buttons
+            $('#detail-modal-edit-btn').click(() => {
+                window.location.href = `/order/edit/${orderId}`;
+            });
+        });
+        
+        // change status
+        $('.btn-change-status').click(function(e) {
+            e.preventDefault();
+            const status = $(this).html().toLowerCase();
+            orderId = $(this).parent().parent().attr('order-id');
+            $.ajax({
+                url: `/order/api/change-status/${orderId}`,
+                method: 'PATCH',
+                data: {
+                    status: status
+                },
+                success: (res) => {
+                    switch(res.data){
+                        case 'pending':
+                            $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-secondary">Pending</span>`);
+                            break;
+                        case 'confirmed':
+                            $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-info">Confirmed</span>`);
+                            break;
+                        case 'awaiting payment':
+                            $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-info">Awaiting payment</span>`);
+                            break;
+                        case 'shipping':
+                            $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-info">Shipping</span>`);
+                            break;
+                        case 'completed':
+                            $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-success">Completed</span>`);
+                            break;
+                        case 'cancelled':
+                            $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-danger">Cancelled</span>`);
+                            break;
+                        case 'refunded':
+                            $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-danger">Refunded</span>`);
+                            break;
+                    }
+                }
+            });
+        });
+
+        // delete modal
+        const deleteModal = $('#deleteModal');
+        deleteModal.on('show.bs.modal', e => {
+            const button = $(e.relatedTarget);
+            const modalDeleteBtn = $('#modal-delete-btn');
+            const modalTitle = deleteModal.find('.modal-title');
+            const modalBody = deleteModal.find('.modal-body');
+
+            if (button.attr('id') === 'detail-modal-delete-btn') {
+                modalTitle.html('Delete order');
+                modalBody.html(`Are you sure you want to delete this order with id: <b>${orderId}</b>? This action cannot be undone.`);
+                modalDeleteBtn.click(() => {
+                    singleItemForm.attr('action', `/order/${orderId}`);
+                    singleItemForm.find('input[name="action"]').val('delete');
+                    singleItemForm.submit();
+                });
+            } else if (button.attr('id') === 'multiselect-delete-btn') {
+                const selectedItems = $('input[name="selectedItems[]"]:checked');
+                const selectedItemsIds = selectedItems.map((i, item) => {
+                    return $(item).val();
+                }).get();
+                modalTitle.html('Delete orders');
+                modalBody.html(`Are you sure you want to delete these orders with ids: <b>${selectedItemsIds.join(', ')}</b>? This action cannot be undone.`);
+                modalDeleteBtn.click(() => {
+                    tableContainerForm.find('input[name="action"]').val('delete');
+                    tableContainerForm.submit();
+                });
+            }
+        })
+    });
+</script>

@@ -6,7 +6,8 @@
             <p class="total-mark mt-0 mb-1 ms-2 px-3">{{ total }}</p>
         </div>
         <div class="d-flex flex-row">
-            <a class="btn btn-outline-info d-flex align-items-center me-4 {{#if active.Administrators}} d-none {{/if}}" href="/admin/customer/create-new">
+            <a class="btn btn-outline-info d-flex align-items-center me-4 {{#if active.Administrators}} d-none {{/if}}"
+                href="/admin/customer/create-new">
                 <i class="fa-solid fa-plus pe-2"></i>
                 <span>Create</span>
             </a>
@@ -66,8 +67,8 @@
             <div class="col-sm-6 col-lg-3">
                 <div class="input-group">
                     <span class="input-group-text" id="createdAtFrom-addon">Created from:</span>
-                    <input type="date" id="filter-createdAtFrom" class="form-control" value="{{ queryObj.createdAtFrom }}"
-                        aria-describedby="createdAtFrom-addon">
+                    <input type="date" id="filter-createdAtFrom" class="form-control"
+                        value="{{ queryObj.createdAtFrom }}" aria-describedby="createdAtFrom-addon">
                 </div>
                 <div class="input-group">
                     <span class="input-group-text" id="createdAtTo-addon">Created to:</span>
@@ -78,8 +79,8 @@
             <div class="col-md-6 col-lg-3">
                 <div class="input-group">
                     <span class="input-group-text" id="updatedAtFrom-addon">Updated from:</span>
-                    <input type="date" id="filter-updatedAtFrom" class="form-control" value="{{ queryObj.updatedAtFrom }}"
-                        aria-describedby="updatedAtFrom-addon">
+                    <input type="date" id="filter-updatedAtFrom" class="form-control"
+                        value="{{ queryObj.updatedAtFrom }}" aria-describedby="updatedAtFrom-addon">
                 </div>
                 <div class="input-group">
                     <span class="input-group-text" id="updatedAtTo-addon">Updated to:</span>
@@ -112,8 +113,8 @@
             <div class="col-2">
                 <span>Sort type:</span>
                 <select id="filter-sortDir" class="form-select form-select-sm">
-                    <option value="asc" {{#unless queryObj.sortDir }} selected {{/unless}} {{#eq queryObj.sortDir "asc" }}
-                        selected {{/eq}}>ASC</option>
+                    <option value="asc" {{#unless queryObj.sortDir }} selected {{/unless}} {{#eq queryObj.sortDir "asc"
+                        }} selected {{/eq}}>ASC</option>
                     <option value="desc" {{#eq queryObj.sortDir "desc" }} selected {{/eq}}>DESC</option>
                 </select>
             </div>
@@ -133,10 +134,12 @@
         </div>
 
     </div>
-    <form name="table-container" method="post" {{#if active.Administrators}} action="/admin/admin/multi-action" {{else}} action="/admin/customer/multi-action" {{/if}}>
+    <form name="table-container" method="post" {{#if active.Administrators}} action="/admin/admin/multi-action" {{else}}
+        action="/admin/customer/multi-action" {{/if}}>
         <div class="multiselect-row row mt-2 mx-1 py-2 border-radius-md d-flex flex-row invisible">
             <span class="col-2 multiselect-text">Selected</span>
-            <button id="multiselect-delete-btn" class="col-1 btn-sm btn-multiselect-row ms-2 p-0" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            <button id="multiselect-delete-btn" class="col-1 btn-sm btn-multiselect-row ms-2 p-0" data-bs-toggle="modal"
+                data-bs-target="#deleteModal">
                 <i class="fa-regular fa-trash-can pe-2"></i>
                 Delete
             </button>
@@ -149,29 +152,31 @@
                 Ban
             </button>
             {{#if active.Administrators}}
-                <button id="multiselect-changeToCustomer-btn" class="col-3 btn-sm btn-multiselect-row ms-2 p-0">
-                    <i class="fa-solid fa-users pe-2"></i>
-                    Change to standard user
-                </button>
+            <button id="multiselect-changeToCustomer-btn" class="col-3 btn-sm btn-multiselect-row ms-2 p-0">
+                <i class="fa-solid fa-users pe-2"></i>
+                Change to standard user
+            </button>
             {{else}}
-                <button id="multiselect-changeToAdmin-btn" class="col-3 btn-sm btn-multiselect-row ms-2 p-0">
-                    <i class="fa-solid fa-users-gear pe-2"></i>
-                    Change to administrators
-                </button>
+            <button id="multiselect-changeToAdmin-btn" class="col-3 btn-sm btn-multiselect-row ms-2 p-0">
+                <i class="fa-solid fa-users-gear pe-2"></i>
+                Change to administrators
+            </button>
             {{/if}}
         </div>
         <input type="hidden" name="action">
         <div class="card">
             <div class="card-body px-0 py-2">
                 <div class="table-responsive">
-                    <table id="data-table" class="table table-hover" page="{{ page }}" total="{{ total }}" {{#if active.Administrators}} role="admin" {{else}} role="customer" {{/if}}
-                        size="{{ queryObj.size }}" urlParams="{{ urlParams }}">
+                    <table id="data-table" class="table table-hover" page="{{ page }}" total="{{ total }}" {{#if
+                        active.Administrators}} role="admin" {{else}} role="customer" {{/if}} size="{{ queryObj.size }}"
+                        urlParams="{{ urlParams }}">
                         <thead>
                             <tr>
                                 <th class="px-2 font-weight-bolder">
                                     <div class="d-flex flex-row">
                                         <div class="form-check px-4">
-                                            <input class="form-check-input select-all" name="select-all" type="checkbox">
+                                            <input class="form-check-input select-all" name="select-all"
+                                                type="checkbox">
                                         </div>
                                         <span>ID</span>
                                     </div>
@@ -179,7 +184,7 @@
                                 <th class="px-6 font-weight-bolder">User</th>
                                 <th class="px-2 font-weight-bolder">Fullname</th>
                                 <th class="px-2 font-weight-border">Updated at</th>
-                                <th></th>
+                                <th class="px-0"></th>
                             </tr>
                         </thead>
 
@@ -189,7 +194,8 @@
                                 <td class="align-middle">
                                     <div class="d-flex flex-row align-items-center">
                                         <div class="form-check px-4">
-                                            <input class="form-check-input select-item" name="selectedItems[]" type="checkbox" value="{{this.id}}">
+                                            <input class="form-check-input select-item" name="selectedItems[]"
+                                                type="checkbox" value="{{this.id}}">
                                         </div>
                                         <span>{{this.id}}</span>
                                     </div>
@@ -197,8 +203,8 @@
                                 <td>
                                     <div class="align-middle d-flex">
                                         <div>
-                                            <img {{#if this.imageUrl}} src="{{this.imageUrl}}" {{else}}
-                                                src="img/user.png" {{/if}} class="avatar me-4" alt="user">
+                                            <img {{#if this.image}} src="{{this.image.url}}" {{else}} src="img/user.png"
+                                                {{/if}} class="avatar me-4" alt="user">
                                         </div>
                                         <div class="d-flex flex-column justify-content-center">
                                             <div class="d-flex">
@@ -217,12 +223,15 @@
                                 <td class="align-middle">{{this.fullname}}</td>
                                 <td class="align-middle">{{this.formattedUpdatedAt}}</td>
                                 <td class="align-middle">
-                                    <button class="btn btn-outline-info d-flex align-items-center justify-content-center"
-                                        type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithInformation" aria-controls="offcanvasWithInformation"
-                                        user-id="{{this.id}}" user-username="{{this.username}}"
-                                        user-fullname="{{this.fullname}}" user-image="{{this.imageUrl}}"
-                                        user-email="{{this.email}}" user-phone="{{this.phone}}"
-                                        user-address="{{this.address}}" user-status="{{this.status}}"
+                                    <button
+                                        class="btn btn-outline-info d-flex align-items-center justify-content-center px-2"
+                                        type="button" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasWithInformation"
+                                        aria-controls="offcanvasWithInformation" user-id="{{this.id}}"
+                                        user-username="{{this.username}}" user-fullname="{{this.fullname}}" {{#if
+                                        this.image}} user-image="{{this.image.url}}" {{/if}} user-email="{{this.email}}"
+                                        user-phone="{{this.phone}}" user-address="{{this.address}}"
+                                        user-status="{{this.status}}"
                                         user-formattedUpdatedAt="{{this.formattedUpdatedAt}}"
                                         user-formattedCreatedAt="{{this.formattedCreatedAt}}">
                                         <i class="fa-regular fa-eye pe-2"></i>
@@ -241,7 +250,7 @@
             </div>
         </div>
     </form>
-    
+
     {{!-- Offcanvas for details --}}
     <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasWithInformation"
         aria-labelledby="offcanvasWithInformationLabel">
@@ -251,7 +260,8 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <button id="offcanvas-delete-btn" class="col-4 btn btn-outline-danger d-flex align-items-center justify-content-center mt-2"
+            <button id="offcanvas-delete-btn"
+                class="col-4 btn btn-outline-danger d-flex align-items-center justify-content-center mt-2"
                 data-bs-toggle="modal" data-bs-target="#deleteModal">
                 <i class="fa-regular fa-trash-can pe-2"></i>
                 <span>Delete</span>
@@ -263,7 +273,8 @@
                 <span>Change to standard user</span>
             </button>
             {{else}}
-            <button id="offcanvas-edit-btn" class="col-4 btn btn-outline-success d-flex align-items-center justify-content-center mt-2">
+            <button id="offcanvas-edit-btn"
+                class="col-4 btn btn-outline-success d-flex align-items-center justify-content-center mt-2">
                 <i class="fa-regular fa-pen-to-square pe-2"></i>
                 <span>Edit</span>
             </button>
@@ -278,13 +289,14 @@
                 <p class="detail-info-item-title">ID</p>
                 <p class="detail-info-item-content" id="detail-info-id"></p>
             </div>
-            <div class="detail-info-item">
-                <p class="detail-info-item-title">Fullname</p>
-                <p class="detail-info-item-content" id="detail-info-fullname"></p>
-            </div>
+            
             <div class="detail-info-item">
                 <p class="detail-info-item-title">Email</p>
                 <p class="detail-info-item-content" id="detail-info-email"></p>
+            </div>
+             <div class="detail-info-item">
+                <p class="detail-info-item-title">Fullname</p>
+                <p class="detail-info-item-content" id="detail-info-fullname"></p>
             </div>
             <div class="detail-info-item">
                 <p class="detail-info-item-title">Phone</p>
@@ -304,7 +316,8 @@
             </div>
             <div class="detail-info-item">
                 <p class="detail-info-item-title">Status</p>
-                <div class="detail-info-item-content d-flex flex-row justify-content-start align-items-center" id="detail-info-status">
+                <div class="detail-info-item-content d-flex flex-row justify-content-start align-items-center"
+                    id="detail-info-status">
                 </div>
             </div>
         </div>
@@ -347,7 +360,7 @@
         const size = parseInt(table.attr('size'));
         const role = table.attr('role');
         const urlParams = table.attr('urlParams');
-        if(urlParams){
+        if (urlParams) {
             $('#filter-btn').removeClass('collapsed');
             $('#filter-btn').attr('aria-expanded', 'true');
             $('#collapseFilter').addClass('show');
@@ -357,8 +370,8 @@
 
         // breadcrumbs
         const breadcrumbs = $('.breadcrumb');
-        let breadcrumbContent = '<li class="breadcrumb-item text-sm"><a class="text-dark" href="/"><span class="breadcrumb-text">Dashboard</span></a></li>';
-        if(role === "admin"){
+        let breadcrumbContent = '<li class="breadcrumb-item text-sm"><a class="text-dark" href="/admin"><span class="breadcrumb-text">Dashboard</span></a></li>';
+        if (role === "admin") {
             breadcrumbContent += `
                 <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Administrators</li>
             `;
@@ -418,7 +431,7 @@
             tableContainerForm.find('input[name="action"]').val('changeToAdmin');
             tableContainerForm.submit();
         });
-        
+
         // offcanvas
         const singleItemForm = $('#single-item-action');
         let userId, username, status, fullname, image, email, phone, address, formattedUpdatedAt, formattedCreatedAt;
@@ -438,12 +451,24 @@
             $('#offcanvasWithInformationLabel').html(`@${username}`);
             $('.detail-image').attr('src', image);
             $('#detail-info-id').html(userId);
-            $('#detail-info-fullname').html(fullname);
             $('#detail-info-email').html(email);
-            $('#detail-info-phone').html(phone);
-            $('#detail-info-address').html(address);
             $('#detail-info-CreatedAt').html(formattedCreatedAt);
             $('#detail-info-UpdatedAt').html(formattedUpdatedAt);
+            if(fullname){
+                $('#detail-info-fullname').html(fullname);
+            } else {
+                $('#detail-info-fullname').parent().addClass('d-none');
+            }
+            if(phone){
+                $('#detail-info-phone').html(phone);
+            } else {
+                $('#detail-info-phone').parent().addClass('d-none');
+            }
+            if(address){
+                $('#detail-info-address').html(address);
+            } else {
+                $('#detail-info-address').parent().addClass('d-none');
+            }
             if (status === 'active') {
                 $('#detail-info-status').html(`
                     <span class="badge rounded-pill bg-gradient-success">Active</span>
@@ -457,25 +482,25 @@
             }
 
             $('#offcanvas-changeToCustomer-btn').click(() => {
-                $('#single-item-action').attr('action', `/${role}/${userId}`);
+                $('#single-item-action').attr('action', `/admin/${role}/${userId}`);
                 $('#single-item-action').find('input[name="action"]').val('changeToCustomer');
                 $('#single-item-action').submit();
             });
             $('#offcanvas-changeToAdmin-btn').click(() => {
-                $('#single-item-action').attr('action', `/${role}/${userId}`);
+                $('#single-item-action').attr('action', `/admin/${role}/${userId}`);
                 $('#single-item-action').find('input[name="action"]').val('changeToAdmin');
                 $('#single-item-action').submit();
             });
             $('#offcanvas-edit-btn').click(() => {
-                window.location.href = `/${role}/edit/${userId}`;
+                window.location.href = `/admin/${role}/edit/${userId}`;
             });
             $('#offcanvas-active-btn').click(() => {
-                $('#single-item-action').attr('action', `/${role}/${userId}`);
+                $('#single-item-action').attr('action', `/admin/${role}/${userId}`);
                 $('#single-item-action').find('input[name="action"]').val('activate');
                 $('#single-item-action').submit();
             });
             $('#offcanvas-ban-btn').click(() => {
-                $('#single-item-action').attr('action', `/${role}/${userId}`);
+                $('#single-item-action').attr('action', `/admin/${role}/${userId}`);
                 $('#single-item-action').find('input[name="action"]').val('ban');
                 $('#single-item-action').submit();
             });
@@ -554,7 +579,7 @@
                 urlParams += `&updatedAtTo=${updatedAtTo_f}`;
             }
 
-            window.location.href = `/${role}?${urlParams}`;
+            window.location.href = `/admin/${role}?${urlParams}`;
         })
 
         // modals
@@ -565,15 +590,15 @@
             const modalTitle = deleteModal.find('.modal-title');
             const modalBody = deleteModal.find('.modal-body');
 
-            if(button.attr('id') === 'offcanvas-delete-btn'){
+            if (button.attr('id') === 'offcanvas-delete-btn') {
                 modalTitle.html('Delete ' + role);
                 modalBody.html(`Are you sure you want to delete this ${role} <b>${username}</b>? This action cannot be undone.`);
                 modalDeleteBtn.click(() => {
-                    singleItemForm.attr('action', `/${role}/${userId}`);
+                    singleItemForm.attr('action', `/admin/${role}/${userId}`);
                     singleItemForm.find('input[name="action"]').val('delete');
                     singleItemForm.submit();
                 });
-            } else if(button.attr('id') === 'multiselect-delete-btn'){
+            } else if (button.attr('id') === 'multiselect-delete-btn') {
                 const selectedItems = $('input[name="selectedItems[]"]:checked');
                 const selectedItemsIds = selectedItems.map((i, item) => {
                     return $(item).val();

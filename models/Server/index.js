@@ -13,8 +13,8 @@ db.CartItem = require('./cartItem.m')(sequelize);
 
 // associations
 // User - Image
-db.User.hasOne(db.Image, { as: 'users', foreignKey: 'userId' });
-db.Image.belongsTo(db.User, { foreignKey: 'userId' });
+db.User.hasOne(db.Image, { as: 'image', foreignKey: 'userId' });
+db.Image.belongsTo(db.User, { as: 'user', foreignKey: 'userId' });
 // Product - Image
 db.Product.hasMany(db.Image, { as: 'images', foreignKey: 'productId' });
 db.Image.belongsTo(db.Product, { foreignKey: 'productId' });
@@ -22,16 +22,15 @@ db.Image.belongsTo(db.Product, { foreignKey: 'productId' });
 db.Product.belongsTo(db.Image, { as: 'mainImage', foreignKey: 'mainImageId', constraints: false });
 // Category - Product
 db.Category.hasMany(db.Product, { as: 'products', foreignKey: 'categoryId' });
-db.Product.belongsTo(db.Category, { foreignKey: 'categoryId' });
-// Order - User
+db.Product.belongsTo(db.Category, { as: 'category', foreignKey: 'categoryId' });
 db.User.hasMany(db.Order, { as: 'orders', foreignKey: 'userId' });
-db.Order.belongsTo(db.User, { foreignKey: 'userId' });
+db.Order.belongsTo(db.User, { as: 'user', foreignKey: 'userId' });
 // Order - OrderItem
-db.Order.hasMany(db.OrderItem, { as: 'orderItems', foreignKey: 'orderId' });
+db.Order.hasMany(db.OrderItem, { as: 'orderItems', foreignKey: 'orderId', onDelete: 'cascade' });
 db.OrderItem.belongsTo(db.Order, { foreignKey: 'orderId' });
 // OrderItem - Product
-db.Product.hasMany(db.OrderItem, { as: 'orderItems', foreignKey: 'productId' });
-db.OrderItem.belongsTo(db.Product, { foreignKey: 'productId' });
+db.Product.hasMany(db.OrderItem, { as: 'orderItems', foreignKey: 'productId', onDelete: 'cascade' });
+db.OrderItem.belongsTo(db.Product, { as: 'product', foreignKey: 'productId' });
 // CartItem - Product
 db.Product.hasMany(db.CartItem, { as: 'cartItems', foreignKey: 'productId' });
 db.CartItem.belongsTo(db.Product, { foreignKey: 'productId' });

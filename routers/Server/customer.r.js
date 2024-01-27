@@ -14,6 +14,6 @@ router.get('/', UserController.showAll('customer'));
 router.post('/', upload.single('image'), UserController.createUser);
 
 // api
-router.get('/check-username/:username', UserController.checkUsername);
-
+router.get('/api/check-username/:username', UserController.checkUsername);
+router.get('/api/data/username', UserController.getAllUsernames);
 module.exports = router;
