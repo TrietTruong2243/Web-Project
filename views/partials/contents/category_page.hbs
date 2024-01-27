@@ -1,0 +1,410 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+{{!--
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+--}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<div class="body" id="main-content">
+  <div class="body-inner">
+    <div class="body-content">
+      {{!-- <div id="site-wide-promo" class="site-wide-promo" style="display: block;">
+        <a class="site-wide-promo-link" style="background-color:#000000;color:#ffffff">
+        </a>
+      </div> --}}
+
+
+      <div class="category-container">
+        {{!-- <div class="category-heading-parent">
+          <div class="category-heading ">
+            <div class="container--narrow">
+              <h1 class="page-heading" id="heading">
+
+              </h1>
+              <!-- snippet location categories -->
+            </div>
+          </div>
+
+        </div> --}}
+
+        <div class="category-main container">
+          <!-- category  -->
+          <div class="category-utility">
+            <div class="category-sort-container">
+              <form class="actionBar" method="get" data-sort-by="">
+                <style>
+                  .category-sort-container .form-field1.form-field.form-field--select:before {
+                    content: "Loại:"
+                  }
+                </style>
+
+                <fieldset class="form-fieldset actionBar-section">
+                  <legend class="is-srOnly">Loại:</legend>
+                  <label class="" for="categories">
+                    <div class="form-field1 form-field form-field--select">
+                      <select class="form-select" name="categories" id="categories">
+                        {{!-- <option value="featured" selected="">Featured Items</option>
+                        <option value="newest">Newest Items</option>
+                        <option value="bestselling">Best Selling</option>
+                        <option value="alphaasc">A to Z</option>
+                        <option value="alphadesc">Z to A</option>
+                        <option value="avgcustomerreview">By Review</option>
+                        <option value="priceasc">PRICE LOW TO HIGH</option>
+                        <option value="pricedesc">PRICE HIGH TO LOW</option> --}}
+                      </select>
+                    </div>
+                  </label>
+                </fieldset>
+
+              </form>
+            </div>
+            <div class="category-link-container row">
+
+            </div>
+            {{!-- <div class="category-sort-container"> --}}
+              <div>
+                <div class=" d-flex flex-row">
+                  <div class=" d-flex flex-row">
+                    <span class="input-group-text" id="priceFrom-addon">Price (VND) from:</span>
+                    <input type="number" id="filter-priceFrom" class="form-control col-xs-4" value=""
+                      aria-describedby="priceFrom-addon" aria-label="priceFrom">
+                    <input type="number" id="filter-priceFromSave" class="form-control col-xs-4" value=""
+                      style="display:none" aria-describedby="priceFrom-addon" aria-label="priceFrom">
+                  </div>
+                  <div class="d-flex flex-row">
+                    <span class="input-group-text" id="priceTo-addon">Price (VND) to:</span>
+                    <input type="number" id="filter-priceTo" class="form-control col-xs-4" value=""
+                      aria-describedby="priceTo-addon" aria-label="priceTo">
+                    <input type="number" id="filter-priceToSave" class="form-control col-xs-4" value=""
+                      style="display:none" aria-describedby="priceFrom-addon" aria-label="priceFrom">
+                  </div>
+                  <button id="filter" class="btn btn-primary btn-sm" type="button">
+                    Apply
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+            <main class="category-products" id="product-listing-container">
+
+              <!-- item template here ->  -->
+              {{!-- <form action="https://www.skullcandy.com/compare" method="POST" data-product-compare=""> --}}
+                <div class="row row-cols-5" id="products">
+                  
+                </div>
+                <nav aria-label="..." style="height:100px">
+                  <ul id="pages" class="pagination d-flex justify-content-center pagination-lg">
+                    {{!-- <li class="page-item active" aria-current="page">
+                      <span class="page-link">1</span>
+                    </li>
+                    <li class="page-item"><span class="page-link" href="#">2</span></li>
+                    <li class="page-item"><span class="page-link" href="#">3</span></li> --}}
+                  </ul>
+                </nav>
+                {{!--
+              </form> --}}
+
+
+            </main>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    window.onload = function () {
+      $.ajax({
+        type: 'GET',
+        url: '/getallcategories',
+        success: function (data) {
+          const categories = data.categories;
+          let category = '';
+          for (let i = 0; i < categories.length; i++) {
+            if (i === 0) {
+              category = category + `<option value="${categories[i].id}" selected="">${categories[i].name}</option>`
+              const categoryID = categories[i].id;
+
+              $.ajax({
+                type: 'GET',
+                url: '/getallpagebycategory',
+                data: { categoryID: categoryID },
+                success(data) {
+                  const allpages = data.allpage;
+                  const allProduct = data.firstPage.list;
+                  let pagesHTML = '';
+                  for (let i = 0; i < allpages.length; i++) {
+                    if (i === 0) {
+                      pagesHTML = pagesHTML + `<li class="page-item active" value = "${allpages[i].value}" aria-current="page">
+                    <span class="page-link">${allpages[i].value}</span>
+                  </li>`
+                    }
+                    else {
+                      pagesHTML = pagesHTML + `<li class="page-item " value = "${allpages[i].value}" >
+                    <span class="page-link">${allpages[i].value}</span>
+                  </li>`
+                    }
+                    const list = document.getElementById("pages");
+                    while (list.hasChildNodes()) {
+                      list.removeChild(list.firstChild);
+                    }
+                    $("#pages").append(pagesHTML)
+                    let productHTML = '';
+                    for (let i of allProduct) {
+                      productHTML = productHTML + `<div class="p-1">
+                      <article class="product-card card rounded-4" >
+                      
+                  <div class="card-content m-1">
+                    <a href="/viewproduct?id=${i.id}" class="card-content-inner">
+                      <figure class="card-figure">
+                        <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                          src="${i.image}"
+                          alt="${i.describe}" sizes="50px">
+                      </figure>
+                      <div class="product-card-swatch-container swatches-loaded"
+                  >
+                        
+                      </div>
+                      <div class="card-body">
+                        <h4 class="card-title">${i.name}</h4>
+                        <div class="card-text" data-test-info-type="price">
+                          <div class="price-section price-section--withoutTax">
+                            <span class="price price--withoutTax">${i.price}đ</span>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </article>
+                </div>`
+                    }
+                    const list1 = document.getElementById("products");
+                    while (list1.hasChildNodes()) {
+                      list1.removeChild(list1.firstChild);
+                    }
+                    $("#products").append(productHTML)
+                  }
+                }
+              })
+            }
+            else {
+              category = category + `<option value="${categories[i].id}">${categories[i].name}</option>`
+            }
+          }
+          $("#categories").append(category)
+        }
+      })
+    }
+
+  </script>
+  <script>
+    $("body").delegate(".page-item", "click", function () {
+      if (!$(this).hasClass('active')) {
+        $(".page-item.active").removeClass("active");
+        $(this).addClass("active");
+        const category = $("#categories").val();
+        const page = $(this).val();
+        /*
+        const filter = {
+          minPrice = $("#filter-priceFrom").val();
+          maxPrice= $("#filter-priceTo").val();
+        } */
+        const minPrice = $("#filter-priceFromSave").val();
+        const maxPrice = $("#filter-priceToSave").val();
+        const filter = { minPrice, maxPrice }
+        $.ajax({
+          type: 'GET',
+          url: '/getproductbypage',
+          data: { page: page, category: category, filter: filter },
+          success(data) {
+            const allProduct = data.pagedata.list
+            let productHTML = '';
+            for (let i of allProduct) {
+              productHTML = productHTML + `
+              <div class="p-1">
+              <article class="product-card card rounded-4" >
+                  <div class="card-content">
+                    <a href="/viewproduct?id=${i.id}" class="card-content-inner">
+                      <figure class="card-figure">
+                        <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                          src="${i.image}"
+                          alt="${i.describe}" sizes="50px">
+                      </figure>
+                      <div class="product-card-swatch-container swatches-loaded" >
+                        
+                      </div>
+                      <div class="card-body">
+                        <h4 class="card-title">${i.name}</h4>
+                        <div class="card-text" data-test-info-type="price">
+                          <div class="price-section price-section--withoutTax">
+                            <span class="price price--withoutTax">${i.price}đ</span>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </article>
+                </div>`
+            }
+            const list1 = document.getElementById("products");
+            while (list1.hasChildNodes()) {
+              list1.removeChild(list1.firstChild);
+            }
+            $("#products").append(productHTML)
+          }
+        })
+      }
+    })
+  </script>
+  <script>
+    $("body").delegate("#categories", "change", function () {
+      const categoryID = $(this).val();
+      const minPrice = $("#filter-priceFromSave").val();
+      const maxPrice = $("#filter-priceToSave").val();
+      const filter = { minPrice, maxPrice }
+      $.ajax({
+        type: 'GET',
+        url: '/getallpagebycategory',
+        data: { categoryID: categoryID, filter: filter },
+        success(data) {
+          const allpages = data.allpage;
+          const allProduct = data.firstPage.list;
+          let pagesHTML = '';
+          for (let i = 0; i < allpages.length; i++) {
+            if (i === 0) {
+              pagesHTML = pagesHTML + `<li class="page-item active" value = "${allpages[i].value}" aria-current="page">
+                    <span class="page-link">${allpages[i].value}</span>
+                  </li>`
+            }
+            else {
+              pagesHTML = pagesHTML + `<li class="page-item " value = "${allpages[i].value}" >
+                    <span class="page-link">${allpages[i].value}</span>
+                  </li>`
+            }
+          }
+          if (pagesHTML === '') {
+            pagesHTML = '<h4>Không có sản phẩm phù hợp </h4>'
+          }
+          const list = document.getElementById("pages");
+          while (list.hasChildNodes()) {
+            list.removeChild(list.firstChild);
+          }
+          $("#pages").append(pagesHTML)
+          let productHTML = '';
+          for (let i of allProduct) {
+            productHTML = productHTML + `
+            <div class="p-1">
+              <article class="product-card card rounded-4" >
+                  <div class="card-content">
+                    <a href="/viewproduct?id=${i.id}" class="card-content-inner">
+                      <figure class="card-figure">
+                        <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                          src="${i.image}"
+                          alt="${i.describe}" sizes="50px">
+                      </figure>
+                      <div class="product-card-swatch-container swatches-loaded"
+                  >
+                        
+                      </div>
+                      <div class="card-body">
+                        <h4 class="card-title">${i.name}</h4>
+                        <div class="card-text" data-test-info-type="price">
+                          <div class="price-section price-section--withoutTax">
+                            <span class="price price--withoutTax">${i.price}đ</span>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </article>
+                </div>`
+          }
+          const list1 = document.getElementById("products");
+          while (list1.hasChildNodes()) {
+            list1.removeChild(list1.firstChild);
+          }
+          $("#products").append(productHTML)
+
+        }
+      })
+    });
+  </script>
+  <script>
+    $("body").delegate("#filter", "click", function () {
+
+      const minPrice = $("#filter-priceFrom").val();
+      const maxPrice = $("#filter-priceTo").val();
+      const filter = { minPrice, maxPrice }
+      const categoryID = $("#categories").val();
+      $("#filter-priceFromSave").val($("#filter-priceFrom").val());
+      $("#filter-priceToSave").val($("#filter-priceTo").val());
+      $.ajax({
+        type: 'GET',
+        url: '/getallpagebyfilter',
+        data: { categoryID: categoryID, filter: filter },
+        success(data) {
+          const allpages = data.allpage;
+          const allProduct = data.firstPage.list;
+          let pagesHTML = '';
+          for (let i = 0; i < allpages.length; i++) {
+            if (i === 0) {
+              pagesHTML = pagesHTML + `<li class="page-item active" value = "${allpages[i].value}" aria-current="page">
+                    <span class="page-link">${allpages[i].value}</span>
+                  </li>`
+            }
+            else {
+              pagesHTML = pagesHTML + `<li class="page-item " value = "${allpages[i].value}" >
+                    <span class="page-link">${allpages[i].value}</span>
+                  </li>`
+            }
+          }
+          if (pagesHTML === '') {
+            pagesHTML = '<h4>Không có sản phẩm phù hợp </h4>'
+          }
+          const list = document.getElementById("pages");
+          while (list.hasChildNodes()) {
+            list.removeChild(list.firstChild);
+          }
+          $("#pages").append(pagesHTML)
+          let productHTML = '';
+          for (let i of allProduct) {
+            productHTML = productHTML + `<div class="p-1">
+              <article class="product-card card rounded-4" >
+                  <div class="card-content">
+                    <a href="/viewproduct?id=${i.id}" class="card-content-inner">
+                      <figure class="card-figure">
+                        <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
+                          src="${i.image}"
+                          alt="${i.describe}" sizes="50px">
+                      </figure>
+                      <div class="product-card-swatch-container swatches-loaded"
+                  >
+                        
+                      </div>
+                      <div class="card-body">
+                        <h4 class="card-title">${i.name}</h4>
+                        <div class="card-text" data-test-info-type="price">
+                          <div class="price-section price-section--withoutTax">
+                            <span class="price price--withoutTax">${i.price}đ</span>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </article>
+                </div>`
+          }
+          const list1 = document.getElementById("products");
+          while (list1.hasChildNodes()) {
+            list1.removeChild(list1.firstChild);
+          }
+          $("#products").append(productHTML)
+
+
+        }
+      })
+    })
+  </script>

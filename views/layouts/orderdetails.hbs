@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <style>
+        #dg-chat-iframe {
+            position: absolute;
+            opacity: 0;
+            width: 1px;
+            height: 1px;
+            top: 0;
+            left: 0;
+            border: none;
+            display: block;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        #dg-chat-container {
+            position: relative;
+            z-index: 2147483647;
+        }
+
+        #dg-chat-widget {
+            position: fixed;
+            width: 100%;
+            right: 20px;
+            bottom: 20px;
+            max-width: 375px;
+            height: 90%;
+            max-height: 650px;
+            min-height: 570px;
+            box-shadow: rgb(0 0 0 / 12%) 0 12px 48px 4px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .navBar-item {
+            cursor: pointer;
+        }
+
+        .is-active {
+            margin: 2px;
+            padding: 2px;
+            background-color: white;
+        }
+
+        @media only screen and (max-width: 800px) {
+            #dg-chat-widget {
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 100%;
+                width: 100%;
+                max-width: initial;
+                max-height: initial;
+                border-radius: 0;
+            }
+        }
+
+        #dg-chat-widget-launcher {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            height: 65px;
+            width: 65px;
+        }
+
+        #dg-chat-widget-proactive {
+            position: fixed;
+            right: 20px;
+            bottom: 90px;
+        }
+
+        .form-label {
+
+            text-align: left;
+        }
+    </style>
+    <style type="text/css">
+        body {
+            background: #e6e6e6;
+        }
+
+        .card {
+            box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+        }
+
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0 solid rgba(0, 0, 0, .125);
+            border-radius: 1rem;
+        }
+
+        .text-reset {
+            --bs-text-opacity: 1;
+            color: inherit !important;
+        }
+
+        a {
+            color: #5465ff;
+            text-decoration: none;
+        }
+    </style>
+    <style>
+        .status span {
+            position: relative;
+            border-radius: 30px;
+            padding: 4px 10px 4px 25px;
+        }
+
+        .status span:after {
+            position: absolute;
+            top: 9px;
+            left: 10px;
+            width: 10px;
+            height: 10px;
+            content: '';
+            border-radius: 50%;
+        }
+
+        .status .Done {
+            background: #cff6dd;
+            color: #1fa750;
+        }
+
+        .status .Done:after {
+            background: #23bd5a;
+        }
+
+        .status .Processing {
+            background: #fdf5dd;
+            color: #cfa00c;
+        }
+
+        .status .Processing:after {
+            background: #f2be1d;
+        }
+
+        .status .Waiting {
+            background: #fdf5dd;
+            color: #cfa00c;
+        }
+
+        .status .Waiting:after {
+            background: #f2be1d;
+        }
+
+        /* red */
+        .status .cancelled {
+            background: #f2481d88;
+            color: #ff2600;
+        }
+
+        .status .cancelled:after {
+            background: #f73200;
+        }
+
+        .status .refunded {
+            background: #f2481d88;
+            color: #ff2600;
+        }
+
+        .status .refunded:after {
+            background: #f73200;
+        }
+
+        /* yellow */
+
+
+        .status .Waiting {
+            background: #fdf5dd;
+            color: #cfa00c;
+        }
+
+        .status .Waiting:after {
+            background: #f2be1d;
+        }
+
+        .status .pending {
+            background: #fdf5dd;
+            color: #cfa00c;
+        }
+
+        .status .pending:after {
+            background: #f2be1d;
+        }
+
+        .status .unpaid {
+            background: #fdf5dd;
+            color: #cfa00c;
+        }
+
+        .status .unpaid:after {
+            background: #f2be1d;
+        }
+
+        .status .shipping {
+            background: #fdf5dd;
+            color: #cfa00c;
+        }
+
+        .status .shipping:after {
+            background: #f2be1d;
+        }
+
+
+
+
+        /* Green */
+
+        .status .completed {
+            background: #cff6dd;
+            color: #1fa750;
+        }
+
+        .status .completed:after {
+            background: #23bd5a;
+        }
+    </style>
+
+    <title>Order Details</title>
+    <style type="text/css">
+        #dg-chat-container {
+            display: none;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="/resource/theme-8c4df980-6632-013c-f3de-5e0f1ae9fa0d.css">
+
+</head>
+
+<body class="productlanding US_EN  cookie-message-active   pace-done" id="productlanding">
+    {{> headers/page_header}}
+    <!-- body -->
+
+    <div class="body" id="main-content">
+        <div class="body-inner">
+            <div class="body-content " style="background-color: rgb(168, 167, 167);">
+                <div class="container-fluid">
+                    <div class="container">
+                        <!-- title -->
+                        <div class="d-flex justify-content-between align-items-center py-3">
+                            <h2 class="h5 mb-0"><a href="#" class="text-muted"></a> Order #{{orderInfo.id}}</h2>
+                        </div>
+
+                        <div class="row">
+                            <!-- order -->
+                            <div class="col-lg-8 ">
+                                <!-- order info & detail -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class=" p-3 d-flex justify-content-between border border primary "
+                                            style="background-color: black; color:white ">
+                                            <div class="status">
+                                                <span class="me-3">{{orderInfo.updatedAt}}</span>
+                                                <span class="me-3">#{{orderInfo.id}} </span>
+                                                <span class="me-3">Visa -1234</span>
+                                                <span class=" me-3 {{orderInfo.Status}}">{{orderInfo.status}}</span>
+                                            </div>
+                                        </div>
+                                        <table class="table " style="margin-top: 2px;">
+                                            <tbody>
+                                                {{#each orderDetail}}
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex mb-2">
+                                                            <div class="flex-shrink-0">
+                                                                <img src="{{image}}" alt width="35" class="img-fluid">
+                                                            </div>
+                                                            <div class="flex-lg-grow-1 ms-3">
+                                                                <h4 class="small mb-0 mt-1"
+                                                                    style="font-weight: 700; font-size:medium">
+                                                                    <a href="#" class="text-reset"> {{name}}</a>
+                                                                </h4>
+                                                                <span class="small">Describe: {{describe}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td> {{quantity}}</td>
+                                                    <td class="text-end">{{price}} đ</td>
+                                                </tr>
+                                                {{/each}}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="fw-bold">
+                                                    <td colspan="2">TOTAL</td>
+                                                    <td class="text-end">{{orderInfo.Total}} đ</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- payment & user address -->
+                                <div class="card mb-4">
+                                    <div class="card-body bg-light rounded-4">
+                                        <div class="row">
+
+                                            {{#if orderInfo.Check}}
+                                            <div class="col-lg-6 text-start ps-4">
+                                                <h3 class="h6">Payment Status </h3>
+                                                <p>
+                                                    Total: {{orderInfo.Total}} đ
+                                                    {{#if orderInfo.Refund}}
+                                                    <span class="badge bg-danger rounded-pill">REFUND</span>
+                                                    {{else}}    
+                                                        {{#if orderInfo.Cancel}}
+                                                        <span class="badge bg-danger rounded-pill">CANCEL</span>
+                                                        {{else}}
+                                                        <span class="badge bg-success rounded-pill">PAID</span>
+                                                        {{/if}}
+                                                    {{/if}}
+                                                </p>
+                                            </div>
+                                            {{else}}
+                                            <div class="col-lg-6 text-start ps-4">
+                                                <h3 class="h6">Payment Method </h3>
+                                                <p>Visa -1234 <br>
+                                                    Total: {{orderInfo.Total}} đ
+
+                                                    <span class="badge bg-warning rounded-pill">UNPAID</span>
+                                                </p>
+                                            </div>
+                                            {{/if}}
+
+                                            <div class="col-lg-6 text-start ps-5">
+                                                <h3 style="font-weight: 700; font-size:medium">Billing address</h3>
+                                                <address>
+                                                    <strong
+                                                        style="font-weight: 500; font-size:medium">{{userInfo.name}}</strong><br>
+                                                    <abbr title="Address">Addr:</abbr> {{userInfo.address}}<br>
+                                                    <abbr title="Phone Number">P.:</abbr> {{userInfo.phone}}
+                                                </address>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- user info -->
+                            <div class="col-lg-4 rounded-4">
+                                <div class="card mb-4 bg-light mt-3">
+
+                                    <div class="card-body text-start ps-5 pb-2 ">
+                                        <h4 class="text-primary"> Customer Information</h4>
+                                        <strong style="font-weight: 700; font-size:medium"> {{userInfo.name}}</strong>
+                                        <br>
+                                        <span>
+                                            Address:{{userInfo.address}}
+                                        </span> <br>
+                                        <span>
+                                            Email:
+                                            <a href="#" class="text-decoration-underline"
+                                                target="_blank">{{userInfo.email}}</a> <i
+                                                class="bi bi-box-arrow-up-right"></i>
+                                        </span> <br>
+                                        <span>
+                                            Phone Number:{{userInfo.phone}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{> footers/page_footer}}
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+</body>
+
+
+
+</html>

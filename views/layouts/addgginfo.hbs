@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        #dg-chat-iframe {
+            position: absolute;
+            opacity: 0;
+            width: 1px;
+            height: 1px;
+            top: 0;
+            left: 0;
+            border: none;
+            display: block;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        #dg-chat-container {
+            position: relative;
+            z-index: 2147483647;
+        }
+
+        #dg-chat-widget {
+            position: fixed;
+            width: 100%;
+            right: 20px;
+            bottom: 20px;
+            max-width: 375px;
+            height: 90%;
+            max-height: 650px;
+            min-height: 570px;
+            box-shadow: rgb(0 0 0 / 12%) 0 12px 48px 4px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .navBar-item {
+            cursor: pointer;
+        }
+
+        .is-active {
+            margin: 2px;
+            padding: 2px;
+            background-color: white;
+        }
+
+        @media only screen and (max-width: 800px) {
+            #dg-chat-widget {
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 100%;
+                width: 100%;
+                max-width: initial;
+                max-height: initial;
+                border-radius: 0;
+            }
+        }
+
+        #dg-chat-widget-launcher {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            height: 65px;
+            width: 65px;
+        }
+
+        #dg-chat-widget-proactive {
+            position: fixed;
+            right: 20px;
+            bottom: 90px;
+        }
+
+        .form-label {
+
+            text-align: left;
+        }
+    </style>
+    <title>Account settings</title>
+
+
+    <!-- Windows 8 IE 10-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    <link href="/resource/theme-8c4df980-6632-013c-f3de-5e0f1ae9fa0d.css" rel="stylesheet">
+    <style type="text/css">
+        #dg-chat-container {
+            display: none;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <link type="text/css" rel="stylesheet" href="/resource/widget.css">
+</head>
+
+<body class="productlanding US_EN  cookie-message-active   pace-done" id="productlanding">
+
+
+
+
+    <!-- body -->
+    <div class="body" id="main-content">
+        <div class="body-inner">
+            <div class="body-content">
+
+                
+                <div class="container h-100">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col-lg-12 col-xl-11">
+                            <div class="card text-black">
+                                <div class="card-body p-md-5">
+                                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"><b>ACCOUNT SETTINGS</b></p>
+                                    <div class="row justify-content-center">
+
+                                        <div class="col-md-10 col-lg-6 col-xl-6  order-lg-1">
+                                            <div class="d-flex flex-row align-items-center mb-4">
+                                                <h2 style="color:green; font: size 20px;" id="success">
+                                                </h2>
+                                                <h2 style="color:red; font: size 20px;" id="err">
+                                                </h2>
+                                            </div>
+
+
+                                            <form class="mx-1 mx-md-4" id="gguserinfo">
+
+                                                <div class="d-flex flex-row align-items-center mb-4">
+                                                    <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                                    <div class="form-outline flex-fill mb-0">
+                                                        <label class="form-label" for="form3Example1c">Email
+                                                            Address</label>
+
+                                                        <input type="text" id="form3Example1c" class="form-control"
+                                                            name="email_address" value={{useremail}} readonly />
+                                                        <h4 style="color:red" id="email_err"> Không thể sửa email do đây
+                                                            là tài khoản đăng nhập bằng google</h4>
+
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex flex-row align-items-center mb-4">
+                                                    <div class="form-outline flex-fill mb-0">
+                                                        <label class="form-label" for="form3Example1c">Username</label>
+
+                                                        <input type="text" id="form3Example1c" class="form-control"
+                                                            name="username" />
+                                                        <h4 style="color:red" id="username_err"></h4>
+
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex flex-row align-items-center mb-4">
+                                                    <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                                    <div class="form-outline flex-fill mb-0">
+                                                        <label class="form-label" for="form3Example1c">FullName</label>
+
+                                                        <input type="text" id="form3Example1c" class="form-control"
+                                                            name="name" value="" />
+                                                        <h4 style="color:red" id="name_err"></h4>
+
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex flex-row align-items-center mb-4">
+                                                    <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                                    <div class="form-outline flex-fill mb-0">
+                                                        <label class="form-label" for="form3Example1c">Phone
+                                                            number</label>
+
+                                                        <input type="text" id="form3Example1c" class="form-control"
+                                                            name="phone_number" value="" />
+                                                        <h4 style="color:red" id="phone_number_err"></h4>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex flex-row align-items-center mb-4">
+                                                    <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                                    <div class="form-outline flex-fill mb-0">
+                                                        <label class="form-label" for="form3Example1c">Home
+                                                            Address</label>
+
+                                                        <input type="text" id="form3Example1c" class="form-control"
+                                                            name="home_address" value="" />
+                                                        <h4 style="color:red" id="home_address_err"></h4>
+
+                                                    </div>
+                                                </div>
+
+                                                <!-- Submit button -->
+                                                <button type="submit"
+                                                    class="btn btn-lg btn-dark btn-block mb-2 m-1">UPDATE
+                                                    DETAILS</button>
+
+
+
+                                            </form>
+
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="content">
+
+                </div>
+                <!-- </section> -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+
+    <script>
+        $("body").delegate("#gguserinfo", "submit", function (e) {
+            e.preventDefault()
+            const formData = $(this).serialize();
+           
+            $.ajax({
+                type: 'POST',
+                url: '/user/addgguserinfo',
+                data: formData,
+                //dataType: 'string',
+                success: function (response) {
+                    $("#success").text("")
+                    $("#err").text("")
+                    $("#name_err").text("")
+                    $("#phone_number_err").text("")
+                    $("#home_address_err").text("")
+                    $("#username_err").text("")
+                    if (response.err) {
+
+                        const error = response.err;
+                        for (i of error) {
+                            if (i.path === 'email_address') {
+                                $("#email_err").text(i.msg);
+
+                            }
+                            
+                            if (i.path === 'name') {
+                                $("#name_err").text(i.msg);
+
+                            }
+                            if (i.path === 'phone_number') {
+                                $("#phone_number_err").text(i.msg);
+
+                            }
+                            if (i.path === 'home_address') {
+                                $("#home_address_err").text(i.msg);
+
+                            } if (i.path === 'username') {
+                                $("#username_err").text(i.msg);
+
+                            }
+
+                        }
+                    }
+                    else if (response.addErr) {
+                        $("#err").text(response.addErr)
+                    }
+                    else {
+                        $("#success").text(response.success)
+                        alert("Chỉnh sửa thông tin thành công");
+                        window.location.href = "/auth/ggsuccessaddinfo"
+                    }
+                },
+
+                error: function (err) {
+                }
+            })
+        })
+    </script>
+
+</body>
+
+
+
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        #dg-chat-iframe {
+            position: absolute;
+            opacity: 0;
+            width: 1px;
+            height: 1px;
+            top: 0;
+            left: 0;
+            border: none;
+            display: block;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        #dg-chat-container {
+            position: relative;
+            z-index: 2147483647;
+        }
+
+        #dg-chat-widget {
+            position: fixed;
+            width: 100%;
+            right: 20px;
+            bottom: 20px;
+            max-width: 375px;
+            height: 90%;
+            max-height: 650px;
+            min-height: 570px;
+            box-shadow: rgb(0 0 0 / 12%) 0 12px 48px 4px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .navBar-item {
+            cursor: pointer;
+        }
+
+        .is-active {
+            margin: 2px;
+            padding: 2px;
+            background-color: white;
+
+        }
+
+        @media only screen and (max-width: 800px) {
+            #dg-chat-widget {
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 100%;
+                width: 100%;
+                max-width: initial;
+                max-height: initial;
+                border-radius: 0;
+            }
+        }
+
+
+        #dg-chat-widget-launcher {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            height: 65px;
+            width: 65px;
+        }
+
+        #dg-chat-widget-proactive {
+            position: fixed;
+            right: 20px;
+            bottom: 90px;
+        }
+
+        .form-label {
+
+            text-align: left;
+        }
+    </style>
+    <title>Account settings</title>
+
+
+
+    <style type="text/css">
+        #dg-chat-container {
+            display: none;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="/resource/theme-8c4df980-6632-013c-f3de-5e0f1ae9fa0d.css">
+    <link type="text/css" rel="stylesheet" href="/resource/widget.css">
+    <link type="text/css" rel="stylesheet" href="/resource/order_style.css">
+</head>
+
+<body class="productlanding US_EN  cookie-message-active   pace-done" id="productlanding">
+
+
+
+
+    {{> headers/page_header}}
+    <!-- body -->
+    <div class="body" id="main-content">
+        <div class="body-inner">
+            <div class="body-content">
+
+                <nav class="navBar navBar--sub navBar--account flex-row">
+                    <ul class="navBar-section">
+                        <li class="navBar-item is-active" id="Account">
+                            <a class="navBar-action" class="p-2">Account settings</a>
+
+
+                        </li>
+                        <li class="navBar-item " id="Order">
+                            <a class="navBar-action " class="p-2">Orders</a>
+
+
+                        </li>
+
+
+                        <li class="navBar-item" id="signout" onclick="signout()">
+                            <a class="navBar-action" class="p-2" href="/auth/signout">Sign Out</a>
+                        </li>
+
+                    </ul>
+                </nav>
+
+                <div id="content">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{> footers/page_footer}}
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script>
+        window.onload = function () {
+            $.ajax({
+                type: 'GET',
+                url: '/user/accountsettings',
+                success: function (data) {
+                    $("#content").html(data)
+                },
+                error: function (err) {
+                }
+            });
+        }
+    </script>
+    <script>
+        function formatDate(inputDate) {
+            var date = new Date(inputDate);
+            var day = date.getDate();
+            var month = date.getMonth() + 1; // Lưu ý rằng tháng trong JavaScript bắt đầu từ 0
+            var year = date.getFullYear(); // Lấy hai chữ số cuối cùng của năm
+
+            // Định dạng: dd/mm/yy
+            var formattedDate = day + "/" + month + "/" + year;
+
+            return formattedDate;
+        }
+        $(function () {
+            $(".navBar-item").click(function (e) {
+                if (!$(this).hasClass('is-active')) {
+                    $(".navBar-item.is-active").removeClass("is-active");
+                    $(this).addClass("is-active");
+                    const id = $(this).attr("id");
+                    if (id === "Account") {
+                        e.preventDefault();
+                        $.ajax({
+                            type: 'GET',
+                            url: '/user/accountsettings',
+                            success: function (data) {
+                                $("#content").html(data)
+                            },
+                            error: function (err) {
+                            }
+                        });
+                    }
+                    else if (id === "Order") {
+
+                        e.preventDefault();
+                        $.ajax({
+                            type: 'GET',
+                            url: '/user/accountorders',
+                            success: function (data) {
+                                console.log("Status order trong order_style.css")
+                                const orders = data.orders;
+                                let dataHTML =
+                                    `
+                                <section class="ftco-section">
+                                    <div class="container">
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-6 text-center" >
+                                                <p class="text-center h1 fw-bold mx-1 mx-md-4 mt-4"><b>YOUR ORDERS</b></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="table-wrap">
+                                                    <table class="table table-responsive-xl">
+                                                        <thead >
+                                                            <tr >
+                                                                <th style = " background-color: black; color: white; border: 1px solid white" >#</th>
+                                                                <th style = " background-color: black; color: white;border: 1px solid white">OrderID</th>
+                                                                <th style = " background-color: black; color: white;border: 1px solid white">Status</th>
+                                                                <th style = " background-color: black; color: white;border: 1px solid white">Total Amount</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="listbody">
+ 
+                                `;
+                                let index = 1;
+                                for (i of orders) {
+                                    
+                                    dataHTML = dataHTML + `
+         
+                                                <tr class="alert order_detail" role="alert" id= "${i.OrderID}">
+                                                    <td>
+                                                        ${index}
+                                                    </td>
+                                                    <td class="d-flex align-items-center">
+                                                        <div class="pl-3 email">
+                                                            <span>${i.OrderID}</span>
+                                                            <span> Order Date: ${formatDate(i.OrderDate)}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="status"><span class="${i.Status}">${i.Status}</span></td>
+                                                    <td> 
+                                                        ${i.TotalAmount} đ
+                                                    </td>
+                                                </tr>
+                                                            `
+                                    index = index + 1;
+                                }
+                                dataHTML = dataHTML + `                                                           
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                `
+                                $("#content").html(dataHTML)
+                            }
+                        })
+                    }
+                    else if (id === "signout") {
+
+                        $.ajax({
+                            type: 'GET',
+                            url: '/auth/signout',
+
+                        });
+                    }
+
+
+
+                }
+            });
+        });
+    </script>
+
+
+
+
+
+    <script>
+        $("body").delegate("#gguserinfo", "submit", function (e) {
+            e.preventDefault()
+            const formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/user/changegguserinfo',
+                data: formData,
+                //dataType: 'string',
+                success: function (response) {
+                    $("#success").text("")
+                    $("#err").text("")
+                    $("#name_err").text("")
+                    $("#phone_number_err").text("")
+                    $("#home_address_err").text("")
+                    $("#username_err").text("")
+                    if (response.err) {
+
+                        const error = response.err;
+                        for (i of error) {
+                            if (i.path === 'email_address') {
+                                $("#email_err").text(i.msg);
+
+                            }
+                            if (i.path === 'name') {
+                                $("#name_err").text(i.msg);
+
+                            }
+                            if (i.path === 'phone_number') {
+                                $("#phone_number_err").text(i.msg);
+
+                            }
+                            if (i.path === 'home_address') {
+                                $("#home_address_err").text(i.msg);
+
+                            } if (i.path === 'username') {
+                                $("#username_err").text(i.msg);
+
+                            }
+
+                        }
+                    }
+                    else if (response.addErr) {
+                        $("#err").text(response.addErr)
+                    }
+                    else {
+                        $("#success").text(response.success)
+
+                    }
+                },
+
+                error: function (err) {
+                }
+            })
+        })
+    </script>
+    <script>
+        $("body").delegate("#userinfo", "submit", function (e) {
+            e.preventDefault()
+
+            const formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/user/changeuserinfo',
+                data: formData,
+                //dataType: 'string',
+                success: function (response) {
+                    $("#success").text("")
+                    $("#err").text("")
+                    $("#email_err").text("")
+                    $("#name_err").text("")
+                    $("#phone_number_err").text("")
+                    $("#home_address_err").text("")
+                    $("#username_err").text("")
+
+                    $("#pw_err").text("")
+                    $("#pw_confirm_err").text("");
+                    $("#pw_current_err").text("");
+                    $("#PassSuccess").text("")
+                    $("#PassErr").text("")
+                    if (response.err) {
+
+                        const error = response.err;
+                        for (i of error) {
+                            if (i.path === 'email_address') {
+                                $("#email_err").text(i.msg);
+
+                            }
+                            if (i.path === 'name') {
+                                $("#name_err").text(i.msg);
+
+                            }
+                            if (i.path === 'phone_number') {
+                                $("#phone_number_err").text(i.msg);
+
+                            }
+                            if (i.path === 'home_address') {
+                                $("#home_address_err").text(i.msg);
+
+                            } 
+                            if (i.path === 'username') {
+                                $("#username_err").text(i.msg);
+
+                            }
+                            /*
+                            if (i.path === 'password') {
+                                $("#pw_err").text(i.msg);
+
+                            }
+                            if (i.path === 'password_confirm') {
+                                $("#pw_confirm_err").text(i.msg);
+
+                            }
+                            if (i.path === 'current_password') {
+                                $("#pw_current_err").text(i.msg);
+
+                            }*/
+                        }
+                    }
+                    else if (response.addErr) {
+                        $("#err").text(response.addErr)
+                    }
+                    else {
+                        $("#success").text(response.success)
+
+                    }
+                },
+
+                error: function (err) {
+                }
+            })
+        })
+    </script>
+    <script>
+        $("body").delegate("#changepass", "submit", function (e) {
+            e.preventDefault()
+
+            const formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/user/changeuserpassword',
+                data: formData,
+                //dataType: 'string',
+                success: function (response) {
+                    $("#success").text("")
+                    $("#err").text("")
+                    $("#email_err").text("")
+                    $("#name_err").text("")
+                    $("#username_err").text("")
+                    $("#phone_number_err").text("")
+                    $("#home_address_err").text("")
+                    $("#pw_err").text("")
+                    $("#pw_confirm_err").text("");
+                    $("#pw_current_err").text("");
+                    $("#PassSuccess").text("")
+                    $("#PassErr").text("")
+                    if (response.err) {
+
+                        const error = response.err;
+                        for (i of error) {
+                            /*
+                            if (i.path === 'email_address') {
+                                $("#email_err").text(i.msg);
+
+                            }
+                            if (i.path === 'name') {
+                                $("#name_err").text(i.msg);
+
+                            }
+                            if (i.path === 'phone_number') {
+                                $("#phone_number_err").text(i.msg);
+
+                            }
+                            if (i.path === 'home_address') {
+                                $("#home_address_err").text(i.msg);
+
+                            }*/
+                            if (i.path === 'password') {
+                                $("#pw_err").text(i.msg);
+
+                            }
+                            if (i.path === 'password_confirm') {
+                                $("#pw_confirm_err").text(i.msg);
+
+                            }
+                            if (i.path === 'current_password') {
+                                $("#pw_current_err").text(i.msg);
+
+                            }
+                        }
+                    }
+                    else if (response.addErr) {
+                        $("#PassErr").text(response.addErr)
+                    }
+                    else {
+                        $("#PassSuccess").text(response.success)
+
+                    }
+                },
+
+                error: function (err) {
+                }
+            })
+        })
+    </script>
+
+
+    <script>
+        $("body").delegate(".order_detail", "click", function (e) {
+            e.preventDefault()
+            const id = $(this).attr('id');
+            const url = "/order/getorderdetail?OrderID=" + id;
+            {{!-- console.log(url); --}}
+            window.location.href = url;
+        })
+    </script>
+</body>
+
+
+
+</html>

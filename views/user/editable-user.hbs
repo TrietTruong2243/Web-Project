@@ -1,0 +1,221 @@
+<link rel="stylesheet" href="/css/input.css">
+<div class="container-fluid mb-4">
+    <div class="d-flex flex-row justify-content-between align-items-center">
+        <div class="d-flex flex-row align-items-center">
+            <h3>{{#if editable}} Edit {{else}} Create new {{/if}}</h3>
+        </div>
+    </div>
+    <div class="card mt-4">
+            <form name="user-form" method="post" {{#if editable}} action="/admin/customer/edit/{{ user.id }}" editable="true" {{else}} action="/admin/customer" {{/if}} enctype="multipart/form-data">
+                <div class="row mb-1">
+                    <div class="col-xxl-8 mb-xxl-0">
+                        <div class="px-4 py-5">
+                            <div class="row g-2">
+                                <h5 class="mb-4 mt-0">Profile details</h5>
+                                <div class="form-group col-md-6 has-danger has-success">
+                                    <label class="form-label">Username *</label>
+                                    <input name="username" type="text" class="form-control" aria-label="username" value="{{ user.username }}" required />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">Fullname</label>
+                                    <input name="fullname" type="text" class="form-control" aria-label="fullname" value="{{ user.fullname }}"/>
+                                </div>
+                                <div class="form-group col-md-6 has-danger">
+                                    <label class="form-label">Email *</label>
+                                    <input name="email" type="email" class="form-control" placeholder="" aria-label="email" value="{{ user.email }}" required />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">Phone</label>
+                                    <input name="phone" type="text" class="form-control" placeholder="" aria-label="phone" value="{{ user.phone }}"/>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">Address</label>
+                                    <input name="address" type="text" class="form-control" value="{{ user.address }}">
+                                </div>
+                                <div class="form-check form-switch col-md-6 mt-5">
+                                    <label class="form-check-label form-label" for="flexSwitchCheckDefault">Upgrade to admin</label>
+                                    <input name="role" class="form-check-input py-2 ms-0" type="checkbox" id="flexSwitchCheckDefault" value="admin">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-4">
+                            <div class="row g-2">
+                                <h5 class="mb-4 mt-0">Password</h5>
+                                {{#if editable}}
+                                <div class="form-group col-md-6 has-danger">
+                                    <label class="form-label">Old password</label>
+                                    <input name="oldPassword" id="oldPassword" type="password" class="form-control" aria-label="oldPassword" value=""/>
+                                    <span toggle="#oldPassword" class="fa fa-fw fa-eye toggle-password"></span>
+                                </div>
+                                {{/if}}
+                                <div class="form-group col-md-6">
+                                    <label class="form-label has-danger">{{#if editable}} New password {{else}} Password *{{/if}}</label>
+                                    <input name="password" id="password" type="password" class="form-control" aria-label="password" value=""/>
+                                    <span toggle="#password" class="fa fa-fw fa-eye toggle-password"></span>
+                                </div>
+                                <div class="form-group col-md-6 has-danger">
+                                    <label name="confirmPassword" class="form-label">Confirm password {{#unless editable}}*{{/unless}}</label>
+                                    <input id="confirmPassword" type="password" class="form-control" aria-label="confirmPassword" value=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-4">
+                        <div class="px-4 py-5">
+                            <div class="row g-2">
+                                <h5 class="mt-0">Profile photo</h5>
+                                <div class="text-center">
+                                    {{#if user.imageUrl}}
+                                    <img id="previewImage" initUrl="{{ user.imageUrl }}" src="{{ user.imageUrl }}" alt="avatar" class="d-block m-auto enlarge-image image-has-modal">
+                                    {{else}}
+                                    <img id="previewImage" src="/img/no-image-icon.png" alt="avatar" class="d-block m-auto enlarge-image image-has-modal">
+                                    {{/if}}
+                                    <input type="file" id="image" name="image" accept="image/*" hidden>
+                                    <label class="btn btn-sm mt-2" for="image">Upload</label>
+                                    <button class="btn btn-sm mt-2" id="removeImageBtn">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex mb-4 justify-content-center text-center">
+                    <span class="badge-error border-radius-xl center mx-auto">{{ message }}</span>
+                </div>
+                <div class="d-md-flex justify-content-center text-center">
+                    <button id="submitBtn" type="submit" class="btn btn-primary btn-sm">Save</button>
+                </div>
+            </form>
+        </div>
+</div>
+
+<script>
+    // breadcrumbs
+    const breadcrumbs = $('.breadcrumb');
+        let breadcrumbContent = `
+            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/"><span class="breadcrumb-text">Dashboard</span></a></li>
+            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/customer"><span class="breadcrumb-text">Customers</span></a></li>
+        `;
+        if($('form[name="user-form"]').attr('editable') === 'true') {
+            breadcrumbContent += `
+                <li class="breadcrumb-item text-sm text-dark active">Edit</li>
+            `;
+        } else {
+            breadcrumbContent += `
+                <li class="breadcrumb-item text-sm text-dark active">Create new</li>
+            `;
+        }
+        breadcrumbs.html(breadcrumbContent);
+
+    // toggle password
+    $(".toggle-password").click(function() {
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        const input = $($(this).attr("toggle"));
+        if (input.attr("type") == "password") {
+            input.attr("type", "text");
+        } else {
+            input.attr("type", "password");
+        }
+    });
+
+    // upload avatar
+    $('#image').on('change', function(e) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        if(file){
+            reader.onload = function (e) {
+                const dataURL = e.target.result;
+                $('#previewImage').attr('src', dataURL);
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+    $('#removeImageBtn').on('click', function(e) {
+        e.preventDefault();
+        $('#image').val('');
+        const src = $('#previewImage').attr('initUrl');
+        if(src) $('#previewImage').attr('src', src);
+        else $('#previewImage').attr('src', '/img/no-image-icon.png');
+    });
+
+    // username input
+    $('input[name="username"]').change(() => {
+        const username = $('input[name="username"]').val();
+        if(!username) return;
+        $.ajax({
+            url: `/customer/check-username/${username}`,
+            method: 'GET',
+            success: res => {
+                if(!res.valid) {
+                    $('input[name="username"]').removeClass('is-valid');
+                    $('input[name="username"]').addClass('is-invalid');
+                    $('.badge-error').text('Username already exists');
+                } else {
+                    $('input[name="username"]').removeClass('is-invalid');
+                    $('input[name="username"]').addClass('is-valid');
+                    $('.badge-error').text('');
+                }
+            }
+        });
+    });
+
+    // password validation
+    $('#submitBtn').on('click', function(e) {
+        e.preventDefault();
+        // check not empty
+        const username = $('input[name="username"]').val();
+        const email = $('input[name="email"]').val();
+        const oldPassword = $('#oldPassword').val();
+        const password = $('#password').val();
+        const confirmPassword = $('#confirmPassword').val();
+
+        const editable = $('form[name="user-form"]').attr('editable');
+        // for editing, check if email or username is empty
+        if(editable){
+            if(!username || !email){
+                $('.badge-error').text('Please fill in all required fields');
+                if (!email) {
+                    $('input[name="email"]').addClass('is-invalid');
+                }
+                if (!username) {
+                    $('input[name="username"]').addClass('is-invalid');
+                }
+                return;
+            }
+        }
+        // for creating, check if all required fields are empty
+        else {
+            if(!username || !email || !password || !confirmPassword){
+                $('.badge-error').text('Please fill in all required fields');
+                if (!email) {
+                    $('input[name="email"]').addClass('is-invalid');
+                }
+                if (!username) {
+                    $('input[name="username"]').addClass('is-invalid');
+                }
+                if (!password) {
+                    $('#password').addClass('is-invalid');
+                }
+                if (!confirmPassword){
+                    $('#confirmPassword').addClass('is-invalid');
+                }
+                return false;
+            }
+        }
+
+        // check confirm password
+        if(password !== confirmPassword) {
+            $('#confirmPassword').addClass('is-invalid');
+            $('.badge-error').text('Password and confirm password do not match');
+            return;
+        }
+        $('form[name="user-form"]').submit();
+    });
+
+    // empty error message when input change
+    $('input').on('keyup', function(e) {
+        $(this).removeClass('is-invalid');
+        $(this).removeClass('is-valid');
+        $('.badge-error').text('');
+    });
+
+</script>

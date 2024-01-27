@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,100&display=swap');
+
+* {
+    font-family: 'Roboto', sans-serif;
+}   
+
+body {
+    background-color: #f0f4f7;
+}
+
+.sidenav {
+    background-image: linear-gradient(#0d1833, #333f57);
+}
+
+#sidenav-collapse-main .nav-item .nav-link {
+    font-size: 1rem;
+}
+
+#sidenav-collapse-main .nav-item:hover {
+    background-color: #091023;
+}
+
+#sidenav-collapse-main .nav-item.nav-link:hover {
+    color: #fff;
+}
+
+#sidenav-collapse-main .nav-item.active {
+    background-color: #091023;
+    border-radius: 1.5rem;
+}
+
+#sidenav-collapse-main .nav-item.active .nav-link {
+    color: #fff;
+}
+
+#iconNavbarSidenav {
+    font-size: 1.2rem;
+    padding: 0 0.25rem;
+}
+
+#iconSidenav {
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+.sidenav-footer a {
+    color: #ffffffcb;
+    font-size: 0.75rem;
+    font-style: bold;
+}
+
+.sidenav-footer a:hover {
+    color: rgb(236, 60, 60);
+}
+
+.navbar-collapse {
+    scrollbar-color: #091023 #0d1833;
+}
+
+.breadcrumb-text:hover {
+    opacity: 1;
+    color: #3040d6;
+    text-decoration: underline;
+}
+
+.breadcrumb-text {
+    opacity: 0.5;
+}

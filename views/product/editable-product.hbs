@@ -1,0 +1,262 @@
+<link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/input.css">
+<link rel="stylesheet" href="/css/custom-carousel.css">
+<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/plugins/piexif.min.js"
+    type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
+<div class="container-fluid mb-4">
+    <div class="d-flex flex-row justify-content-between align-items-center">
+        <div class="d-flex flex-row align-items-center">
+            <h3>{{#if editable}} Edit {{else}} Create new {{/if}}</h3>
+        </div>
+    </div>
+    <div class="card mt-4">
+        <form name="product-form" method="post" {{#if editable}} action="/admin/product/edit/{{ product.id }}" editable="true"
+            {{else}} action="/admin/product" {{/if}} enctype="multipart/form-data" class="p-4">
+            <div class="row mb-2">
+                <h4>Product Details</h4>
+                <div class="form-group col-md-6 has-danger">
+                    <label class="form-label">Name *</label>
+                    <input name="name" type="text" class="form-control" aria-label="name" value="{{ product.name }}" required/>
+                </div>
+                <div class="form-group col-md-6 has-danger">
+                    <label class="form-label">Category *</label>
+                    <select name="category" id="category" class="form-select" initCategoryId="{{ product.categoryId }}">
+                        {{#each categories}}
+                        <option value="{{ this.id }}">
+                            {{this.name}}
+                        </option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="form-label">Quantity</label>
+                    <input name="quantity" type="number" class="form-control" value="{{ product.quantity }}" aria-label="quantity">
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="form-label">Price</label>
+                    <input name="price" type="number" class="form-control" value="{{ product.price }}" aria-label="quantity">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="descriptionTextarea">Description</label>
+                <textarea name="description" class="form-control" id="descriptionTextarea" rows="2"></textarea>
+            </div>
+            <div class="row">
+                <h4>Product Images</h4>
+                {{#if product.images}}
+                <p class="fst-italic">
+                    Mark the images that you want to remove or set main by clicking the buttons at the top left corner of the carousel. 
+                </p>
+                <p class="fst-italic">
+                    Thumbnail image will be the first one if no one is selected.
+                </p>
+                <div class="image-icon d-flex flex-row justify-content-end">
+                    <input type="checkbox" class="btn-check" id="btnThumbnail" autocomplete="off">
+                    <label class="btn btn-outline-info btn-sm" for="btnThumbnail">Thumbnail</label>
+                    <i class="fa-solid fa-circle-minus ms-4 me-4 remove-image-icon"></i>
+                </div>
+                <div id="imagesCarousel" class="carousel slide" mainImageId="{{product.mainImageId}}">
+                    <div class="carousel-inner">
+                        {{#each product.images}}
+                            <div class="carousel-item {{#eq @index 0}}active{{/eq}}" imageId="{{this.id}}">
+                                <img src="{{ this.url }}" class="d-block carousel-image image-has-modal mx-auto" alt="product-image-{{ this.id }}">
+                            </div>
+                        {{/each}}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#imagesCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#imagesCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                    <div class="carousel-indicators mt-4">
+                        {{#each product.images}}
+                            <button type="button" data-bs-target="#imagesCarousel" data-bs-slide-to="{{@index}}"
+                                class="{{#eq @index 0}}active{{/eq}}" aria-label="Slide {{@index}}">
+                                <img src="{{ this.url }}" class="d-block w-100 enlarge-image" alt="product-image-{{ this.id }}">
+                            </button>
+                        {{/each}}
+                    </div>
+                </div>
+                <input name="removeIds" type="hidden">
+                <input name="mainId" type="hidden">
+                {{/if}}
+                <input type="file" name="allImages" id="all-images" accept="image/*" multiple>
+            </div>
+            <div class="d-flex mb-4 justify-content-center text-center">
+                <span class="badge-error border-radius-xl center mx-auto">{{ message }}</span>
+            </div>
+            <div class="d-md-flex justify-content-center text-center">
+                <button id="submitBtn" type="submit" class="btn btn-primary btn-sm">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const editable = $('form[name="product-form"]').attr('editable') === 'true';
+    const initCategoryId = $('select[name="category"]').attr('initCategoryId');
+    $('select[name="category"]').val(initCategoryId);
+    
+    // breadcrumbs
+    const breadcrumbs = $('.breadcrumb');
+    let breadcrumbContent = `
+            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/"><span class="breadcrumb-text">Dashboard</span></a></li>
+            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/product"><span class="breadcrumb-text">Products</span></a></li>
+        `;
+    if ($('form[name="product-form"]').attr('editable') === 'true') {
+        breadcrumbContent += `
+                <li class="breadcrumb-item text-sm text-dark active">Edit</li>
+            `;
+    } else {
+        breadcrumbContent += `
+                <li class="breadcrumb-item text-sm text-dark active">Create new</li>
+            `;
+    }
+    breadcrumbs.html(breadcrumbContent);
+
+    // init data
+    let removedImageIds = [];
+    let thumbnailId = $('#imagesCarousel').attr('mainImageId') || null;
+    if(editable){
+        const activeImage = $('#imagesCarousel .carousel-item.active');
+        const activeImageId = activeImage.attr('imageId');
+        if(thumbnailId === activeImageId) {
+            $('#btnThumbnail').prop("checked", true);
+        } else {
+            $('#btnThumbnail').prop("checked", false);
+        }
+    }
+
+    // input images
+    $('#all-images').fileinput({
+        showUpload: false,
+        showCaption: false,
+        maxFileCount: 10,
+        browseClass: "btn bg-gradient-info", 
+    })
+
+    // change remove image icon when sliding
+    $('#imagesCarousel').on('slid.bs.carousel', function () {
+        const thumbnailBtn = $('#btnThumbnail');
+        const toggleIcon = $('.remove-image-icon');
+        const activeImage = $('#imagesCarousel .carousel-item.active');
+        const activeImageId = activeImage.attr('imageId');
+        if (removedImageIds.includes(activeImageId)) {
+            toggleIcon.removeClass('fa-circle-minus');
+            toggleIcon.addClass('fa-circle-plus');
+            thumbnailBtn.prop("disabled", "disabled");
+        } else {
+            toggleIcon.removeClass('fa-circle-plus');
+            toggleIcon.addClass('fa-circle-minus');
+            thumbnailBtn.prop("disabled", false);
+            if(thumbnailId === activeImageId) {
+                thumbnailBtn.prop("checked", true);
+            } else {
+                thumbnailBtn.prop("checked", false);
+            }
+        }
+    });
+
+    // mark thumbnail image
+    $('#btnThumbnail').click(function (e) {
+        e.stopPropagation();
+        if ($(this).prop("checked") == true) {
+            thumbnailId = $('#imagesCarousel .carousel-item.active').attr('imageId');
+        } else {
+            thumbnailId = null;
+        }
+        console.log(thumbnailId);
+    });
+
+    // mark to remove images and adding to removedImageIds
+    $('.remove-image-icon').click(function (e) {
+        e.stopPropagation();
+        const toggleIcon = $(this);
+        const thumbnailBtn = $('#btnThumbnail');
+        if (toggleIcon.hasClass('fa-circle-minus')) {
+            toggleIcon.removeClass('fa-circle-minus');
+            toggleIcon.addClass('fa-circle-plus');
+            // find and change active image
+            const activeImage = $('#imagesCarousel .carousel-item.active');
+            activeImage.find('img').addClass('removed-image');
+            activeImage.find('button').removeClass('image-has-modal');
+            // find and change active indicator
+            const activeIndicator = $('#imagesCarousel .carousel-indicators button.active');
+            activeIndicator.find('img').addClass('removed-image');
+            // add to removedImageIds
+            const activeImageId = activeImage.attr('imageId');
+            removedImageIds.push(activeImageId);
+            // disable thumbnail button
+            if(thumbnailId === activeImageId) {
+                thumbnailBtn.prop("checked", false);
+                thumbnailId = null;
+            }
+            thumbnailBtn.prop("disabled", "disabled");
+        } else {
+            toggleIcon.removeClass('fa-circle-plus');
+            toggleIcon.addClass('fa-circle-minus');
+            // find and change active image
+            const activeImage = $('#imagesCarousel .carousel-item.active');
+            activeImage.find('img').removeClass('removed-image');
+            activeImage.find('button').addClass('image-has-modal');
+            // find and change active indicator
+            const activeIndicator = $('#imagesCarousel .carousel-indicators button.active');
+            activeIndicator.find('img').removeClass('removed-image');
+            // remove from removedImageIds
+            const activeImageId = activeImage.attr('imageId');
+            const index = removedImageIds.indexOf(activeImageId);
+            if (index > -1) {
+                removedImageIds.splice(index, 1);
+            }
+            // enable thumbnail button
+            thumbnailBtn.prop("disabled", false);
+        }
+        console.log(removedImageIds);
+    });
+    
+    // form submit
+    $('#submitBtn').click(function (e) {
+        e.preventDefault();
+        const name = $('input[name="name"]').val();
+        const category = $('select[name="category"]').val();
+        
+        if(!name){
+            $('.badge-error').text('Name is required');
+            $('input[name="name"]').addClass('is-invalid');
+            return;
+        }
+        if(!category){
+            $('.badge-error').text('Category is required. If there is no category, please create one.');
+            $('select[name="category"]').addClass('is-invalid');
+            return;
+        }
+        if(editable){
+            $('input[name="removeIds"]').val(removedImageIds);
+            $('input[name="mainId"]').val(thumbnailId);
+        }
+
+        console.log('submit');
+        console.log($('input[name="removeIds"]').val())
+        console.log($('input[name="mainId"]').val())
+        $('form[name="product-form"]').submit();
+    });
+
+    // empty error message when typing
+    $('input').on('keyup', function (e) {
+        $(this).removeClass('is-invalid');
+        $(this).removeClass('is-valid');
+        $('.badge-error').text('');
+    });
+    $('select').on('change', function (e) {
+        $(this).removeClass('is-invalid');
+        $(this).removeClass('is-valid');
+        $('.badge-error').text('');
+    });
+</script>
