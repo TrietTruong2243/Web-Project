@@ -216,7 +216,9 @@
             `);
             let currentTotal = parseInt($('#order-total').attr('value'));
             if(isNaN(currentTotal)) currentTotal = 0;
-            $('#order-total').text(new Intl.NumberFormat('vi', CurrencyOptions).format(currentTotal + product.price * number));
+            const newTotal = currentTotal + product.price * number;
+            $('#order-total').text(new Intl.NumberFormat('vi', CurrencyOptions).format(newTotal));
+            $('#order-total').attr('value', newTotal);
         }
         $('#item-product').val('');
         $('#item-number').val('');
@@ -233,7 +235,9 @@
             const amount = parseInt(orderItem.find('#orderItem-total').text());
             let currentTotal = parseInt($('#order-total').attr('value'));
             if (isNaN(currentTotal)) currentTotal = 0;
-            $('#order-total').text(new Intl.NumberFormat('vi', CurrencyOptions).format(currentTotal - amount));
+            const newTotal = currentTotal - amount;
+            $('#order-total').text(new Intl.NumberFormat('vi', CurrencyOptions).format(newTotal));
+            $('#order-total').attr('value', newTotal);
             orderItem.remove();
         }
     });

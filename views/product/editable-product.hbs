@@ -55,7 +55,7 @@
                 <div class="image-icon d-flex flex-row justify-content-end">
                     <input type="checkbox" class="btn-check" id="btnThumbnail" autocomplete="off">
                     <label class="btn btn-outline-info btn-sm" for="btnThumbnail">Thumbnail</label>
-                    <i class="fa-solid fa-circle-minus ms-4 me-4 remove-image-icon"></i>
+                    <i class="fa-solid fa-circle-minus ms-4 me-4 remove-image-icon" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Remove"></i>
                 </div>
                 <div id="imagesCarousel" class="carousel slide" mainImageId="{{product.mainImageId}}">
                     <div class="carousel-inner">
@@ -151,10 +151,12 @@
         if (removedImageIds.includes(activeImageId)) {
             toggleIcon.removeClass('fa-circle-minus');
             toggleIcon.addClass('fa-circle-plus');
+            toggleIcon.attr('data-bs-original-title', 'Add');
             thumbnailBtn.prop("disabled", "disabled");
         } else {
             toggleIcon.removeClass('fa-circle-plus');
             toggleIcon.addClass('fa-circle-minus');
+            toggleIcon.attr('data-bs-original-title', 'Remove');
             thumbnailBtn.prop("disabled", false);
             if(thumbnailId === activeImageId) {
                 thumbnailBtn.prop("checked", true);
@@ -183,6 +185,7 @@
         if (toggleIcon.hasClass('fa-circle-minus')) {
             toggleIcon.removeClass('fa-circle-minus');
             toggleIcon.addClass('fa-circle-plus');
+            toggleIcon.attr('data-bs-original-title', 'Add');
             // find and change active image
             const activeImage = $('#imagesCarousel .carousel-item.active');
             activeImage.find('img').addClass('removed-image');
@@ -202,6 +205,7 @@
         } else {
             toggleIcon.removeClass('fa-circle-plus');
             toggleIcon.addClass('fa-circle-minus');
+            toggleIcon.attr('data-bs-original-title', 'Remove');
             // find and change active image
             const activeImage = $('#imagesCarousel .carousel-item.active');
             activeImage.find('img').removeClass('removed-image');

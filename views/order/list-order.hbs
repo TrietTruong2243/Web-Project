@@ -28,8 +28,8 @@
                     <option value="confirmed" {{#eq queryObj.status "confirmed" }} selected {{/eq}}>
                         Confirmed
                     </option>
-                    <option value="awaiting payment" {{#eq queryObj.status "awaiting payment" }} selected {{/eq}}>
-                        Awaiting payment
+                    <option value="unpaid" {{#eq queryObj.status "unpaid" }} selected {{/eq}}>
+                        unpaid
                     </option>
                     <option value="shipping" {{#eq queryObj.status "shipping" }} selected {{/eq}}>
                         Shipping
@@ -192,8 +192,8 @@
                                     {{#eq this.status "confirmed"}}
                                     <span class="badge badge-pill bg-gradient-info">Confirmed</span>
                                     {{/eq}}
-                                    {{#eq this.status "awaiting payment"}}
-                                    <span class="badge badge-pill bg-gradient-info">Awaiting payment</span>
+                                    {{#eq this.status "unpaid"}}
+                                    <span class="badge badge-pill bg-gradient-info">Unpaid</span>
                                     {{/eq}}
                                     {{#eq this.status "shipping"}}
                                     <span class="badge badge-pill bg-gradient-info">Shipping</span>
@@ -219,7 +219,7 @@
                                             <li><button class="dropdown-item btn-change-status">Confirmed</button></li>
                                             <li><button class="dropdown-item btn-change-status">Shipping</button></li>
                                             <li><button class="dropdown-item btn-change-status">Completed</button></li>
-                                            <li><button class="dropdown-item btn-change-status">Awaiting payment</button></li>
+                                            <li><button class="dropdown-item btn-change-status">Unpaid</button></li>
                                             <li><button class="dropdown-item btn-change-status">Cancelled</button></li>
                                             <li><button class="dropdown-item btn-change-status">Refunded</button></li>
                                         </ul>
@@ -468,8 +468,8 @@
                         case 'confirmed':
                             $('#detail-status').html(`<span class="badge badge-pill bg-gradient-info">Confirmed</span>`);
                             break;
-                        case 'awaiting payment':
-                            $('#detail-status').html(`<span class="badge badge-pill bg-gradient-info">Awaiting payment</span>`);
+                        case 'unpaid':
+                            $('#detail-status').html(`<span class="badge badge-pill bg-gradient-info">Unpaid</span>`);
                             break;
                         case 'shipping':
                             $('#detail-status').html(`<span class="badge badge-pill bg-gradient-info">Shipping</span>`);
@@ -532,8 +532,8 @@
                         case 'confirmed':
                             $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-info">Confirmed</span>`);
                             break;
-                        case 'awaiting payment':
-                            $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-info">Awaiting payment</span>`);
+                        case 'unpaid':
+                            $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-info">Unpaid</span>`);
                             break;
                         case 'shipping':
                             $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-info">Shipping</span>`);

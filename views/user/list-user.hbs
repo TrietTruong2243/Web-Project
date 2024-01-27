@@ -273,7 +273,7 @@
                 <span>Change to administrator</span>
             </button>
             {{/if}}
-            <img class="detail-image enlarge-image image-has-modal" src="" alt="user">
+            <img class="detail-image" src="" alt="user">
             <div class="detail-info-item">
                 <p class="detail-info-item-title">ID</p>
                 <p class="detail-info-item-content" id="detail-info-id"></p>
@@ -428,7 +428,7 @@
             username = button.attr('user-username');
             status = button.attr('user-status');
             fullname = button.attr('user-fullname');
-            image = button.attr('user-image') || 'img/user.png';
+            image = button.attr('user-image');
             email = button.attr('user-email');
             phone = button.attr('user-phone');
             address = button.attr('user-address');
@@ -436,7 +436,13 @@
             formattedCreatedAt = button.attr('user-formattedCreatedAt');
 
             $('#offcanvasWithInformationLabel').html(`@${username}`);
-            $('.detail-image').attr('src', image);
+            if(image){
+                $('.detail-image').attr('src', image);
+                $('.detail-image').addClass('enlarge-image');
+                $('.detail-image').addClass('image-has-modal')
+            } else {
+                $('.detail-image').attr('src', 'img/user.png');
+            }
             $('#detail-info-id').html(userId);
             $('#detail-info-email').html(email);
             if(fullname){
@@ -527,7 +533,7 @@
 
             let urlParams = '';
             if (size_f && size_f !== '10') {
-                urlParams += `&size=${size}`;
+                urlParams += `&size=${size_f}`;
             }
             if (status_f && status_f !== 'Select status') {
                 urlParams += `&status=${status_f}`;

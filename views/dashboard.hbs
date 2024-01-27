@@ -1,2 +1,597 @@
 <link rel="stylesheet" href="./css/dashboard.css">
-<p>Charts will be here</p>
+<style>
+
+</style>
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-xl-3 col-sm-6 mb-2">
+            <div class="card shadow">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-9">
+                            <p class="text-md mb-0 text-uppercase font-weight-bold text-primary">New orders</p>
+                            <h5 class="font-weight-bolder mb-0" id="newOrders">
+                            </h5>
+                            <span class="text-sm font-weight-bolder" id="growthRateOrder"></span>
+                        </div>
+                        <div class="col-3 text-end d-flex align-items-center">
+                            <div class="icon icon-shape bg-gradient-primary text-center border-radius-md">
+                                <i class="fa-solid fa-cart-plus text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-2">
+            <div class="card shadow">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-9">
+                            <p class="text-md mb-0 text-uppercase font-weight-bold text-primary">Today's sale</p>
+                            <h5 class="font-weight-bolder mb-0" id="todaySale">
+                            </h5>
+                            <span class="text-sm font-weight-bold" id="growthRateDay"></span>
+                        </div>
+                        <div class="col-3 text-end d-flex align-items-center">
+                            <div class="icon icon-shape bg-gradient-info text-center border-radius-md">
+                                <i class="fa-regular fa-calendar text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-2">
+            <div class="card shadow">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-9">
+                            <p class="text-md mb-0 text-uppercase font-weight-bold text-primary">Month's sale</p>
+                            <h5 class="font-weight-bolder mb-0" id="monthSale">
+                            </h5>
+                            <span class="text-sm font-weight-bolder" id="growthRateMonth"></span>
+                        </div>
+                        <div class="col-3 text-end d-flex align-items-center">
+                            <div class="icon icon-shape bg-gradient-success shadow text-center border-radius-md">
+                                <i class="fa-solid fa-calendar-day text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-2">
+            <div class="card shadow">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="numbers">
+                                <p class="text-md mb-0 text-uppercase font-weight-bold text-primary">Year's sale</p>
+                                <h5 class="font-weight-bolder mb-0" id="yearSale">
+                                </h5>
+                                <span class="text-sm font-weight-bolder" id="growthRateYear"></span>
+                            </div>
+                        </div>
+                        <div class="col-3 text-end d-flex align-items-center">
+                            <div class="icon icon-shape bg-gradient-danger text-center border-radius-md">
+                                <i class="fa-solid fa-calendar-days text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row justify-content-center g-2 mt-3">
+        <div class="card p-1">
+            <div class="card-header pb-0 mb-0">
+                <h4>Sales overview</h4>
+                <div class="d-flex flex-row mt-2">
+                    <button class="btn btn-sm btn-primary me-2" id="insertYear">Insert</button>
+                    <button class="btn btn-sm btn-secondary me-2" id="removeYear">Remove</button>
+                    <select name="yearSelection" id="yearSelection" class="form-select"
+                        style="width: 100px; height: 40px">
+                        <option value="2023">2023</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body pt-0 mt-0">
+                <div class="wrapper1">
+                    <canvas id="yearChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center g-2 mt-4">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header pb-0 mb-0">
+                    <h5>Sales by categories</h5>
+                    <select name="criterionSelection" id="criterionSelection" class="form-select"
+                        style="width: 150px; height: 40px">
+                        <option value="month" select>This month</option>
+                        <option value="year">This year</option>
+                        <option value="day">Today</option>
+                    </select>
+                </div>
+                <div class="card-body">
+                    <div class="list-categories">
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-header pb-0 mb-0">
+                    <h5>Sale Calculator</h5>
+                </div>
+                <div class="card-body mt-0 pt-0">
+                    <div class="form-group">
+                        <label class="form-label">From</label>
+                        <input name="dateFrom" type="date" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">To</label>
+                        <input name="dateTo" type="date" class="form-control">
+                    </div>
+                    <button class="btn btn-sm btn-primary" id="saleCalculatorBtn">Calculate</button>
+                    <div class="sale-result">
+                        <span class="text-lg font-weight-bolder form-label">
+                            <i class="fa-solid fa-sack-dollar pe-2"></i>
+                            Total sale:
+                        </span>
+                        <span class="sale-result-item-value text-lg"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-8">
+            <div class="card mt-4 ms-3">
+                <div class="wrapper2">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center g-2 mt-4">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="row">
+                        <div class="col-lg-6 col-7">
+                            <h5>Best selling products</h5>
+                            <select name="topProduct" id="topProduct" class="form-select" style="width: 100px">
+                                <option value="5">Top 5</option>
+                                <option value="10">Top 10</option>
+                                <option value="20">Top 20</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2 mt-0 pt-0">
+                    <div class="table-responsive">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th 
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Product</th>
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Category</th>
+                                    <th
+                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Price</th>
+                                    <th
+                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Sold</th>
+                                </tr>
+                            </thead>
+                            <tbody id="top-product-table">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card ms-2">
+                <div class="card-header pb-0">
+                    <h5>Recent orders</h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline timeline-one-side" id="recent-orders">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // cards
+    $.ajax({
+        url: '/statistic/api/overview',
+        method: 'GET',
+        success: function (data) {
+            $('#newOrders').html(`+${data.todayOrder}`);
+            $('#todaySale').html(new Intl.NumberFormat('vi').format(data.todaySale / 1000) + "k₫");
+            $('#monthSale').html(new Intl.NumberFormat('vi').format(data.monthSale / 1000) + "k₫");
+            $('#yearSale').html(new Intl.NumberFormat('vi').format(data.yearSale / 1000) + "k₫");
+            if (data.growthRateOrderDay > 0) {
+                $('#growthRateOrder').html(`
+                    <i class="fa-solid fa-arrow-up"></i>
+                    <span>${data.growthRateOrderDay}%</span>
+                `);
+                $('#growthRateOrder').addClass('badge-success text-success');
+            } else {
+                $('#growthRateOrder').html(`
+                    <i class="fa-solid fa-arrow-down"></i>
+                    <span>${data.growthRateOrderDay}%</span>
+                `);
+                $('#growthRateOrder').addClass('badge-danger text-danger');
+            }
+            if (data.growthRateDay > 0) {
+                $('#growthRateDay').html(`
+                    <i class="fa-solid fa-arrow-up"></i>
+                    <span>${data.growthRateDay}%</span>
+                `);
+                $('#growthRateDay').addClass('badge-success text-success');
+            } else {
+                $('#growthRateDay').html(`
+                    <i class="fa-solid fa-arrow-down"></i>
+                    <span>${data.growthRateDay}%</span>
+                `);
+                $('#growthRateDay').addClass('badge-danger text-danger');
+            }
+            if (data.growthRateMonth > 0) {
+                $('#growthRateMonth').html(`
+                    <i class="fa-solid fa-arrow-up"></i>
+                    <span>${data.growthRateMonth}%</span>
+                `);
+                $('#growthRateMonth').addClass('badge-success text-success');
+            } else {
+                $('#growthRateMonth').html(`
+                    <i class="fa-solid fa-arrow-down"></i>
+                    <span>${data.growthRateMonth}%</span>
+                `);
+                $('#growthRateMonth').addClass('badge-danger text-danger');
+            }
+            if (data.growthRateYear > 0) {
+                $('#growthRateYear').html(`
+                    <i class="fa-solid fa-arrow-up"></i>
+                    <span>${data.growthRateYear}%</span>
+                `);
+                $('#growthRateYear').addClass('badge-success text-success');
+            } else {
+                $('#growthRateYear').html(`
+                    <i class="fa-solid fa-arrow-down"></i>
+                    <span>${data.growthRateYear}%</span>
+                `);
+                $('#growthRateYear').addClass('badge-danger text-danger');
+            }
+        }
+    });
+
+    // chart
+    const COLOR = [
+        "#5e72e4",
+        "#cb0c9f",
+        "#2dce89",
+        "#fbcf33",
+        "#fb6340",
+        "#adb5bd",
+        "#17c1e8",
+        "#00d6b4",
+    ]
+
+    // line chart
+    let indexColor = 0;
+    let operationYears = [];
+    let displayedYears = [];
+    let curYearData = [];
+    const lineChart = new Chart(document.getElementById('yearChart').getContext("2d"), {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets:
+                []
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Sales in year',
+                    font: {
+                        size: 18,
+                        weight: 'bold',
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        callback: function (value, index, ticks) {
+                            return new Intl.NumberFormat('vi', {
+                                style: 'currency',
+                                currency: 'VND'
+                            }).format(value);
+                        }
+                    }
+                }
+            },
+        }
+    });
+    $.ajax({
+        url: '/statistic/api/operation-years',
+        method: 'GET',
+        success: function (res) {
+            operationYears = res.data;
+            const yearSelection = $('#yearSelection');
+            for (let i = 0; i < operationYears.length; i++) {
+                yearSelection.append(`<option value="${operationYears[i]}">${operationYears[i]}</option>`);
+            }
+            yearSelection.val(operationYears[0]);
+
+            $.ajax({
+                url: `/statistic/api/sale-distributed-by-month?year=${operationYears[0]}`,
+                method: 'GET',
+                success: function (res) {
+                    yearData = res.data;
+                    lineChart.data.datasets.push({
+                        label: `${operationYears[0]}`,
+                        data: yearData,
+                        tension: 0.3,
+                        pointRadius: 0,
+                        borderColor: COLOR[indexColor++ % COLOR.length],
+                        borderWidth: 3,
+                    });
+                    lineChart.update();
+                    displayedYears.push(`${operationYears[0]}`);
+                }
+            });
+
+            $('#insertYear').click(function () {
+                const chosenYear = yearSelection.val();
+                if (displayedYears.includes(chosenYear)) {
+                    return;
+                }
+                $.ajax({
+                    url: `/statistic/api/sale-distributed-by-month?year=${yearSelection.val()}`,
+                    method: 'GET',
+                    success: function (res) {
+                        yearData = res.data;
+                        lineChart.data.datasets.push({
+                            label: `${yearSelection.val()}`,
+                            data: yearData,
+                            tension: 0.3,
+                            pointRadius: 0,
+                            borderColor: COLOR[indexColor++ % COLOR.length],
+                            borderWidth: 3,
+                        });
+                        lineChart.update();
+                    }
+                });
+                displayedYears.push(`${chosenYear}`);
+            });
+
+            $('#removeYear').click(function () {
+                const chosenYear = yearSelection.val();
+                if (!displayedYears.includes(chosenYear)) {
+                    return;
+                }
+                const index = displayedYears.indexOf(chosenYear);
+                displayedYears.splice(index, 1);
+                lineChart.data.datasets.splice(index, 1);
+                lineChart.update();
+            });
+        }
+    });
+
+    // sale calculator
+    $('#saleCalculatorBtn').click(function () {
+        const dateFrom = $('input[name="dateFrom"]').val();
+        const dateTo = $('input[name="dateTo"]').val();
+        $.ajax({
+            url: `/statistic/api/sale-by-period?from=${dateFrom}&to=${dateTo}`,
+            method: 'GET',
+            success: function (res) {
+                console.log(res);
+                $('.sale-result-item-value').html(new Intl.NumberFormat('vi').format(res.data / 1000) + "k₫");
+            }
+        });
+    });
+
+    // category list
+    const categoryChart = new Chart(document.getElementById('categoryChart').getContext("2d"), {
+        type: 'doughnut',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: 'Sales',
+                    data: [],
+                    backgroundColor: COLOR,
+                    hoverOffset: 4,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Sales by categories',
+                    font: {
+                        size: 18,
+                        weight: 'bold',
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            }
+        }
+    });
+    function renderCategories(criterion) {
+        $.ajax({
+            url: `/statistic/api/sale-distributed-by-category?criterion=${criterion}`,
+            method: 'GET',
+            success: function (res) {
+                console.log(res);
+                const data = res.data;
+                const listCategories = $('.list-categories');
+                listCategories.html('');
+                for (let i = 0; i < res.data.length; i++) {
+                    listCategories.append(`
+                        <div class="row mt-2">
+                            <div class="col-4">
+                                <div class="text-md font-weight-bolder">
+                                    ${data[i].categoryName}:
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                ${new Intl.NumberFormat('vi').format(data[i].sale / 1000)}k₫
+                            </div>
+                            <span class="col-4 text-sm text-start font-weight-bolder ${data[i].growthRate > 0 ? "badge-success" : "badge-danger"}">
+                                <i class="fa-solid fa-arrow-${data[i].growthRate > 0 ? "up" : "down"}"></i>
+                                ${data[i].growthRate}%
+                            </span>
+                        </div>
+                    `);
+                }
+
+                categoryChart.data.datasets[0].data = [];
+                categoryChart.data.labels = [];
+                for (let i = 0; i < data.length; i++) {
+                    categoryChart.data.datasets[0].data.push(data[i].sale);
+                    categoryChart.data.labels.push(data[i].categoryName);
+                }
+                categoryChart.update();
+            }
+        });
+    }
+
+    renderCategories('month');
+    $('#criterionSelection').change(function () {
+        const criterion = $(this).val();
+        console.log(criterion);
+        renderCategories(criterion);
+    });
+
+    // top selling products
+    function renderTopSelling(limit){
+        $.ajax({
+            url: `/statistic/api/top-selling-products?limit=${limit}`,
+            method: 'GET',
+            success: function (res) {
+                const data = res.data;
+                console.log(data)
+                let content = '';
+                for (let i = 0; i < data.length; ++i) {
+                    content += `
+                        <tr>
+                            <td>
+                                <div class="d-flex px-2 py-1">
+                                    <img src="${data[i].product.mainImage ? data[i].product.mainImage.url : "/img/no-image-icon.png"}" class="avatar avatar-md me-2 rounded-circle" alt="product">
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <h6 class="mb-0 text-sm">${data[i].product.name}</h6>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <p class="text-xs mb-0">
+                                    <a href="/category?id=${data[i].product.category.id}" class="text-decoration-none">${data[i].product.category.name}</a>
+                                </p>
+                            </td>
+                            <td class="align-middle text-center text-sm">
+                                <span class="text-xs font-weight-bold">${new Intl.NumberFormat('vi', { style: 'currency', currency: 'VND' }).format(data[i].product.price)}</span>
+                            </td>
+                            <td class="align-middle text-center ">
+                                <span>${data[i].sold}</span>
+                            </td>
+                        </tr>
+                    `;
+                }
+                $('#top-product-table').html(content);
+            }
+        });
+    }
+    renderTopSelling(5);
+    const topProduct = $('#topProduct');
+    topProduct.change(function () {
+        const limit = $(this).val();
+        console.log(limit)
+        renderTopSelling(limit);
+    });
+
+    // recent orders
+    $.ajax({
+        url: '/statistic/api/recent-orders',
+        method: 'GET',
+        success: function (res) {
+            const data = res.data;
+            let content = '';
+            let icon = '';
+            let statusBadge = '';
+            for (let i = 0; i < data.length; ++i) {
+                if(data[i].status == 'pending'){
+                    icon = 'fa-solid fa-clock text-primary text-gradient';
+                    statusBadge = 'badge-secondary';
+                } else if(data[i].status == 'confirmed'){
+                    icon = 'fa-solid fa-clock text-info text-gradient';
+                    statusBadge = 'badge-info';
+                } else if(data[i].status == 'unpaid'){
+                    icon = 'fa-solid fa-clock text-success text-gradient';
+                    statusBadge = 'badge-warning';
+                }  else if (data[i].status == 'shipping') {
+                    icon = 'fa-solid fa-truck text-info text-gradient';
+                    statusBadge = 'badge-info';
+                } else if(data[i].status == 'cancelled'){
+                    icon = 'fa-solid fa-times text-danger text-gradient';
+                    statusBadge = 'badge-danger';
+                } else if(data[i].status == 'refunded'){
+                    icon = 'fa-solid fa-times text-danger text-gradient';
+                    statusBadge = 'badge-danger';
+                } else if (data[i].status == 'completed') {
+                    icon = 'fa-solid fa-check text-success text-gradient';
+                    statusBadge = 'badge-success';
+                } 
+
+                content += `
+                    <div class="timeline-block mb-3">
+                        <span class="timeline-step">
+                            <i class="${icon}"></i>
+                        </span>
+                        <div class="timeline-content">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <a href="/order?id=${data[i].id}" class="text-dark font-weight-bold text-sm">Order #${data[i].id}</a>
+                                <span class="text-sm ${statusBadge}">${data[i].status}</span>
+                            </div>
+                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">${data[i].formattedDate}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            $('#recent-orders').html(content);
+        }
+    });
+</script>

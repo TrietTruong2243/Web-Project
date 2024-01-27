@@ -52,21 +52,29 @@ module.exports = {
                 }
             }
             if (createdAtFrom || createdAtTo) {
-                createdAtFrom = new Date(createdAtFrom);
-                createdAtTo = new Date(createdAtTo);
-                createdAtFrom.setHours(0, 0, 0, 0);
-                createdAtTo.setHours(23, 59, 59, 999);
+                if(createdAtFrom){
+                    createdAtFrom = new Date(createdAtFrom);
+                    createdAtFrom.setHours(0, 0, 0, 0);
+                } else createdAtFrom = '1970-01-01';
+                if(createdAtTo){
+                    createdAtTo = new Date(createdAtTo);
+                    createdAtTo.setHours(23, 59, 59, 999);
+                } else createdAtTo = '9999-12-31';
                 filters.createdAt = {
-                    [Op.between]: [createdAtFrom || '1970-01-01', createdAtTo || '9999-12-31']
+                    [Op.between]: [createdAtFrom, createdAtTo]
                 }
             }
             if (updatedAtFrom || updatedAtTo) {
-                updatedAtFrom = new Date(updatedAtFrom);
-                updatedAtTo = new Date(updatedAtTo);
-                updatedAtFrom.setHours(0, 0, 0, 0);
-                updatedAtTo.setHours(23, 59, 59, 999);
+                if(updatedAtFrom){
+                    updatedAtFrom = new Date(updatedAtFrom);
+                    updatedAtFrom.setHours(0, 0, 0, 0);
+                } else updatedAtFrom = '1970-01-01';
+                if(updatedAtTo){
+                    updatedAtTo = new Date(updatedAtTo);
+                    updatedAtTo.setHours(23, 59, 59, 999);
+                } else updatedAtTo = '9999-12-31';
                 filters.updatedAt = {
-                    [Op.between]: [updatedAtFrom || '1970-01-01', updatedAtTo || '9999-12-31']
+                    [Op.between]: [updatedAtFrom , updatedAtTo]
                 }
             }
 

@@ -28,7 +28,7 @@ db.User.hasMany(db.Order, { as: 'orders', foreignKey: 'userId' });
 db.Order.belongsTo(db.User, { as: 'user', foreignKey: 'userId' });
 // Order - OrderItem
 db.Order.hasMany(db.OrderItem, { as: 'orderItems', foreignKey: 'orderId', onDelete: 'cascade' });
-db.OrderItem.belongsTo(db.Order, { foreignKey: 'orderId' });
+db.OrderItem.belongsTo(db.Order, { as: 'order', foreignKey: 'orderId' });
 // OrderItem - Product
 db.Product.hasMany(db.OrderItem, { as: 'orderItems', foreignKey: 'productId', onDelete: 'cascade' });
 db.OrderItem.belongsTo(db.Product, { as: 'product', foreignKey: 'productId' });

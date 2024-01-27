@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const { engine } = require('express-handlebars');
+const Handlebars = require('handlebars');
 const bodyParser = require('body-parser');
-const helpers = require('handlebars-helpers');
 const session = require('express-session');
 const methodOverride = require('method-override');
 const cors = require('cors');
@@ -39,7 +39,9 @@ app.use(methodOverride('_method'));
 // set view engine
 app.engine("hbs", engine({ 
     extname: ".hbs",
-    helpers: helpers(),
+    helpers: Handlebars.registerHelper('eq', function(arg1, arg2, options) {
+        return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+    }),
 }));
 app.set("view engine", "hbs");
 app.set("views", "./views");

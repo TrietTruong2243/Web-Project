@@ -19,7 +19,7 @@ module.exports = {
     // [GET] /category
     showAll: async (req, res, next) => {
         try {
-            let { page, size, sortBy, sortDir, name, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query;
+            let { page, size, sortBy, sortDir, id, name, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query;
             page = page || 1;
             size = size || 10;
             sortBy = (sortBy || sortBy === 'productsNum') || 'id';
@@ -27,27 +27,41 @@ module.exports = {
             let filters = {};
 
             // filter
+            if (id) {
+                filters.id = id;
+            }
             if (name) {
                 filters.name = {
                     [Op.like]: `%${name}%`
                 };
             }
             if (createdAtFrom || createdAtTo) {
-                createdAtFrom = new Date(createdAtFrom);
-                createdAtTo = new Date(createdAtTo);
-                createdAtFrom.setHours(0, 0, 0, 0);
-                createdAtTo.setHours(23, 59, 59, 999);
+                if(createdAtFrom){
+                    createdAtFrom = new Date(createdAtFrom);
+                    createdAtFrom.setHours(0, 0, 0, 0);
+                }
+                else createdAtFrom = '1970-01-01'
+                if(createdAtTo){
+                    createdAtTo = new Date(createdAtTo);
+                    createdAtTo.setHours(23, 59, 59, 999);
+                }
+                else createdAtTo = '9999-12-31'
                 filters.createdAt = {
-                    [Op.between]: [createdAtFrom || '1970-01-01', createdAtTo || '9999-12-31']
+                    [Op.between]: [createdAtFrom, createdAtTo]
                 }
             }
             if (updatedAtFrom || updatedAtTo) {
-                updatedAtFrom = new Date(updatedAtFrom);
-                updatedAtTo = new Date(updatedAtTo);
-                updatedAtFrom.setHours(0, 0, 0, 0);
-                updatedAtTo.setHours(23, 59, 59, 999);
+                if(updatedAtFrom){
+                    updatedAtFrom = new Date(updatedAtFrom);
+                    updatedAtFrom.setHours(0, 0, 0, 0);
+                } else updatedAtFrom = '1970-01-01';
+                if(updatedAtTo){
+                    updatedAtTo = new Date(updatedAtTo);
+                    updatedAtTo.setHours(23, 59, 59, 999);
+                } else updatedAtTo = '9999-12-31';
+
                 filters.updatedAt = {
-                    [Op.between]: [updatedAtFrom || '1970-01-01', updatedAtTo || '9999-12-31']
+                    [Op.between]: [updatedAtFrom , updatedAtTo]
                 }
             }
 
@@ -68,7 +82,7 @@ module.exports = {
                         categoryId: categories[i].id
                     }
                 });
-                const productsUrl = `/product?categoryId=${categories[i].id}`;
+                const productsUrl = `/product?category=${categories[i].id}`;
                 
                 categories[i] = categories[i].dataValues;
                 categories[i].products = {

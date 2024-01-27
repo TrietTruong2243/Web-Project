@@ -1,3 +1,42 @@
-p {
-    color: red;
-}
+    .wrapper1 {
+        height: 500px !important;
+    }
+
+    .wrapper2 {
+        height: 700px !important;
+    }
+
+    .badge-success {
+        background-color: rgba(0, 255, 0, 0.15);
+        color: green;
+        padding: 0 0.5rem;
+        border-radius: 0.5rem;
+    }
+
+    .badge-danger {
+        background-color: rgba(255, 0, 0, 0.15);
+        color: red;
+        padding: 0 0.5rem;
+        border-radius: 0.5rem;
+    }
+
+    .badge-warning {
+        background-color: rgba(255, 255, 0, 0.15);
+        color: yellow;
+        padding: 0 0.5rem;
+        border-radius: 0.5rem;
+    }
+
+    .badge-secondary {
+        background-color: rgba(0, 0, 0, 0.15);
+        color: black;
+        padding: 0 0.5rem;
+        border-radius: 0.5rem;
+    }
+
+    .badge-info {
+        background-color: rgba(0, 255, 255, 0.15);
+        color: blue;
+        padding: 0 0.5rem;
+        border-radius: 0.5rem;
+    }

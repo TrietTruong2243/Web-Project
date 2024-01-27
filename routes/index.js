@@ -6,6 +6,7 @@ const CustomerRouter = require('./customer.r');
 const CategoryRouter = require('./category.r');
 const ProductRouter = require('./product.r');
 const OrderRouter = require('./order.r');
+const StatisticRouter = require('./statistic.r');
 
 module.exports = (app) => {
     app.use('/', AuthRouter);
@@ -16,4 +17,5 @@ module.exports = (app) => {
     app.use('/category', CategoryRouter);
     app.use('/product', ProductRouter);
     app.use('/order', OrderRouter);
+    app.use('/statistic', StatisticRouter);
 }

@@ -15,7 +15,7 @@ passport.deserializeUser(async (id, done) => {
             return done(null, false);
         }
         if(user.status !== 'active'){
-            return done(null, false, { message: 'inactive account' });
+            return done(null, false, { message: 'banned account' });
         }
         if(user.role !== 'admin'){
             return done(null, false, { message: 'not admin' });

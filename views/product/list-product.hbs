@@ -229,7 +229,11 @@
                 <i class="fa-regular fa-pen-to-square pe-2"></i>
                 <span>Edit</span>
             </a>
-            <img class="detail-image enlarge-image image-has-modal" {{#if this.mainImage }} src="{{ this.mainImage.url }}" {{else}} src="/img/no-image-icon.png" {{/if}} alt="product">
+            {{#if this.mainImage}}
+            <img class="detail-image enlarge-image image-has-modal" src="{{ this.mainImage.url }}" alt="product">
+            {{else}}
+            <img class="detail-image" src="/img/no-image-icon.png" alt="product">
+            {{/if}}
             {{#if this.images }}
                 <p class="detail-info-item-title">Images</p>
                 {{#each this.images}}
