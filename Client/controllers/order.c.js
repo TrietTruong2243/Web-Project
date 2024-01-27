@@ -21,4 +21,12 @@ module.exports = {
         // console.log(orderDetail); 
         res.render("home",{ layout: "orderdetails", orderInfo: orderInfo, userInfo: userInfo, orderDetail: orderDetail})
     }, 
+    StatusUpdate: async(req,res)=>{
+        const OrderID = req.query.id;
+        const Status = req.query.status;
+        const result = await orderModel.updateStatus(OrderID,Status);
+        // console.log(orderDetail); 
+        res.json({});
+    },
+
 }

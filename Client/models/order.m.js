@@ -30,7 +30,7 @@ module.exports = {
         let cancel = false;
         if(order.Status === "cancelled") cancel =true;
         if(order.Status === "refunded") refund = true;
-        if(order.Status === "Wait" || order.Status === "Processing" || order.Status === "pending"|| order.Status === "confirmed"|| order.Status === "unpaid") check = false;
+        if(order.Status === "Wait" || order.Status === "Processing" || order.Status === "pending"|| order.Status === "unpaid") check = false;
         const data = { OrderID: order.OrderID, Date: formatDate(order.OrderDate), Total: order.TotalAmount, Status: order.Status, Check: check, Cancel: cancel, Refund: refund};
         return data; 
     },
@@ -59,4 +59,8 @@ module.exports = {
         return total;
 
     },
+    updateStatus: async (OrderID,Status) => {
+        let result = await orderDB.updateStatus(OrderID,Status);
+        return result;
+    }
 }
