@@ -53,27 +53,29 @@ module.exports = {
     checkoutCart: async (userID) => {
         const cart = await cartDB.getCartByUser(userID);
         let checkQuantity = true;
+        let message = `Storage: Insufficient inventory. `;
         for (i of cart) {
             // console.log(i.ProductID);
             const product = await productDB.getProductByID(i.ProductID);
             if (product.InventoryQuantity < i.Quantity) {
                 checkQuantity = false;
-                // error here
-                break; 
+                message = message + `\n  The remaining quantity of product ${product.ProductName} is ${product.InventoryQuantity} items`
             }
         }
         if (checkQuantity) {
             const OrderID = await orderDB.createOrder(userID); //orderid
             for (i of cart) {  
+
                 let result = await orderDB.addOrderItem(OrderID, i.ProductID, i.Quantity);
+
                 let subtract = await productDB.subProductInventoryQuantity(i.ProductID, i.Quantity);
+
                 let remove = await cartDB.removeCartItem(userID,i.ProductID);
             }
-            return OrderID;
+            return {message:"checkout success!", OrderID: OrderID}; 
         }
         else{
-            // error handle
-            return undefined;
+            return {message:message, OrderID: "-1"};
         }
     }
 }

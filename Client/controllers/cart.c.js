@@ -37,8 +37,6 @@ module.exports = {
     checkoutCart: async(req,res)=>{
         const userID = req.user.id;
         const checkout = await model.checkoutCart(userID);
-        console.log(checkout);
-        const url = "http://localhost:3000/order/getorderdetail?OrderID=" + toString(checkout);
-        res.redirect(url);
-    }
+        res.json({checkout: checkout});
+    } 
 }

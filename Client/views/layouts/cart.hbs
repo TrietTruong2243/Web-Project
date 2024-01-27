@@ -260,11 +260,11 @@
                                         <!-- buttons -->
                                         <div class="ibox-content d-flex mb-3">
                                             <div class="hidden p-2"></div>
-                                            <button class="btn btn-primary pull-right p-2" onclick="window.location.href='/cart/checkout'">
+                                            <button class="btn btn-primary pull-right p-2" id = "checkout_btn">
                                                 <i class="fa fa fa-shopping-cart"></i> Checkout
                                             </button>
                                             <button class="btn btn-white  ms-auto p-2 border border-danger"
-                                                onclick="window.location.href='/'"><i class="fa fa-arrow-left"></i>
+                                                onclick="window.location.href='/'"> <i class="fa fa-arrow-left"></i>
                                                 Continue shopping</button>
 
                                         </div>
@@ -290,7 +290,6 @@
                 type: 'GET',
                 url: '/cart/getcartinfo',
                 success: function (data) {
-
                     const cartInfo = data.cartInfo;
                     $("#userinfo").html(` Hello, ${data.userName}. You have (${cartInfo.length}) items in your cart.`)
                     let dataHTML = "";
@@ -344,6 +343,30 @@
                     }
                     $("#allItems").html(dataHTML)
                     $("#totalAmmount").html(totalAmmount + " đ")
+                    $("body").delegate("#checkout_btn", "click", function (e) {
+                        e.preventDefault()
+                        console.log(cartInfo.length)
+                        if(cartInfo.length){
+                            $.ajax({
+                                type: 'GET',
+                                url: '/cart/checkout',
+                                success: function (data) {
+                                    if(data.checkout.OrderID === "-1"){
+                                        console.log(data.checkout.message)
+                                        alert(data.checkout.message);
+                                    }
+                                    else{
+                                        window.location.href = `/order/getorderdetail?OrderID=${data.checkout.OrderID}`;
+                                    }
+                                }
+                            })
+                        }
+                        else{
+                            alert("Your cart is empty!");
+                        }
+
+
+                    })
                 }
             })
         }
@@ -393,6 +416,7 @@
         }
     </style>
     
+    {{!-- quantity change --}}
     <script>
         $("body").delegate(".quantity", "change", function (e) {
             const id = $(this).attr('id').split("-")[1];
@@ -410,6 +434,7 @@
         })
 
     </script>
+    {{!-- remove item --}}
     <script>
         $("body").delegate(".remove_item", "click", function (e) {
             const id = $(this).attr('id').split("-")[1];
