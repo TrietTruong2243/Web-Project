@@ -224,17 +224,17 @@
                                     
                                     dataHTML = dataHTML + `
          
-                                                <tr class="alert order_detail" role="alert" id= "${i.OrderID}">
+                                                <tr class="alert order_detail" role="alert" id= "${i.id}">
                                                     <td>
                                                         ${index}
                                                     </td>
                                                     <td class="d-flex align-items-center">
                                                         <div class="pl-3 email">
-                                                            <span>${i.OrderID}</span>
-                                                            <span> Order Date: ${formatDate(i.OrderDate)}</span>
+                                                            <span>${i.id}</span>
+                                                            <span> Order Date: ${formatDate(i.createdAt)}</span>
                                                         </div>
                                                     </td>
-                                                    <td class="status"><span class="${i.Status}">${i.Status}</span></td>
+                                                    <td class="status"><span class="${i.status}">${i.status}</span></td>
                                                     <td> 
                                                         ${i.TotalAmount} đ
                                                     </td>
@@ -488,7 +488,6 @@
             e.preventDefault()
             const id = $(this).attr('id');
             const url = "/order/getorderdetail?OrderID=" + id;
-            {{!-- console.log(url); --}}
             window.location.href = url;
         })
     </script>

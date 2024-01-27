@@ -8,10 +8,9 @@ module.exports = {
         //      orderInfo: order's information (status, date, total ammount)
         //      orderDetail: information of products in order
         const userInfo = await orderModel.getUserInfo(userID);
-        console.log(userInfo);
         const orderInfo = await orderModel.getOrderInfo(orderID);
+        console.log(orderInfo);
         const orderDetail = await orderModel.getOrderDetail(orderID);
-        console.log(orderDetail);
         res.render("home",{ layout: "orderdetails", orderInfo: orderInfo, userInfo: userInfo, orderDetail: orderDetail})
         // res.json({orderInfo: orderInfo, userInfo: userInfo, orderDetail: orderDetail});
     },
@@ -23,4 +22,11 @@ module.exports = {
         // console.log(orderDetail); 
         res.render("home",{ layout: "orderdetails", orderInfo: orderInfo, userInfo: userInfo, orderDetail: orderDetail})
     }, 
+    StatusUpdate: async(req,res)=>{
+        const OrderID = req.query.id;
+        const Status = req.query.status;
+        const result = await orderModel.updateStatus(OrderID,Status);
+        // console.log(orderDetail); 
+        res.json({});
+    },
 }

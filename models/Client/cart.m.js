@@ -17,7 +17,7 @@ module.exports = {
        
     },
     getUserInfo: async (userID) => {
-        return (await userDB.findUserByID(userID)).name;
+        return (await userDB.findUserByID(userID)).username;
     },
     getCartInfo: async (userID) => {
         const result = [];
@@ -61,14 +61,17 @@ module.exports = {
     checkoutCart: async (userID) => {
         const cart = await cartDB.getCartByUser(userID);
         let checkQuantity = true;
+        let message = `Storage: Insufficient inventory. `;
+
         for (i of cart) {
             const product = await productDB.getProductByID(i.productId);
             if (product.quantity < i.quantity) {
 
                 checkQuantity = false;
-                // error here 
-                break
-              
+                // // error here 
+                // break
+                message = message + `\n  The remaining quantity of product ${product.name} is ${product.quantity} items`
+                //break;
             }
         }
         if (checkQuantity) {
@@ -78,11 +81,14 @@ module.exports = {
                 let subtract = await productDB.subProductInventoryQuantity(i.productId, i.quantity);
                 let remove = await cartDB.removeCartItem(userID,i.productId);
             }
-            return OrderID;
+            //return OrderID;
+            return {message:"checkout success!", OrderID: OrderID}; 
         }
         else{
             // error handle
-            return undefined;
+            //return undefined;
+            return {message:message, OrderID: "-1"};
+
         }
     }
 }

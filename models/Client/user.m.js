@@ -10,10 +10,8 @@ module.exports = {
         let result = AllOrder;
         for (i of result)
         {
-            console.log(i);
             i.TotalAmount =  await orderDB.calculateTotal(i.id);
         }
-        console.log(result);
         return result;
     },
     getUserByID: async(id)=>{

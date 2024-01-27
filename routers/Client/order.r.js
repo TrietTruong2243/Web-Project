@@ -5,7 +5,7 @@ const mws = require("../../mws/Client/middlewareController")
 const orderControl = require("../../controllers/Client/order.c");
 const { check } = require('express-validator');
 router.use(app.static(__dirname+'/../public'));
-
 router.get("/getorderdetail",mws.verifyToken, orderControl.getOrderDetail);
 router.get("/orderdetail",mws.verifyToken, orderControl.OrderDetail);
+router.get("/updatestatus",mws.verifyToken, orderControl.StatusUpdate);
 module.exports = router;

@@ -18,7 +18,7 @@ module.exports = {
 
     getUserInfo: async(userID)=>{
         const user = await userDB.findUserByID(userID);
-        //const data = { Name: user.CustomerName, Email: user.Email, Address: user.HomeAddress, PhoneNumber: user.PhoneNumber };
+        const data = { name: user.fullname, email: user.email, address: user.address, phone: user.phone };
         return data;
     },
     getOrderInfo: async( orderID )=>{
@@ -30,8 +30,8 @@ module.exports = {
         let cancel = false;
         if(order.status === "cancelled") cancel =true;
         if(order.status === "refunded") refund = true;
-        if(order.status === "Wait" || order.status === "Processing" || order.status === "pending"|| order.status === "confirmed"|| order.status === "unpaid") check = false;
-        const data = { OrderID: order.OrderID, Date: formatDate(order.OrderDate), Total: order.TotalAmount, Status: order.status, Check: check, Cancel: cancel, Refund: refund};
+        if(order.status === "Wait" || order.status === "Processing" || order.status === "pending"|| order.status === "unpaid") check = false;  
+        const data = { OrderID: order.id, Date: formatDate(order.createdAt), Total: order.TotalAmount, Status: order.status, Check: check, Cancel: cancel, Refund: refund};
         return data; 
     },
     getOrderDetail: async( orderID )=>{
@@ -59,4 +59,8 @@ module.exports = {
         return total;
 
     },
+    updateStatus: async (OrderID,Status) => {
+        let result = await orderDB.updateStatus(OrderID,Status);
+        return result;
+    }
 }

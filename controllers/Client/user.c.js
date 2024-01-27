@@ -302,7 +302,6 @@ module.exports = {
     accountorders: async (req, res) => {
         const id = req.user.id;
         const orders = await userModel.getAllOrderOfUser(id);
-        console.log(orders);
         res.json({orders: orders});
     },
     changeUserInfo: async (req, res) => {

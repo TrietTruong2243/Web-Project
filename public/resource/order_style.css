@@ -11895,8 +11895,16 @@ h5,
   color: #cfa00c;
 }
 
-.table tbody td.status .shipping:after {
+.table tbody td.status .confirmed:after {
   background: #f2be1d;
+}
+.table tbody td.status .shipping {
+  background: #91e5f2;
+  color: #06aac4;
+}
+
+.table tbody td.status .shipping:after {
+  background: #06aac4;
 }
 
 

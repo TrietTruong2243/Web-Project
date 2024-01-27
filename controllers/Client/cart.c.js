@@ -18,6 +18,7 @@ module.exports = {
     getCartInfo: async(req,res)=>{
         const userID = req.user.id;
         const userinfo = await model.getUserInfo(userID);
+        console.log(userinfo);
         const cartInfo = await model.getCartInfo(userID);
         res.json({cartInfo: cartInfo, userName: userinfo});
     },
@@ -37,8 +38,8 @@ module.exports = {
     checkoutCart: async(req,res)=>{
         const userID = req.user.id;
         const checkout = await model.checkoutCart(userID);
-      
-        const url = "http://localhost:3000/order/getorderdetail?OrderID=" + checkout;
-        res.redirect(url);
+        res.json({checkout: checkout});
+        // const url = "http://localhost:3000/order/getorderdetail?OrderID=" + checkout;
+        // res.redirect(url);
     }
 }
