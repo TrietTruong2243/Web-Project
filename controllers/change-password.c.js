@@ -11,6 +11,7 @@ exports.postChangePassword = async (req, res) => {
 	const { id } = req.user;
 
 	try {
+
 		const account = await Account.findByPk(id, {
 			raw: true,
 			attributes: ['password'],
@@ -20,14 +21,34 @@ exports.postChangePassword = async (req, res) => {
 			throw new Error('account does not exists');
 		}
 
-		const isCorrectPwd = await bcrypt.compare(oldPassword, account.password);
+		let isCorrectPwd = true;
+		if(account.password){
+			isCorrectPwd = await bcrypt.compare(oldPassword, account.password);
+		}
+		else{
+			////debug
+			// console.log("create password for new account");
+		}
+		//123456aA@
+		// console.log(isCorrectPwd)
 		if (!isCorrectPwd) {
+			if(oldPassword === ''){
+				return res.render('home', {
+					layout: "ChangePassword",
+					msg: 'Hãy nhập mật khẩu!',
+				});
+			}
 			return res.render('home', {
 				layout: "ChangePassword",
 				msg: 'Mật khẩu hiện tại không chính xác',
 			});
 		}
-
+		if (oldPassword === newPassword) {
+			return res.render('home', {
+				layout: "ChangePassword",
+				msg: 'Mật khẩu mới không được trùng với mật khẩu cũ',
+			});
+		}
 		const newHashPwd = await bcrypt.hash(newPassword, 10);
 		const affectedRows = await Account.update(
 			{ password: newHashPwd },
@@ -35,8 +56,10 @@ exports.postChangePassword = async (req, res) => {
 		);
 
 		if (affectedRows) {
-			req.logout();
-			res.redirect('/auth/login');
+			req.logout(()=>{});
+			res.render('home',{
+				layout: "login",
+			 	msg: "Đổi mật khẩu thành công"});
 		}
 	} catch (error) {
 		console.error('Function putChangePassword Error: ', error);

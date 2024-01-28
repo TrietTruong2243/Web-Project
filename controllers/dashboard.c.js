@@ -5,7 +5,7 @@ const Account = db.Account;
 exports.getDashboardPage = async (req, res) => {
 	const { userId } = req.user;
 	let { putMoneyStatus = null } = req.session;
-	console.log(putMoneyStatus);
+	// console.log(putMoneyStatus);
 	if (putMoneyStatus) {
 		req.session.putMoneyStatus = null;
 	}
