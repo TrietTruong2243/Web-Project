@@ -1,11 +1,11 @@
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    {{!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> --}}
+{{!--
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> --}}
 
 
 <style>
-    
     .btn-link {
         border: none;
         outline: none;
@@ -16,6 +16,9 @@
         text-decoration: underline;
         font-family: inherit;
         font-size: inherit;
+    }
+    .showhide, .showhide:hover{
+        color:#333
     }
 </style>
 
@@ -35,16 +38,16 @@
                                 <form class="mx-1 mx-md-4" action="/auth/signin" method="post">
                                     <div class="d-flex flex-row align-items-center mb-4">
 
-                                         <h2 style="color:red; font: size 20px;" id ="err"> {{loginErr}}
-                                            </h2> 
+                                        <h2 style="color:red; font: size 20px;" id="err"> {{loginErr}}
+                                        </h2>
                                     </div>
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         {{!-- <i class="fas fa-user fa-lg me-3 fa-fw"></i> --}}
                                         <div class="form-outline flex-fill mb-0">
                                             <label class="form-label text-left" for="form3Example1c">Username</label>
 
-                                            <input type="text" id="form3Example1c" class="form-control"
-                                                name="username" required/>
+                                            <input type="text" id="form3Example1c" class="form-control" name="username"
+                                                required />
                                         </div>
                                     </div>
 
@@ -54,42 +57,27 @@
                                         {{!-- <i class="fas fa-lock fa-lg me-3 fa-fw"></i> --}}
                                         <div class="form-outline flex-fill mb-0">
                                             <label class="form-label text-left" for="form3Example4c">Password</label>
+                                            <div class="input-group" id="show_hide_password">
+                                                <input type="password" id="form3Example4c" class="form-control"
+                                                    name="password" required />
+                                                {{!-- <a class="showhide"href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a> --}}
+                                            </div>
 
-                                            <input type="password" id="form3Example4c" class="form-control"
-                                                name="password"  required/>
                                         </div>
                                     </div>
-
-
-                                    <!-- <div class="col d-flex justify-content-center">
-                                            Checkbox
-                                            <div class="form-check">
-                                                <input class="form-check-input" name="remember" type="checkbox"
-                                                    id="form2Example31" checked="true" />
-                                                <label class="form-check-label" for="form2Example31"> Remember me
-                                                </label>
-                                            </div>
-                                        </div> -->
 
 
                                     <!-- Submit button -->
                                     <button type="submit" class="btn btn-dark btn-lg btn-block mb-1 mt-4">Sign
                                         in</button>
-                                    <div class="text-center"><a href="/auth/forgotpassword">Forgot your password?</a></div>
-                                    {{!-- <button class="btn btn-lg btn-block btn-primary mb-4 mt-4"
-                                        style="background-color: #3b5998;" type="submit"><i
-                                            class="fab fa-facebook-f me-2"></i>Sign in with facebook</button> --}}
-                                            <button class="btn btn-lg btn-block btn-primary mb-4 mt-4" style="background-color: #dd4b39;"
-              type="button" onclick = "window.location.href='/auth/google'"><i class="fab fa-google me-2"></i> Sign in with google</button>
-                                    <!-- Register buttons -->
-                                    {{!-- <div class="text-center">
-                                        <!-- <p>Not a member? <a href="/toRegister">Register</a></p> -->
+                                    {{!-- <div class="text-center"><a href="/auth/forgotpassword">Forgot your
+                                            password?</a></div> --}}
 
-                                        <button type="button" class="btn btn-link btn-floating mx-1">
-                                            <i class="fab fa-facebook-f"></i>
-                                        </button>
+                                    <button class="btn btn-lg btn-block btn-primary mb-4 mt-4"
+                                        style="background-color: #dd4b39;" type="button"
+                                        onclick="window.location.href='/auth/google'"><i class="fab fa-google me-2"></i>
+                                        Sign in with google</button>
 
-                                    </div> --}}
 
                                 </form>
 
@@ -109,19 +97,22 @@
                                         </ul>
                                     </div>
 
-                                    <button type="button" onclick="window.location.href='/auth/signup'"class="btn btn-dark btn-block mb-4">Create Account</button>
+                                    <button type="button" onclick="window.location.href='/auth/signup'"
+                                        class="btn btn-dark btn-block mb-4">Create Account</button>
 
-                                {{!-- </div> --}}
+                                    {{!--
+                                </div> --}}
 
                             </div>
                         </div>
 
                     </div>
+                    {{!--
+                </div> --}}
                 {{!-- </div> --}}
-            {{!-- </div> --}}
-        {{!-- </div>
+            {{!-- </div>
     </div>
-    
+
 </section> --}}
 
 <!-- Optional JavaScript -->
@@ -130,26 +121,24 @@
     $(document).ready(function () {
         $("#signin").on('submit', function (e) {
             e.preventDefault();
-                const formData = $(this).serialize();
-        
-                $.ajax({
-                    type: 'POST',
-                    url: '/auth/signin',
-                    data: formData,
-                    //dataType: 'string',
-                    success: function(response){
-                        $("#err").text(response)
-                    },
-                    error: function (err) {
-                        alert("looix")
+            const formData = $(this).serialize();
 
-                    }
-                })
+            $.ajax({
+                type: 'POST',
+                url: '/auth/signin',
+                data: formData,
+                //dataType: 'string',
+                success: function (response) {
+                    $("#err").text(response)
+                },
+                error: function (err) {
+                    alert("looix")
+
+                }
+            })
         })
 
     });
 
 </script>
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
-

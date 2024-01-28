@@ -6,6 +6,9 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING(20),
             defaultValue: 'pending'
         },
+        transactionCode: {
+            type: DataTypes.STRING(15)
+        },
     });
 
     return Order;

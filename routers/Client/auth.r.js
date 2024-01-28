@@ -79,8 +79,8 @@ let validateRegisterUser = () => {
         check('phone_number', 'Phonenumber must not empty!').not().isEmpty(),
 
         check('home_address', 'Address must not empty!').not().isEmpty(),
-        check('password', 'Password must have at least 1 uppercase, 1 lowercase and 1 special characters').matches(
-            /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d@$.!%*#?&]/,
+        check('password', 'Password must have at least 1 uppercase, 1 lowercase, 1 special characters and no spaces!').matches(
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*()_+{}|:";<>,.?/~`])\S{6,}$/,
           ),
           check('password', 'Password lenght must more than 6 characters').isLength({ min: 6 }),
 

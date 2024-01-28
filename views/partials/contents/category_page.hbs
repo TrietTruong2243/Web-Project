@@ -144,6 +144,9 @@
                     <span class="page-link">${allpages[i].value}</span>
                   </li>`
                     }
+                    if (pagesHTML == '') {
+            pagesHTML = '<h4>No products matched! </h4>'
+          }
                     const list = document.getElementById("pages");
                     while (list.hasChildNodes()) {
                       list.removeChild(list.firstChild);
@@ -283,7 +286,7 @@
             }
           }
           if (pagesHTML === '') {
-            pagesHTML = '<h4>Không có sản phẩm phù hợp </h4>'
+            pagesHTML = '<h4>No products matched! </h4>'
           }
           const list = document.getElementById("pages");
           while (list.hasChildNodes()) {
@@ -359,7 +362,7 @@
             }
           }
           if (pagesHTML === '') {
-            pagesHTML = '<h4>Không có sản phẩm phù hợp </h4>'
+            pagesHTML = '<h4>No product matches </h4>'
           }
           const list = document.getElementById("pages");
           while (list.hasChildNodes()) {
