@@ -1,7 +1,6 @@
 $(document).ready(function () {
 	$('#loginForm').submit(function (e) {
 		e.preventDefault();
-
 		const submitBtn = $('#submitBtn');
 		const username = $('#username').val()?.trim();
 		const password = $('#password').val()?.trim();
@@ -10,7 +9,7 @@ $(document).ready(function () {
 		}
 
 		if (!password) {
-			$('#password').val('0');
+			$('#password').val("%@^*F@#$%Gfa4vq");
 		}
 
 		submitBtn.addClass('disabled');

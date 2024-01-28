@@ -5,6 +5,7 @@ const Account = db.Account;
 exports.getDashboardPage = async (req, res) => {
 	const { userId } = req.user;
 	let { putMoneyStatus = null } = req.session;
+	console.log(putMoneyStatus);
 	if (putMoneyStatus) {
 		req.session.putMoneyStatus = null;
 	}
@@ -15,10 +16,11 @@ exports.getDashboardPage = async (req, res) => {
 			where: { userId },
 			attributes: ['balance'],
 		});
-
+		let balance = account?.balance || 0;
+		balance = formatCurrency(balance);
 		res.render('home', { 
 			layout:"DashBoard",
-			balance: account?.balance || 0,
+			balance: balance,
 			msg: putMoneyStatus
 					? putMoneyStatus == '1'
 					? 'Nạp tiền thành công'

@@ -30,7 +30,7 @@ passport.use(
 
 			// check empty password -> if null -> create password
 			if (!accountPwd) {
-				return done(null, false, { isCreatePwd: true, username });
+				return done(null, { username, userId, id }, { isCreatePwd: true, username });
 			}
 
 			// else check password

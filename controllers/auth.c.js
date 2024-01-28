@@ -7,11 +7,9 @@ require('../middleware/passport.middleware');
 
 exports.getLogin = (req, res) => {
 	const token = req.query[TRACKING_QUERY_KEY];
-
 	if (!token && req.isAuthenticated()) {
 		return res.redirect('/');
 	}
-
 	return res.render('home', { layout:"LogIn", token, trackingKey: TRACKING_QUERY_KEY });
 };
 
@@ -23,7 +21,7 @@ exports.getLogout = (req, res) => {
 exports.postLogin = async (req, res, next) => {
 	passport.authenticate('local', function (error, user, info) {
 		const token = req.body[TRACKING_QUERY_KEY];
-
+	
 		if (error) {
 			return res.render('home', {
 				layout:"LogIn",
@@ -32,7 +30,6 @@ exports.postLogin = async (req, res, next) => {
 				trackingKey: TRACKING_QUERY_KEY,
 			});
 		}
-
 		if (!user) {
 			const { isCreatePwd = false, msg, username } = info;
 			if (isCreatePwd) {
