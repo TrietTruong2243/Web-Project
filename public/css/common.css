@@ -1,0 +1,149 @@
+/* ----------- Reset ------------- */
+:root {
+	--primary: #ff56a4;
+	--light-gray: #f2f2f2;
+	--field-bg: #e5e5e5;
+	--gray: #888;
+	--dark: #1e1e1e;
+	--transition: all ease-in-out 0.35s;
+	--box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+	--text-color: #1e1e1e;
+}
+
+html,
+body {
+	overflow-x: hidden;
+	box-sizing: border-box;
+	font-family: 'Montserrat', sans-serif;
+	background-color: #f5f7fa;
+}
+
+html {
+	font-size: 100%;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--gray);
+}
+
+a {
+	text-decoration: none !important;
+	color: #fff !important;
+}
+
+.disabled {
+	pointer-events: none;
+}
+
+/* ----------- atomic ------------- */
+.flex-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.flex-center-between {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.center-vertical {
+	display: flex;
+	align-items: center;
+}
+
+.cur-pointer {
+	cursor: pointer;
+}
+
+.text-gray {
+	color: var(--gray);
+}
+
+/* ----------- button ------------- */
+.btn {
+	transition: all 0.35s;
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+	text-transform: capitalize;
+	font-weight: 500;
+}
+
+.btn:hover {
+	-webkit-filter: brightness(0.85);
+	filter: brightness(0.85);
+}
+
+.btn-primary {
+	background-color: var(--primary) !important;
+}
+
+/* ----------- toasts ------------- */
+.toast-msg {
+	z-index: 9999;
+	position: fixed;
+	right: 15px;
+	top: 15px;
+	max-width: 500px;
+	text-align: justify;
+
+	padding: 1.25rem 2.25rem;
+	border-radius: 8px;
+	background-color: #fff;
+	font-size: 1.1rem;
+	font-weight: 500;
+	box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 50px -12px;
+	color: var(--gray-dark);
+	display: none;
+}
+
+.toast-msg.show {
+	display: block;
+	-webkit-animation: toast-ani 0.5s linear forwards;
+	animation: toast-ani 0.5s linear forwards;
+}
+
+.toast-msg.success {
+	background-color: var(--success);
+	color: #fff;
+}
+
+.toast-msg.danger {
+	background-color: var(--danger);
+	color: #fff;
+}
+
+.toast-msg.warning {
+	background-color: var(--warning);
+}
+
+.toast-msg .close-icon {
+	position: absolute;
+	top: 2px;
+	right: 12px;
+	cursor: pointer;
+	color: inherit;
+}
+
+@-webkit-keyframes toast-ani {
+	from {
+		right: -200px;
+	}
+	to {
+		right: 15px;
+	}
+}
+@keyframes toast-ani {
+	from {
+		right: -200px;
+	}
+	to {
+		right: 15px;
+	}
+}

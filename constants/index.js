@@ -1,0 +1,15 @@
+module.exports = {
+	API_AUTH_HEADER: 'payment-token',
+	JWT_CHECKOUT_SUCCESS_KEY: 'JWT_CHECKOUT_SUCCESS',
+	MAX: {
+		SESSION_EXP: 300 * 60 * 1000, // 30 mins
+		FAILED_LOGIN_TIME: 5,
+		CHECKOUT_JWT_EXP: 20 * 60 * 1000, //20 mins
+	},
+	TRACKING_QUERY_KEY: 'fid',
+	PRIVATE_KEY: process.env.PRIVATE_KEY,
+	PAYMENT_TYPES: {
+		PUT_MONEY: 0,
+		SEND_MONEY: 1,
+	},
+};
