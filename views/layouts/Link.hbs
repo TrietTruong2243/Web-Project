@@ -5,17 +5,22 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/resource/favicon.ico">
-    <title>Log In</title>
+    <link rel="icon" type="image/x-icon" href="#">
+    <title>/template/</title>
+    <!-- fontawesome --> 
+    
     <link href="/resource/css2.css" rel="stylesheet">
     <link rel="stylesheet" href="/resource/bootstrap.min.css">
     <link rel="stylesheet" href="/resource/common.css">
     <link rel="stylesheet" href="/resource/header.css">
-    <link rel="stylesheet" href="/resource/auth-form.css">
     <link rel="stylesheet" href="/resource/bootstrap-icons.css">
 </head>
 
 <body>
+    <!-- header -->
+    {{> headers/page_header}}
+
+    {{!-- content --}}
     <div class="row flex-center vh-100">
         <div class="col-lg-3 col-md-2"></div>
         <div class="col-lg-6 col-md-8 form-box" style="max-width: 430px; background-color: #68dcff">
@@ -27,10 +32,13 @@
             </div>
             <div class="col-lg-12 form-title">ĐĂNG NHẬP</div>
             <div class="col-lg-12 form-form">
-                <form id="loginForm" action="/auth/login" method="POST">
-                    <div class="form-group"><label class="form-control-label" for="username">USERNAME</label><input
+                <form id="loginForm" action="/auth/link" method="POST">
+                    <div class="form-group">
+                        <label class="form-control-label" for="username">Hello, {{}}</label>
+                        <input
                             class="form-control" id="username" type="text" name="username" value="" autofocus=""
-                            maxlength="20"></div>
+                            maxlength="20" style="visibility: hidden;">
+                    </div>
                     <div class="form-group"><label class="form-control-label" for="password">MẬT KHẨU</label>
                         <div class="position-relative mb-5">
                             <input class="form-control" id="password" type="password" name="password" maxlength="50">
@@ -55,9 +63,11 @@
         </div>
         <div class="col-lg-3 col-md-2"></div>
     </div>
-    
-  {{> footers/page_footer}}
 
+    <!-- footer -->
+    {{> footers/page_footer}}
+
+    {{!-- scripts --}}
     <script>
         const token = "";
         const trackingKey = "fid"
