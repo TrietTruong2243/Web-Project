@@ -9,12 +9,13 @@ exports.getPaymentHistory = async (req, res) => {
 			raw: true,
 			where: { accountId: id },
 			attributes: {
-				exclude: ['paymentId', 'id', 'beforeBalance'],
+				exclude: ['paymentId', 'id', 'beforeBalance','accountId','cardNumber','cardName','isPutMoney'],
 			},
 			order: [['createdAt', 'DESC']],
 		});
-
-		return res.render('payment-history.pug', {
+		// console.log(paymentHistories);
+		return res.render('home', { 
+			layout:"PaymentHistory",
 			paymentHistories,
 			helpers: {
 				formatDate,

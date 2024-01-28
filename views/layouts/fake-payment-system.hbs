@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="#">
+    <title>Nạp tiền</title>
+    <!-- fontawesome -->
+    <link href="/resource/css2.css" rel="stylesheet">
+    <link rel="stylesheet" href="/resource/bootstrap.min.css">
+    <link rel="stylesheet" href="/resource/common.css">
+    <link rel="stylesheet" href="/resource/header.css">
+    <link rel="stylesheet" href="/resource/bootstrap-icons.css">
+    <link rel="stylesheet" href="/resource/fake-payment-checkout.css">
+</head>
+
+<body>
+    <!-- header -->
+    {{> headers/page_header}}
+
+    {{!-- content --}}
+    <div class="content">
+        <div class="container my-5">
+            <div class="box mx-auto pt-3 pb-5 px-4">
+                <div class="header mb-3">
+                    <img src="/resource/logo.png" style="background-color: aqua;" alt="">
+                </div>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Mã giao dịch</th>
+                            <th scope="col">Tổng tiền</th>
+                            <th scope="col">Phí giao dịch</th>
+                            <th scope="col">Nội dung</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-light">
+                            <td>{{transactionCode}}</td>
+                            <td>{{totalMoney}}</td>
+                            <td>{{transactionFee}}</td>
+                            <td>{{transactionContent}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="box-container">
+                    <h1 class="title text-center mb-3">Thanh toán Online bằng thẻ ATM/ Internet Banking</h1>
+                    <div class="flex-center mb-4">
+                        <img class="bank-logo mr-3" src={{ bankLogo }} alt="Photo">
+                        <span class="bank-name text-center">{{bankName}}</span>
+                    </div>
+                    <form id="paymentForm" action="/fake-payment-system/checkout" method="POST">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label" for="cardNumber">Số thẻ ATM <span
+                                    class="required">*</span></label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="cardNumber" type="text" name="cardNumber" autofocus
+                                    required minlength="8" maxlength="19">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label" for="cardAuthor">Tên chủ thẻ <span
+                                    class="required">*</span></label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="cardAuthor" type="text" name="cardAuthor" required
+                                    style="text-transform: uppercase" maxlength="50">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label" for="month">Ngày hết hạn <span
+                                    class="required">*</span></label>
+                            <div class="col-sm-4 mb-3 mb-sm-0">
+                                <select class="form-control" id="monthExp" name="monthExp" required>
+                                    <option value="" hidden selected disabled>Tháng</option>
+
+                                    <option value="1">Tháng 1</option>
+                                    <option value="2">Tháng 2</option>
+                                    <option value="3">Tháng 3</option>
+                                    <option value="4">Tháng 4</option>
+                                    <option value="5">Tháng 5</option>
+                                    <option value="6">Tháng 6</option>
+                                    <option value="7">Tháng 7</option>
+                                    <option value="8">Tháng 8</option>
+                                    <option value="9">Tháng 9</option>
+                                    <option value="10">Tháng 10</option>
+                                    <option value="11">Tháng 11</option>
+                                    <option value="12">Tháng 12</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <select class="form-control" id="yearExp" name="yearExp" required>
+                                    <option value="" hidden selected disabled>Năm</option>
+                                    <option value="2024">Năm 2024</option>
+                                    <option value="2025">Năm 2025</option>
+                                    <option value="2026">Năm 2026</option>
+                                    <option value="2027">Năm 2027</option>
+                                    <option value="2028">Năm 2028</option>
+                                    <option value="2029">Năm 2029</option>
+                                    <option value="2030">Năm 2030</option>
+                                    <option value="2031">Năm 2031</option>
+                                    <option value="2032">Năm 2032</option>
+                                    <option value="2033">Năm 2033</option>
+                                    <option value="2034">Năm 2034</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label" for="captcha">Mã bảo mật <span
+                                    class="required">*</span></label>
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input class="form-control" id="captcha" type="text" name="captcha" required>
+                            </div>
+                            <div class="col-sm-2">
+                                <img class="captcha-img" src="/resource/captcha.png" alt="Captcha">
+                            </div>
+                            <div class="col-sm-4">
+                                <p class="col-sm-8 captcha-msg">(Xác nhận Captcha để tiến hành thanh toán)</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-5 mb-3 mb-sm-0">
+                                <button class="btn btn-info w-100" id="paymentSubmitBtn" type="submit">Thanh
+                                    toán</button>
+                            </div>
+                            <div class="col-sm-3">
+                                <button class="btn btn-secondary w-100" id="cancelPaymentBtn" type="button">Huỷ
+                                    bỏ</button>
+                            </div>
+                        </div>
+                        <div class="d-none">
+                            <input type="text" name="transactionCode" value="{{transactionCode}}">
+                            <input type="text" name="token" value="{{token}}">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- footer -->
+    {{> footers/page_footer}}
+
+    {{!-- scripts --}}
+    <script src="/resource/fake-payment-checkout.js"></script>
+</body>
+
+</html>

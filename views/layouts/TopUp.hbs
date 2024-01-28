@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="#">
+    <title>Nạp tiền</title>
+    <!-- fontawesome -->
+    <link href="/resource/css2.css" rel="stylesheet">
+    <link rel="stylesheet" href="/resource/bootstrap.min.css">
+    <link rel="stylesheet" href="/resource/common.css">
+    <link rel="stylesheet" href="/resource/header.css">
+    <link rel="stylesheet" href="/resource/put-money.css">
+    <link rel="stylesheet" href="/resource/bootstrap-icons.css">
+</head>
+
+<body>
+    <!-- header -->
+    {{> headers/page_header}}
+
+    {{!-- content --}}
+    <div class="toast-msg" id="toastMsg"></div>
+    <div class="container my-4">
+        <div class="box py-4 px-5">
+            <h1 class="title text-center mb-3">Nạp tiền vào tài khoản</h1>
+            <h2 class="sub-title text-center">Thanh toán bằng thẻ ngân hàng nội địa (thẻ ATM Online)</h2>
+            <ul class="bank-list" id="bankList">
+                {{#each bankList}}
+                {{#with this}}
+                <li class="bank-item">
+                    <label for={{code}}>
+                        <img src={{logoUrl}} alt={{code}} title={{name}}>
+                    </label>
+                    <input type="radio" name="bank" value={{code}} id={{code}}>
+                </li>
+                {{/with}}
+                {{/each}}
+            </ul>
+
+            <div class="mb-3">
+                <label class="text-gray" for="totalMoney">Số tiền cần nạp (tối thiểu 10.000đ, tối đa
+                    100.000.000đ)</label>
+                <input id="totalMoney" class="form-control" type="number" placeholder="Nhập số tiền cần nạp" min="10000"
+                    max="10000000">
+            </div>
+
+
+            <div class="text-center mt-3">
+                <button class="btn btn-primary payment-btn" id="paymentBtn">
+                    Tiến hành thanh toán&nbsp;&nbsp;
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-fill" viewBox="0 0 16 16">
+                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1H0zm0 3v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7zm3 2h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    
+
+
+    </div>
+
+    <!-- footer -->
+    {{> footers/page_footer}}
+
+    {{!-- scripts --}}
+    <script>
+        const token = "{{token}}";
+    </script>
+    <script src="/resource/put-money.js"> </script>
+</body>
+
+</html>

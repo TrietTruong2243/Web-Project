@@ -7,31 +7,29 @@ require('../middleware/passport.middleware');
 
 exports.getLogin = (req, res) => {
 	const token = req.query[TRACKING_QUERY_KEY];
-
 	if (!token && req.isAuthenticated()) {
 		return res.redirect('/');
 	}
-
-	return res.render('login.pug', { token, trackingKey: TRACKING_QUERY_KEY });
+	return res.render('home', { layout:"LogIn", token, trackingKey: TRACKING_QUERY_KEY });
 };
 
 exports.getLogout = (req, res) => {
-	req.logout();
+	req.logout(()=>{});
 	return res.redirect('/auth/login');
 };
 
 exports.postLogin = async (req, res, next) => {
 	passport.authenticate('local', function (error, user, info) {
 		const token = req.body[TRACKING_QUERY_KEY];
-
+	
 		if (error) {
-			return res.render('login.pug', {
+			return res.render('home', {
+				layout:"LogIn",
 				msg: 'Đăng nhập thất bại, thử lại !',
 				token,
 				trackingKey: TRACKING_QUERY_KEY,
 			});
 		}
-
 		if (!user) {
 			const { isCreatePwd = false, msg, username } = info;
 			if (isCreatePwd) {
@@ -42,11 +40,12 @@ exports.postLogin = async (req, res, next) => {
 				});
 			}
 
-			return res.render('login.pug', {
+			return res.render('home', {
+				layout:"LogIn",
 				msg,
 				username,
 				token,
-				trackingKey: TRACKING_QUERY_KEY,
+				trackingKey: TRACKING_QUERY_KEY, 
 			});
 		}
 

@@ -26,6 +26,6 @@ $(document).ready(function () {
 	});
 
 	$('#cancelPaymentBtn').click(() => {
-		location.href = '/put-money';
+		location.href = '/top-up';
 	});
 });

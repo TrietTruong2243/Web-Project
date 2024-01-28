@@ -30,7 +30,7 @@ passport.use(
 
 			// check empty password -> if null -> create password
 			if (!accountPwd) {
-				return done(null, false, { isCreatePwd: true, username });
+				return done(null, { username, userId, id }, { isCreatePwd: true, username });
 			}
 
 			// else check password
@@ -70,7 +70,7 @@ passport.deserializeUser(async function (user, done) {
 
 		return done(null, false);
 	} catch (error) {
-		console.log('PASSPORT DESERIALIZE ERROR: ', error);
+		// console.log('PASSPORT DESERIALIZE ERROR: ', error);
 		done(error, false);
 	}
 });
