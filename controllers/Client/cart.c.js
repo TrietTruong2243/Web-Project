@@ -8,11 +8,11 @@ module.exports = {
         const addtoCart = await model.addProductToUserCart(req.user.id, req.body.id);
         if (addtoCart)
         {
-            res.json("Thêm vào giỏ hàng thành công")
+            res.json("Add to cart success!")
 
         }
         else{
-            res.json("Sản phẩm đã tồn tại trong giỏ hàng")
+            res.json("The product already exists in the shopping cart!")
         }
     },
     getCartInfo: async(req,res)=>{

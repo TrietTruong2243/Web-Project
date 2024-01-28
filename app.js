@@ -8,22 +8,12 @@ const app1= express();
 const port=3000;
 const bodyParser = require('body-parser');
 var path = require('path');
-// const appRouter = require("./routers/Client/app.r");
-// const authRouter = require("./routers/Client/auth.r")
-// const userRouter = require("./routers/Client/user.r")
-// const cartRouter =require("./routers/Client/cart.r")
-// const orderRouter =require("./routers/Client/order.r")
-// const adminRouter = require("./routers/Server/index")
 const flash = require('express-flash');
 const cookieParser = require("cookie-parser"); 
-
-
 const session = require('express-session');
 const { engine } = require('express-handlebars');
 const helpers = require('handlebars-helpers');
 const methodOverride = require('method-override');
-
-
 const CustomError = require('./helpers/customError');
 const PassportMiddleware = require('./middlewares/passport');
 const LocalsMiddleware = require('./middlewares/locals');
@@ -37,9 +27,6 @@ app.use(cors({
     credentials: true
 }));
 app.use(methodOverride('_method'));
-
-
-
 
 // const https = require('https');
 // const secret = 'mysecretkey';
@@ -86,11 +73,5 @@ PassportMiddleware(app)
 app.use(LocalsMiddleware)
 router(app)
 ErrorHandlerMiddleware(app);
-// app.use('/',appRouter);
-// app.use('/auth',authRouter) 
-// app.use("/user", userRouter)
-// app.use("/order", orderRouter)
-// app.use("/cart", cartRouter)
-// app.use("/admin", router )
 app.listen(port,()=> console.log(`Server listening on port ${port}: http://localhost:3000`));
 

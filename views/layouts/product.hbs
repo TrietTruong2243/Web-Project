@@ -75,6 +75,9 @@
             right: 20px;
             bottom: 90px;
         }
+        html {
+    font-size: 20px;
+} 
     </style>
 
     <title> {{productName1}} </title>
@@ -98,11 +101,11 @@
         <div class="body-inner">
             <div class="body-content">
                 <div class="productEnhanced productEnhanced--full productEnhanced--2021 js-productEnhanced productView loading-pdp-image"
-                    style="background-color: rgb(190, 191, 186);">
+                    style="background-color: rgb(55, 57, 48);">
                     <div>
                         <div class="productEnhanced-hero js-productEnhanced-hero"
-                            style="background-color: rgb(190, 191, 186);">
-                            <div class="container-fluid ">
+                            style="background-color: rgb(135, 149, 150);">
+                            <div class="container">
 
                                 {{!-- <div class="productEnhanced-heroInfo"> --}}
                                     <form id="addtocartform" class="form">
@@ -128,14 +131,14 @@
                                             </div>
 
                                         </div>
-                                        <h1 class="productView-title h2">
-                                            <span class="desktop-title">{{product.name}}</span>
+                                        <h1 class="productView-title h1">
+                                           {{product.name}}
                                         </h1>
 
-                                        <h3 class="price-section price-section--withoutTax">
+                                        {{!-- <h3 class="price-section price-section--withoutTax">
                                             <span data-product-price-without-tax="" class="price price--withoutTax">Giá:
                                                 {{product.price}} đ</span>
-                                        </h3>
+                                        </h3> --}}
 
 
                                 </div>
@@ -152,7 +155,7 @@
 
                                 <section
                                     class="productIcons productEnhanced-at-a-glance js-productEnhanced-at-a-glance  hide-on-image-loading">
-                                    <div class="productIcons-contents container container-fluid">
+                                    <div class="productIcons-contents container container">
                                         <div class="">
                                             <div class="productIcons-list">
                                                 <div class="productIcon">
@@ -170,20 +173,20 @@
                                                     <span class="productIcon-title">Số lượng:
                                                         {{product.quantity}}</span>
                                                 </div>
+                                                <div class="productView-addToCartRow container">
+                                                    <div class="form-action productView-addToCartButton">
 
+                                                        <button id="form-action-addToCart"
+                                                            class="product-button--action button button--info js-button--addToCart"
+                                                            type="submit" {{#if isDisabled}} disabled {{/if}}>Add to
+                                                            Cart</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </section>
-                                <div class="productView-addToCartRow">
-                                    <div class="form-action productView-addToCartButton">
 
-                                        <button id="form-action-addToCart"
-                                            class="product-button--action button button--info js-button--addToCart"
-                                            type="submit" {{#if isDisabled}} disabled {{/if}}>Add to
-                                            Cart</button>
-                                    </div>
-                                </div>
                                 </form>
                                 {{!--
                             </div> --}}

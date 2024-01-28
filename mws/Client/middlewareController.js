@@ -13,6 +13,10 @@ const middlewareController = {
                     // res.status(403).json("Token is not valid");
                     res.redirect('/auth/signin')
                 }
+                else if (user.status=='banned'){
+                    res.clearCookie('token');
+                    res.redirect('/')
+                }
                 else{
                     req.user = user;
                     return next();

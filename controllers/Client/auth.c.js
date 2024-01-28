@@ -43,13 +43,13 @@ module.exports = {
             var err;
             switch (addUser) {
                 case -2:
-                    err = "Username đã tồn tại, không thể tạo tài khoản "
+                    err = "Username already exists, cannot create account!"
                     break;
                 case -1:
-                    err = "Email đã tồn tại, không thể tạo tài khoản "
+                    err = "Email already exists, cannot create account!"
                     break;
                 case 0:
-                    err = "Có lỗi, không thể thêm tài khoản "
+                    err = "Error, cannot add account!"
                     break;
                 case 1:
                     break;
@@ -59,7 +59,7 @@ module.exports = {
                 res.json({addErr: err});
 
             }else{
-               res.json("Thêm thành công")
+               res.json("Success")
             }
     
         }
@@ -79,19 +79,19 @@ module.exports = {
             res.cookie('email' , user.email)
             return res.redirect("/auth/addgginfo")
         }        
-        const accessToken = jwt.sign({ id: user.id, isGoogleAccount: user.isGGAcc || false , role: user.role}, process.env.SECRET_KEY, { expiresIn: "1h" });
+        const accessToken = jwt.sign({ id: user.id, isGoogleAccount: user.isGGAcc || false , role: user.role, status: user.status}, process.env.SECRET_KEY, { expiresIn: "1h" });
         res.cookie('token', accessToken, { httpOnly: false, sameSite: true, maxAge: "3000000" });
         return res.redirect("/")
     },
     googlefailurelogin: async (req, res) => {
-        req.flash('error', "Không thể đăng nhập với google");
+        req.flash('error', "Cannot sign in with google");
         res.redirect("/auth/signin")
     },
     ggSuccessAddInfo: async (req,res)=>{
         const email = req.cookies['email'];
         const user = await model.getUserByEmail(email);
    
-        const accessToken = jwt.sign({ id: user.id, isGoogleAccount: user.isGGAcc || false, role: user.role }, process.env.SECRET_KEY, { expiresIn: "1h" });
+        const accessToken = jwt.sign({ id: user.id, isGoogleAccount: user.isGGAcc || false, role: user.role,status: user.status }, process.env.SECRET_KEY, { expiresIn: "1h" });
         res.cookie('token', accessToken, { httpOnly: false, sameSite: true, maxAge: "3000000" });
         res.clearCookie('email')
         res.redirect('/');

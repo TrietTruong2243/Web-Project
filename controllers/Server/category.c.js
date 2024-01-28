@@ -142,7 +142,7 @@ module.exports = {
             const category = await Category.create({
                 name
             });
-            res.redirect('/category');
+            res.redirect('/admin/category');
         } catch (err) {
             if(err instanceof UniqueConstraintError) {
                 res.render('category/editable-category', {

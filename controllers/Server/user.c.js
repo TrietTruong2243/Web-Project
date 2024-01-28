@@ -200,7 +200,7 @@ module.exports = {
             const id = req.params.id;
             // skip for the super admin
             if (id === '1') {
-                res.redirect('/customer');
+                res.redirect('/admin/customer');
                 return;
             }
             let user = await User.findOne({
@@ -317,6 +317,7 @@ module.exports = {
     handleSingleItem: async (req, res, next) => {
         try {
             const id = req.params.id;
+            console.log(id);
             // skip for the super admin
             if (id === '1') {
                 res.redirect('back');
@@ -368,6 +369,7 @@ module.exports = {
                         id
                     }
                 });
+                console.log(admin);
             }
             res.redirect('back');
         } catch (err) {

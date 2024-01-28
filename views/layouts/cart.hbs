@@ -68,7 +68,11 @@
             right: 20px;
             bottom: 90px;
         }
-       
+       html {
+            background-color: #bebfba;
+            
+            background-size: cover; 
+        }
     </style>
 
     <title> Cart </title>
@@ -144,7 +148,7 @@
                                                     </thead>
                                                     <!-- itmes -->
                                                     <tbody id="allItems">
-                                                        <tr>
+                                                        {{!-- <tr>
                                                             <!-- Image -->
                                                             <td width="90">
                                                                 <div class="cart-product-imitation">
@@ -189,7 +193,7 @@
                                                                     $180,00
                                                                 </h4>
                                                             </td>
-                                                        </tr>
+                                                        </tr> --}}
                                                         {{!-- <tr>
                                                             <!-- Image -->
                                                             <td width="90">
@@ -255,7 +259,7 @@
                                         <!-- total prices -->
                                         <div class="ibox-content">
                                             <h2 class="font-bold" id="totalAmmount">
-                                                $390,00
+                                                {{!-- $390,00 --}}
                                             </h2>
                                         </div>
                                         <!-- buttons -->
@@ -436,7 +440,7 @@
     <script>
         $("body").delegate(".remove_item", "click", function (e) {
             const id = $(this).attr('id').split("-")[1];
-            var answer = confirm("Bạn có muốn xoá sản phẩm này khỏi giỏ hàng?");
+            var answer = confirm("Do you want to remove this product from your shopping cart?");
             if (answer) {
                 $.ajax({
                     type: 'GET',

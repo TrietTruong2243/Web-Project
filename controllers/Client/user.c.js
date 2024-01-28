@@ -7,7 +7,7 @@ module.exports = {
       
         const user = await userModel.getUserByID(id);
         var jsonfile;
-        if (user.IsGGAcc === true) {
+        if (user.isGGAcc === true) {
             jsonfile = `<div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-lg-12 col-xl-11">
@@ -320,13 +320,13 @@ module.exports = {
             const checkEmail = await userModel.findUserEmailToChangeInfo(userID,req.body.email_address)
             if (checkEmail==false)
             {
-                return res.json({addErr: "Email đã tồn tại"});
+                return res.json({addErr: "Email already exists!"});
 
             }
             const checkUsername = await userModel.findUserNameToChangeInfo(userID,req.body.username)
             if (checkUsername==false)
             {
-                return res.json({addErr: "Username đã tồn tại"});
+                return res.json({addErr: "Username already exists!"});
 
             }
             const changeUserInfo = await userModel.changeUserInfo(userID, req.body);
@@ -335,7 +335,7 @@ module.exports = {
               
                 
                 case 0:
-                    err = "Có lỗi, không thể chỉnh sửa thông tin"
+                    err = "There was an error, the information cannot be edited!"
                     break;
                 case 1:
                     break;
@@ -345,7 +345,7 @@ module.exports = {
                 res.json({addErr: err});
 
             }else{
-                res.json({success: "Chỉnh sửa thông tin thành công"})
+                res.json({success: "Edited information successfully!"})
             }
             
     
@@ -364,11 +364,11 @@ module.exports = {
             var err;
             switch (changeUserInfo) {
                 case -1:
-                    err = "Mật khẩu hiện tại không khớp với mật khẩu cũ"
+                    err = "The current password does not match the old password!"
                     break;
 
                 case 0:
-                    err = "Có lỗi, không thể thay đổi mật khẩu"
+                    err = "Error, cannot change password!"
                     break;
                 case 1:
                     break;
@@ -377,7 +377,7 @@ module.exports = {
                 res.json({ addErr: err });
 
             } else {
-                res.json({ success: "Thay đổi mật khẩu thành công" })
+                res.json({ success: "Password change successful!" })
             }
         }
     },
@@ -394,7 +394,7 @@ module.exports = {
             const checkUsername = await userModel.findUserNameToChangeInfo(userID,req.body.username)
             if (checkUsername==false)
             {
-                return res.json({addErr: "Username đã tồn tại, không thể thay đổi!"});
+                return res.json({addErr: "Username already exists, cannot be changed!"});
 
             }
             const changeUserInfo = await userModel.changeGGUserInfo(userID, req.body);
@@ -404,7 +404,7 @@ module.exports = {
             switch (changeUserInfo) {
                 
                 case 0:
-                    err = "Có lỗi, không thể chỉnh sửa thông tin"
+                    err = "There was an error, the information cannot be edited!"
                     break;
                 case 1:
                     break;
@@ -414,7 +414,7 @@ module.exports = {
                 res.json({addErr: err});
 
             }else{
-                res.json({success: "Chỉnh sửa thông tin thành công"})
+                res.json({success: "Edited information successfully!"})
             }
     
         }
@@ -434,7 +434,7 @@ module.exports = {
             const checkUsername = await userModel.findUserNameToChangeInfo(userID,req.body.username)
             if (checkUsername==false)
             {
-                return res.json({addErr: "Username đã tồn tại, không thể thêm vào"});
+                return res.json({addErr: "Username already exists, cannot be added!"});
 
             }
             const changeUserInfo = await userModel.changeGGUserInfo(userID, req.body);
@@ -444,7 +444,7 @@ module.exports = {
             switch (changeUserInfo) {
                 
                 case 0:
-                    err = "Có lỗi, không thể chỉnh sửa thông tin"
+                    err = "There was an error, the information cannot be edited!"
                     break;
                 case 1:
                     break;
@@ -454,7 +454,7 @@ module.exports = {
                 res.json({addErr: err});
 
             }else{
-                res.json({success: "Thêm thông tin thành công"})
+                res.json({success: "Added information successfully!"})
             }
     
         }

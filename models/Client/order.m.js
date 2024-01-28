@@ -40,13 +40,19 @@ module.exports = {
         for (i of order)
         {
             let res = await productDB.getProductByID(i.productId);
-            const image = await imageDB.getImageByImageID(res.mainImageId);
-            if (image)
+            if (res.mainImageId)
             {
-                res.image = image.url
+                const image = await imageDB.getImageByImageID(res.mainImageId);
+                if (image)
+                {
+                    res.image = image.url
+                }
+                else{
+                    res.image = "https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_640.png"
+                }
             }
             else{
-                res.image = "https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_640.png"
+                res.image =  "https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_640.png"
             }
             res.quantity = i.quantity;   
             // console.log(res); 
