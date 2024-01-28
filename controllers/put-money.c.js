@@ -14,7 +14,8 @@ const PaymentHistory = db.PaymentHistory;
 exports.getPutMoneyPage = (req, res) => {
 	const token = req.query[TRACKING_QUERY_KEY];
 
-	return res.render('put-money.pug', {
+	return res.render("home", {
+		layout: "TopUp" ,
 		bankList: BANK_LIST,
 		token,
 	});

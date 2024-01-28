@@ -14,7 +14,8 @@ exports.getPaymentHistory = async (req, res) => {
 			order: [['createdAt', 'DESC']],
 		});
 
-		return res.render('payment-history.pug', {
+		return res.render('home', {
+			layout:"PaymentHistory",
 			paymentHistories,
 			helpers: {
 				formatDate,

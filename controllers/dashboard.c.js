@@ -16,7 +16,8 @@ exports.getDashboardPage = async (req, res) => {
 			attributes: ['balance'],
 		});
 
-		res.render('dashboard.pug', {
+		res.render('home', { 
+			layout:"DashBoard",
 			balance: account?.balance || 0,
 			msg: putMoneyStatus
 					? putMoneyStatus == '1'

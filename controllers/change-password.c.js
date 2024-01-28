@@ -3,7 +3,7 @@ const db = require('../models');
 const Account = db.Account;
 
 exports.getChangePassword = (req, res) => {
-	return res.render('change-password.pug');
+	return res.render("home",{layout:"ChangePassword"});
 };
 
 exports.postChangePassword = async (req, res) => {
@@ -22,7 +22,8 @@ exports.postChangePassword = async (req, res) => {
 
 		const isCorrectPwd = await bcrypt.compare(oldPassword, account.password);
 		if (!isCorrectPwd) {
-			return res.render('change-password', {
+			return res.render('home', {
+				layout: "ChangePassword",
 				msg: 'Mật khẩu hiện tại không chính xác',
 			});
 		}

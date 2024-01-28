@@ -6,7 +6,7 @@ const path = require('path');
 const { MAX } = require('./constants');
 const session = require('express-session');
 const passport = require('passport');
-
+const exphbs=require('express-handlebars'); 
 const db = require('./models');
 // db.sequelize.sync({force: true});
 const Account = db.Account;
@@ -42,7 +42,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // set view engine
-app.set('view engine', 'pug');
+app.engine('hbs',exphbs.engine({
+    extname:'.hbs',
+    defaultLayout:'DashBoard.hbs',
+    layoutsDir:"views/layouts",
+}));
+app.set('view engine','hbs');
 app.set('views', path.join(__dirname, '/views'));
 
 /* ============== Routes =============== */
@@ -53,7 +58,7 @@ app.use('/*', authMiddleware);
 app.use('/dashboard', dashboardRoute);
 app.use('/payment-history', paymentHistoryRoute);
 app.use('/change-password', changePasswordRoute);
-app.use('/put-money', putMoneyRoute);
+app.use('/top-up', putMoneyRoute);
 app.use('/fake-payment-system', fakePaymentSystemRoute);
 app.use('/', (req, res) => res.redirect('/dashboard'));
 // error handler
@@ -73,7 +78,8 @@ db.sequelize.sync({ after: true }).then((_) => {
                 });
             }
         });
-        console.log(`Server is listening on port ${PORT}`);
+        console.log(`Server is listening on port ${PORT}: http://localhost:${process.env.PORT}`);
     });
 });
 
+ 
