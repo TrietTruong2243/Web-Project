@@ -1,11 +1,15 @@
+const { response } = require("express");
 const userModel = require("../../models/Client/user.m")
 var { validationResult } = require('express-validator');
+const cloudinary = require('../../config/cloudinary');
+const toDataUri = require('../../helpers/dataUriConverter');
 
 module.exports = {
     accountsettings: async (req, res) => {
         const id = req.user.id;
-      
+
         const user = await userModel.getUserByID(id);
+    
         var jsonfile;
         if (user.isGGAcc === true) {
             jsonfile = `<div class="container h-100">
@@ -18,15 +22,24 @@ module.exports = {
 
                             <div class="col-md-10 col-lg-6 col-xl-6  order-lg-1">
                             <div class="d-flex flex-row align-items-center mb-4">
-                            <h2 style="color:green; font: size 20px;" id="success">
-                            </h2>
-                            <h2 style="color:red; font: size 20px;" id="err">
-                            </h2>
+                           
                         </div>
 
-
-                                <form class="mx-1 mx-md-4" id = "gguserinfo" method="post">
-
+                        <div >
+                        <form  action="/user/changeimageprofile" method="post" enctype="multipart/form-data">
+                               <h5 class="mt-0"><b>Profile photo</b></h5>
+                               <div class="text-center">
+                                   <img id="previewImage" src="${user.image}" initUrl = "${user.image}"alt="avatar" class="d-block m-auto enlarge-image image-has-modal">
+                                   <input type="file" id="image" name="image" hidden>
+                                   <label class="btn btn-sm mt-2 btn-primary" for="image">Upload</label>
+                                   <button class="btn btn-sm mt-2 btn-danger" id="removeImageBtn">Remove</button>
+                               </div>
+                               <button type="submit"  id="saveImg"
+                               class="btn btn-lg btn-dark btn-block mb-2 m-1">SAVE IMAGE   </button>           
+                         </form>
+                   </div>
+                                <form class="mx-1 mx-md-4" id = "gguserinfo" method="post" enctype="multipart/form-data">
+                                
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
@@ -35,7 +48,7 @@ module.exports = {
 
                                             <input type="text" id="form3Example1c" class="form-control"
                                                 name="email_address" value="${user.email || ""}" readonly />
-                                                <h4 style="color:red" id="email_err"> Không thể sửa email do đây là tài khoản đăng nhập bằng google</h4>
+                                                <h4 style="color:red" id="email_err"> Cannot change email because this is Google Account</h4>
 
                                         </div>
                                     </div>
@@ -86,7 +99,10 @@ module.exports = {
 
                                         </div>
                                     </div>
-
+                                    <h2 style="color:green; font: size 20px;" id="success">
+                                    </h2>
+                                    <h2 style="color:red; font: size 20px;" id="err">
+                                    </h2>
                                     <!-- Submit button -->
                                     <button type="submit"
                                         class="btn btn-lg btn-dark btn-block mb-2 m-1">UPDATE
@@ -131,9 +147,21 @@ module.exports = {
 
                                 <div class="col-md-10 col-lg-6 col-xl-6  order-lg-1">
                                     
-
-                                    <form class="mx-1 mx-md-4" id = "userinfo" method="post">
-
+                                <div >
+                                <form  action="/user/changeimageprofile" method="post" enctype="multipart/form-data">
+                                       <h5 class="mt-0"><b>Profile photo</b></h5>
+                                       <div class="text-center">
+                                           <img id="previewImage" src="${user.image}" initUrl = "${user.image}" alt="avatar" class="d-block m-auto enlarge-image image-has-modal">
+                                           <input type="file" id="image" name="image" hidden>
+                                           <label class="btn btn-sm mt-2 btn-primary" for="image">Upload</label>
+                                           <button class="btn btn-danger btn-sm mt-2" id="removeImageBtn">Remove</button>
+                                       </div>
+                                       <button type="submit" id="saveImg"
+                                       class="btn btn-lg btn-dark btn-block mb-2 m-1" >SAVE IMAGE   </button>           
+                                 </form>
+                           </div>
+                                    <form class="mx-1 mx-md-4" id = "userinfo" method="post" enctype="multipart/form-data">
+                                    
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
@@ -305,50 +333,46 @@ module.exports = {
         console.log(id);
         const orders = await userModel.getAllOrderOfUser(id);
         console.log(orders);
-        res.json({orders: orders});
+        res.json({ orders: orders });
     },
     changeUserInfo: async (req, res) => {
         var err1 = validationResult(req);
-      
+        console.log(req);
         const userID = req.user.id;
-        
-        if (err1.errors.length)
-        {
-            res.json({err: err1.errors})
+
+        if (err1.errors.length) {
+            res.json({ err: err1.errors })
         }
-        else{
-            const checkEmail = await userModel.findUserEmailToChangeInfo(userID,req.body.email_address)
-            if (checkEmail==false)
-            {
-                return res.json({addErr: "Email already exists!"});
+        else {
+            const checkEmail = await userModel.findUserEmailToChangeInfo(userID, req.body.email_address)
+            if (checkEmail == false) {
+                return res.json({ addErr: "Email already exists!" });
 
             }
-            const checkUsername = await userModel.findUserNameToChangeInfo(userID,req.body.username)
-            if (checkUsername==false)
-            {
-                return res.json({addErr: "Username already exists!"});
+            const checkUsername = await userModel.findUserNameToChangeInfo(userID, req.body.username)
+            if (checkUsername == false) {
+                return res.json({ addErr: "Username already exists!" });
 
             }
             const changeUserInfo = await userModel.changeUserInfo(userID, req.body);
             var err;
             switch (changeUserInfo) {
-              
-                
+
+
                 case 0:
                     err = "There was an error, the information cannot be edited!"
                     break;
                 case 1:
                     break;
             }
-            if (err)
-            {
-                res.json({addErr: err});
+            if (err) {
+                res.json({ addErr: err });
 
-            }else{
-                res.json({success: "Edited information successfully!"})
+            } else {
+                res.json({ success: "Edited information successfully!" })
             }
-            
-    
+
+
         }
     },
     changeUserPassword: async (req, res) => {
@@ -383,18 +407,16 @@ module.exports = {
     },
     changeGGUserInfo: async (req, res) => {
         var err1 = validationResult(req);
-        
+        console.log(req);
         const userID = req.user.id;
-     
-        if (err1.errors.length)
-        {
-            res.json({err: err1.errors})
+
+        if (err1.errors.length) {
+            res.json({ err: err1.errors })
         }
-        else{
-            const checkUsername = await userModel.findUserNameToChangeInfo(userID,req.body.username)
-            if (checkUsername==false)
-            {
-                return res.json({addErr: "Username already exists, cannot be changed!"});
+        else {
+            const checkUsername = await userModel.findUserNameToChangeInfo(userID, req.body.username)
+            if (checkUsername == false) {
+                return res.json({ addErr: "Username already exists, cannot be changed!" });
 
             }
             const changeUserInfo = await userModel.changeGGUserInfo(userID, req.body);
@@ -402,21 +424,20 @@ module.exports = {
             // const addUser = await model.addNewUser(req.body);
             var err;
             switch (changeUserInfo) {
-                
+
                 case 0:
                     err = "There was an error, the information cannot be edited!"
                     break;
                 case 1:
                     break;
             }
-            if (err)
-            {
-                res.json({addErr: err});
+            if (err) {
+                res.json({ addErr: err });
 
-            }else{
-                res.json({success: "Edited information successfully!"})
+            } else {
+                res.json({ success: "Edited information successfully!" })
             }
-    
+
         }
 
 
@@ -426,15 +447,13 @@ module.exports = {
         const email = req.cookies['email'];
         const user = await userModel.getUserByEmail(email);
         const userID = user.id;
-        if (err1.errors.length)
-        {
-            res.json({err: err1.errors})
+        if (err1.errors.length) {
+            res.json({ err: err1.errors })
         }
-        else{
-            const checkUsername = await userModel.findUserNameToChangeInfo(userID,req.body.username)
-            if (checkUsername==false)
-            {
-                return res.json({addErr: "Username already exists, cannot be added!"});
+        else {
+            const checkUsername = await userModel.findUserNameToChangeInfo(userID, req.body.username)
+            if (checkUsername == false) {
+                return res.json({ addErr: "Username already exists, cannot be added!" });
 
             }
             const changeUserInfo = await userModel.changeGGUserInfo(userID, req.body);
@@ -442,23 +461,41 @@ module.exports = {
             // const addUser = await model.addNewUser(req.body);
             var err;
             switch (changeUserInfo) {
-                
+
                 case 0:
                     err = "There was an error, the information cannot be edited!"
                     break;
                 case 1:
                     break;
             }
-            if (err)
-            {
-                res.json({addErr: err});
+            if (err) {
+                res.json({ addErr: err });
 
-            }else{
-                res.json({success: "Added information successfully!"})
+            } else {
+                res.json({ success: "Added information successfully!" })
             }
-    
+
         }
 
 
+    },
+    changeImageProfile: async(req,res)=>{
+        const image = req.file;
+        console.log(req.user);
+        if (image) {
+            const imageDataUri = toDataUri(image);
+            const result = await cloudinary.uploader.upload(imageDataUri, {
+                folder: 'HCMUS-Ecommerce/users'
+            });
+            //insert image to database
+            await userModel.insertImageProfile(result,req.user);
+            // const newImage = await Image.create({
+            //     url: result.secure_url,
+            //     public_id: result.public_id,
+            //     userId: user.id
+            // });
+            // console.log(newImage);
+        }
+        res.redirect("/auth/userinfo");
     }
 }

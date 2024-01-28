@@ -180,7 +180,7 @@ module.exports = {
                 console.log(newImage);
             }
 
-            res.redirect('/customer');
+            res.redirect('/admin/customer');
         } catch (err) {
             if (err instanceof UniqueConstraintError) {
                 res.render('user/editable-user', {
@@ -299,7 +299,7 @@ module.exports = {
                 });
             }
 
-            res.redirect('/customer');
+            res.redirect('/admin/customer');
         } catch (err) {
             if (err instanceof UniqueConstraintError) {
                 res.render('user/editable-user', {

@@ -1,6 +1,7 @@
 const db = require("../../db/Client/db_user_helpers");
 const orderDB = require("../../db/Client/db_order_helpers");
 const productDB = require("../../db/Client/db_product_helpers");
+const imageDB = require("../../db/Client/db_image_helpers")
 const bcrypt = require("bcrypt")
 
 
@@ -16,6 +17,14 @@ module.exports = {
     },
     getUserByID: async(id)=>{
         const user = await db.findUserByID(id);
+        const image = await imageDB.getImageByUserID(id);
+        if (image)
+        {
+            user.image = image.url
+        }
+        else{
+            user.image = "/img/user.png"
+        }
         return user;
     },
     findUserByEmail: async(email)=>{
@@ -126,5 +135,9 @@ module.exports = {
             return true;
         }
        return false;
+    },
+    insertImageProfile: async (result,user)=>{
+        await imageDB.insertImageProfile(result,user)
     }
+
 }

@@ -40,15 +40,15 @@ module.exports = {
             query = `SELECT * FROM public."${table}" WHERE "categoryId" ='${id}'`
         }
         else if (!filter.minPrice|| filter.minPrice=='') {
-            query = `SELECT * FROM public."${table}" WHERE "categoryId" ='${id}' AND "price" < '${filter.maxPrice}'`
+            query = `SELECT * FROM public."${table}" WHERE "categoryId" ='${id}' AND "price" <= '${filter.maxPrice}'`
 
         }
         else if (!filter.maxPrice ||filter.maxPrice=='') {
-            query = `SELECT * FROM public."${table}" WHERE "categoryId" ='${id}' AND "price" > '${filter.minPrice}'`
+            query = `SELECT * FROM public."${table}" WHERE "categoryId" ='${id}' AND "price" >= '${filter.minPrice}'`
 
         }
         else {
-            query = `SELECT * FROM public."${table}" WHERE "categoryId" ='${id}' AND "price" < '${filter.maxPrice}'AND "price" > '${filter.minPrice}'`
+            query = `SELECT * FROM public."${table}" WHERE "categoryId" ='${id}' AND "price" <= '${filter.maxPrice}'AND "price" >= '${filter.minPrice}'`
 
         }
         // console.log(query);
@@ -68,7 +68,7 @@ module.exports = {
         return result.rows[0];
     },
     findProductsByValue: async (value) => {
-        const query = `SELECT * FROM public."${table}" WHERE "name" LIKE '%${value}%'`
+        const query = `SELECT * FROM public."${table}" WHERE "name" LIKE '%${value}%' OR "description" LIKE '%${value}%'`
         const result = await db.query(query);
         // Check if any rows were returned
         return result.rows;

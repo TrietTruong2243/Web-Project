@@ -20,7 +20,8 @@ const LocalsMiddleware = require('./middlewares/locals');
 const ErrorHandlerMiddleware = require('./middlewares/errorHandler');
 const db = require('./models/Server');
 const router = require('./routers/Server');
-const router2 = require("./routers/Client/index.r")
+const router2 = require("./routers/Client/index.r");
+const fs = require("fs")
 // cors
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -28,7 +29,7 @@ app.use(cors({
 }));
 app.use(methodOverride('_method'));
 
-// const https = require('https');
+const https = require('https');
 // const secret = 'mysecretkey';
 // const passport = require('passport');
 
@@ -73,5 +74,12 @@ PassportMiddleware(app)
 app.use(LocalsMiddleware)
 router(app)
 ErrorHandlerMiddleware(app);
-app.listen(port,()=> console.log(`Server listening on port ${port}: http://localhost:3000`));
+const server = https.createServer({
+    key: fs.readFileSync('./certs/demo.key'),
+    cert: fs.readFileSync('./certs/demo.crt')
+}, app);
+server.listen(port, () => {
+    console.log(`App listening on port ${port}!: https://localhost:3000`)
+}); 
+// app.listen(port,()=> console.log(`Server listening on port ${port}: http://localhost:3000`));
 

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/css/soft-ui-dashboard.css">
     <link rel="stylesheet" href="/css/layout.css">
     <link rel="stylesheet" href="/css/image-extension.css">
-    <link rel="icon" type="image/png" href="/img/logo.png">
+    <link rel="icon" type="image/png" href="https://cdn.pixabay.com/photo/2017/03/29/04/09/shopping-icon-2184065_1280.png">
     <script src="https://code.jquery.com/jquery-3.7.1.js"
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
@@ -29,23 +29,22 @@
                 <i class="fas fa-times p-3 cursor-pointer position-absolute end-0 top-0 d-xl-none" aria-hidden="true"
                     id="iconSidenav"></i>
                 <a class="navbar-brand m-0" href="/">
-                {{!-- <img src="https://cdn.pixabay.com/photo/2017/03/29/04/09/shopping-icon-2184065_1280.png" style="height:50px">
-                  <div class="text-light">ShoppingWeb</div> --}}
+              
                     <img src="https://cdn.pixabay.com/photo/2017/03/29/04/09/shopping-icon-2184065_1280.png" class="navbar-brand-img h-100" alt="main_logo">
                     <span class="ms-1 font-weight-bold text-light">SHOPPINGWEB</span>
                 </a>
             </div>
             <hr class="horizontal bg-white mt-0 mb-4">
-            <div class="navbar-collapse" id="sidenav-collapse-main">
-                <ul class="navbar-nav">
-                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mt-3 mb-1">Dashboard</h6>
+            <div class="navbar" id="sidenav-collapse-main">
+                <ul class="navbar-nav mb-4">
+                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mt-3 mb-1 text-light">Dashboard</h6>
                     <li class="nav-item {{#if active.Dashboard}} active {{/if}}">
                         <a class="nav-link" href="/admin">
                             <i class="fa-solid fa-house pe-2"></i>
                             <span class="nav-link-text ms-1">Dashboard</span>
                         </a>
                     </li>
-                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mt-3 mb-1">Users</h6>
+                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mt-3 mb-1 text-light">Users</h6>
                     <li class="nav-item {{#if active.Administrators}} active {{/if}}">
                         <a class="nav-link" href="/admin/admin">
                             <i class="fa-solid fa-tv pe-2"></i>
@@ -58,7 +57,7 @@
                             <span class="nav-link-text ms-1">Customers</span>
                         </a>
                     </li>
-                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mt-3 mb-1">Store</h6>
+                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mt-3 mb-1 text-light">Store</h6>
                     <li class="nav-item {{#if active.Categories}} active {{/if}}">
                         <a class="nav-link" href="/admin/category">
                             <i class="fa-solid fa-tag pe-2"></i>
@@ -77,6 +76,7 @@
                             <span class="nav-link-text ms-1">Orders</span>
                         </a>
                     </li>
+                    <li class="nav-item">
                 </ul>
             </div>
             

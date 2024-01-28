@@ -4,6 +4,10 @@ const router = app.Router();
 const mws = require("../../mws/Client/middlewareController")
 const userControl = require("../../controllers/Client/user.c");
 const { check } = require('express-validator');
+const multer = require('multer');
+const upload = multer({
+    storage: multer.memoryStorage()
+});
 router.use(app.static(__dirname+'/../public'));
 let validateUserInfo = () => {
     return [
@@ -67,8 +71,8 @@ let validateGGUserInfo = () => {
 router.get("/accountsettings",mws.verifyToken, userControl.accountsettings)
 router.get("/accountorders",mws.verifyToken, userControl.accountorders)
 router.post("/changeuserinfo",mws.verifyToken,validateUserInfo(),userControl.changeUserInfo)
-router.post("/changegguserinfo",mws.verifyToken,validateGGUserInfo(),userControl.changeGGUserInfo)
+router.post("/changegguserinfo",mws.verifyToken,validateGGUserInfo(),upload.single('image'),userControl.changeGGUserInfo)
 router.post("/addgguserinfo",validateGGUserInfo(),userControl.addGGUserInfo)
 router.post("/changeuserpassword",mws.verifyToken, validateUserPassword(),userControl.changeUserPassword)
-
+router.post("/changeimageprofile", mws.verifyToken, upload.single('image'),userControl.changeImageProfile)
 module.exports = router;
