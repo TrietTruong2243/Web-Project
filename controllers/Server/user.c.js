@@ -13,16 +13,19 @@ const DateOptions = {
     minute: "numeric",
     hour12: false
 }
+
 module.exports = {
     // [GET] /:role
     showAll: (role) => {
         return async (req, res, next) => {
             try {
-                let { id, page, size, status, sortBy, sortDir, email, username, fullname, phone, address, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query; page = page || 1;
+                let { id, page, size, status, sortBy, sortDir, email, username, fullname, phone, address, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query;
+                page = page || 1;
                 size = size || 10;
                 sortBy = sortBy || 'id';
                 sortDir = sortDir || 'asc';
                 let filters = { role };
+
                 if (id) {
                     filters.id = id;
                 }
@@ -55,21 +58,29 @@ module.exports = {
                     }
                 }
                 if (createdAtFrom || createdAtTo) {
-                    createdAtFrom = new Date(createdAtFrom);
-                    createdAtTo = new Date(createdAtTo);
-                    createdAtFrom.setHours(0, 0, 0, 0);
-                    createdAtTo.setHours(23, 59, 59, 999);
+                    if(createdAtFrom){
+                        createdAtFrom = new Date(createdAtFrom);
+                        createdAtFrom.setHours(0, 0, 0, 0);
+                    } else createdAtFrom = '1970-01-01';
+                    if(createdAtTo){
+                        createdAtTo = new Date(createdAtTo);
+                        createdAtTo.setHours(23, 59, 59, 999);
+                    } else createdAtTo = '9999-12-31';
                     filters.createdAt = {
-                        [Op.between]: [createdAtFrom || '1970-01-01', createdAtTo || '9999-12-31']
+                        [Op.between]: [createdAtFrom, createdAtTo]
                     }
                 }
                 if (updatedAtFrom || updatedAtTo) {
-                    updatedAtFrom = new Date(updatedAtFrom);
-                    updatedAtTo = new Date(updatedAtTo);
-                    updatedAtFrom.setHours(0, 0, 0, 0);
-                    updatedAtTo.setHours(23, 59, 59, 999);
+                    if(updatedAtFrom){
+                        updatedAtFrom = new Date(updatedAtFrom);
+                        updatedAtFrom.setHours(0, 0, 0, 0);
+                    } else updatedAtFrom = '1970-01-01';
+                    if(updatedAtTo){
+                        updatedAtTo = new Date(updatedAtTo);
+                        updatedAtTo.setHours(23, 59, 59, 999);
+                    } else updatedAtTo = '9999-12-31';
                     filters.updatedAt = {
-                        [Op.between]: [updatedAtFrom || '1970-01-01', updatedAtTo || '9999-12-31']
+                        [Op.between]: [updatedAtFrom , updatedAtTo]
                     }
                 }
 
@@ -87,11 +98,7 @@ module.exports = {
                     limit: size,
                     offset: (page - 1) * size
                 });
-                // for (let i = 0; i < users.length; ++i) {
-
-                //     users[i] = users[i].dataValues;
-                //     users[i].imageUrl = image ? image.url : null;
-                // }
+                
                 for (let i = 0; i < users.length; ++i) {
                     users[i] = users[i].dataValues;
                     if(users[i].image) {
@@ -100,9 +107,11 @@ module.exports = {
                     users[i].formattedCreatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(users[i].createdAt);
                     users[i].formattedUpdatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(users[i].updatedAt);
                 }
+
                 const total = await User.count({
                     where: filters
                 });
+
                 let urlParams = (new URLSearchParams(req.query));
                 urlParams.delete('page');
 
@@ -171,7 +180,7 @@ module.exports = {
                 console.log(newImage);
             }
 
-            res.redirect('/admin/customer');
+            res.redirect('/customer');
         } catch (err) {
             if (err instanceof UniqueConstraintError) {
                 res.render('user/editable-user', {
@@ -206,7 +215,9 @@ module.exports = {
                 ]
             });
             user = user.dataValues;
-            user.image = user.image.dataValues;
+            if(user.image) {
+                user.image = user.image.dataValues;
+            }
             res.render('user/editable-user', {
                 active: { Customers: true },
                 editable: true,
@@ -288,7 +299,7 @@ module.exports = {
                 });
             }
 
-            res.redirect('/admin/customer');
+            res.redirect('/customer');
         } catch (err) {
             if (err instanceof UniqueConstraintError) {
                 res.render('user/editable-user', {
@@ -434,6 +445,7 @@ module.exports = {
                     username
                 }
             });
+            console.log(user);
             if (user) {
                 res.json({ valid: false });
             } else {
@@ -443,15 +455,17 @@ module.exports = {
             next(err);
         }
     },
-// [GET] /customer/api/data
-getAllUsernames: async (req, res, next) => {
-    try {
-        let users = await User.findAll({});
-        users = users.map(user => user.dataValues.username);
-        res.status(200).json(users);
-    } catch (err) {
-        console.log(err);
-        next(err);
+
+    // [GET] /customer/api/data
+    getAllUsernames: async (req, res, next) => {
+        try {
+            let users = await User.findAll({});
+            users = users.map(user => user.dataValues.username);
+            res.status(200).json(users);
+        } catch (err) {
+            console.log(err);
+            next(err);
+        }
     }
-}
+
 }

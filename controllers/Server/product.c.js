@@ -1,9 +1,7 @@
 const db = require('../../models/Server');
-const bcrypt = require('bcrypt');
 const { Op, UniqueConstraintError } = require('sequelize');
 const cloudinary = require('../../config/cloudinary');
 const toDataUri = require('../../helpers/dataUriConverter');
-const { parse } = require('dotenv');
 const Product = db.Product;
 const Category = db.Category;
 const Image = db.Image;
@@ -19,11 +17,13 @@ const CurrencyOptions = {
     style: 'currency',
     currency: 'VND'
 }
+
 module.exports = {
     // [GET] /product
     showAll: async (req, res, next) => {
         try {
-            let { id, page, size, sortBy, sortDir, name, category, quantityFrom, quantityTo, priceFrom, priceTo, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query; page = page || 1;
+            let { id, page, size, sortBy, sortDir, name, category, quantityFrom, quantityTo, priceFrom, priceTo, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query;
+            page = page || 1;
             size = size || 10;
             sortBy = sortBy || 'id';
             sortDir = sortDir || 'asc';
@@ -52,21 +52,29 @@ module.exports = {
                 }
             }
             if (createdAtFrom || createdAtTo) {
-                createdAtFrom = new Date(createdAtFrom);
-                createdAtTo = new Date(createdAtTo);
-                createdAtFrom.setHours(0, 0, 0, 0);
-                createdAtTo.setHours(23, 59, 59, 999);
+                if(createdAtFrom){
+                    createdAtFrom = new Date(createdAtFrom);
+                    createdAtFrom.setHours(0, 0, 0, 0);
+                } else createdAtFrom = '1970-01-01';
+                if(createdAtTo){
+                    createdAtTo = new Date(createdAtTo);
+                    createdAtTo.setHours(23, 59, 59, 999);
+                } else createdAtTo = '9999-12-31';
                 filters.createdAt = {
-                    [Op.between]: [createdAtFrom || '1970-01-01', createdAtTo || '9999-12-31']
+                    [Op.between]: [createdAtFrom, createdAtTo]
                 }
             }
             if (updatedAtFrom || updatedAtTo) {
-                updatedAtFrom = new Date(updatedAtFrom);
-                updatedAtTo = new Date(updatedAtTo);
-                updatedAtFrom.setHours(0, 0, 0, 0);
-                updatedAtTo.setHours(23, 59, 59, 999);
+                if(updatedAtFrom){
+                    updatedAtFrom = new Date(updatedAtFrom);
+                    updatedAtFrom.setHours(0, 0, 0, 0);
+                } else updatedAtFrom = '1970-01-01';
+                if(updatedAtTo){
+                    updatedAtTo = new Date(updatedAtTo);
+                    updatedAtTo.setHours(23, 59, 59, 999);
+                } else updatedAtTo = '9999-12-31';
                 filters.updatedAt = {
-                    [Op.between]: [updatedAtFrom || '1970-01-01', updatedAtTo || '9999-12-31']
+                    [Op.between]: [updatedAtFrom , updatedAtTo]
                 }
             }
 
@@ -98,15 +106,15 @@ module.exports = {
                 offset: (page - 1) * size
             });
             for (let i = 0; i < products.length; ++i) {
-
                 products[i] = products[i].dataValues;
                 products[i].category = products[i].category.dataValues;
                 products[i].images = products[i].images.map(image => image.dataValues);
-                if (products[i].mainImage) products[i].mainImage = products[i].mainImage.dataValues;
+                if(products[i].mainImage) products[i].mainImage = products[i].mainImage.dataValues;
                 products[i].formattedCreatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(products[i].createdAt);
                 products[i].formattedUpdatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(products[i].updatedAt);
                 products[i].formattedPrice = new Intl.NumberFormat('vi', CurrencyOptions).format(products[i].price);
             }
+
             const total = await Product.count({
                 where: filters
             });
@@ -237,11 +245,13 @@ module.exports = {
                     id
                 }
             });
-            if (removeIds) {
+
+            if(removeIds) {
                 const removeIdsArr = removeIds.split(',');
                 for (let i = 0; i < removeIdsArr.length; ++i) {
                     removeIdsArr[i] = parseInt(removeIdsArr[i]);
                 }
+
                 if (removeIdsArr.length > 0 && !isNaN(removeIdsArr[0])) {
                     console.log('delete images');
                     const images = await Image.findAll({
@@ -381,7 +391,8 @@ module.exports = {
             next(err);
         }
     },
-     // API
+
+    // API
     // [GET] /product/api/data/:id
     getProductData: async (req, res, next) => {
         try {

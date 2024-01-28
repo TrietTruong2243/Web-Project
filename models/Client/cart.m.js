@@ -22,6 +22,7 @@ module.exports = {
     getCartInfo: async (userID) => {
         const result = [];
         const cart = await cartDB.getCartByUser(userID);
+        console.log(cart);
         for (i of cart) {
             const res = await productDB.getProductByID(i.productId);
             if (res.mainImageId)

@@ -1,5 +1,6 @@
 const db = require('../../models/Server');
 const { Op, UniqueConstraintError } = require('sequelize');
+const sequelize = db.sequelize;
 const OrderItem = db.OrderItem;
 const Order = db.Order;
 const User = db.User;
@@ -22,7 +23,7 @@ module.exports = {
     // [GET] /order
     showAll: async (req, res, next) => {
             try {
-                let { id, page, size, sortBy, sortDir, status, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query;
+                let { id, page, size, sortBy, sortDir, status, username, totalPriceFrom, totalPriceTo, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query;
                 page = page || 1;
                 size = size || 10;
                 sortBy = sortBy || 'id';
@@ -35,67 +36,123 @@ module.exports = {
                 if (status) {
                     filters.status = status;
                 }
-                
+                let usernameFilter = {};
+                if(username){
+                    usernameFilter.username = {
+                        [Op.like]: `%${username}%`
+                    };
+                }
                 if (createdAtFrom || createdAtTo) {
-                    createdAtFrom = new Date(createdAtFrom);
-                    createdAtTo = new Date(createdAtTo);
-                    createdAtFrom.setHours(0, 0, 0, 0);
-                    createdAtTo.setHours(23, 59, 59, 999);
+                    if (createdAtFrom) {
+                        createdAtFrom = new Date(createdAtFrom);
+                        createdAtFrom.setHours(0, 0, 0, 0);
+                    } else createdAtFrom = '1970-01-01';
+                    if (createdAtTo) {
+                        createdAtTo = new Date(createdAtTo);
+                        createdAtTo.setHours(23, 59, 59, 999);
+                    } else createdAtTo = '9999-12-31';
                     filters.createdAt = {
-                        [Op.between]: [createdAtFrom || '1970-01-01', createdAtTo || '9999-12-31']
+                        [Op.between]: [createdAtFrom, createdAtTo]
                     }
                 }
                 if (updatedAtFrom || updatedAtTo) {
-                    updatedAtFrom = new Date(updatedAtFrom);
-                    updatedAtTo = new Date(updatedAtTo);
-                    updatedAtFrom.setHours(0, 0, 0, 0);
-                    updatedAtTo.setHours(23, 59, 59, 999);
+                    if (updatedAtFrom) {
+                        updatedAtFrom = new Date(updatedAtFrom);
+                        updatedAtFrom.setHours(0, 0, 0, 0);
+                    } else updatedAtFrom = '1970-01-01';
+                    if (updatedAtTo) {
+                        updatedAtTo = new Date(updatedAtTo);
+                        updatedAtTo.setHours(23, 59, 59, 999);
+                    } else updatedAtTo = '9999-12-31';
                     filters.updatedAt = {
-                        [Op.between]: [updatedAtFrom || '1970-01-01', updatedAtTo || '9999-12-31']
+                        [Op.between]: [updatedAtFrom, updatedAtTo]
                     }
                 }
 
+                totalPriceFrom = parseInt(totalPriceFrom);
+                if(isNaN(totalPriceFrom)) totalPriceFrom = 0;
+                totalPriceTo = parseInt(totalPriceTo);
+                if(isNaN(totalPriceTo)) totalPriceTo = Number.MAX_SAFE_INTEGER;
+
                 const orders = await Order.findAll({
-                    where: filters,
+                    attributes: [
+                        sequelize.col('"Orders".id'), 'id',
+                        'status',
+                        'createdAt',
+                        'updatedAt',
+                        [sequelize.fn('SUM', sequelize.literal('"orderItems".quantity * price')), 'totalAmount']
+                    ],
                     include: [
                         {
                             model: User,
-                            as: 'user'
-                        }
+                            as: 'user',
+                            attributes: ['username'],
+                            where: usernameFilter
+                        },
+                        {
+                            model: OrderItem,
+                            as: 'orderItems',
+                            include: [
+                                {
+                                    model: Product,
+                                    as: 'product',
+                                    attributes: []
+                                }
+                            ],
+                            attributes: []
+                        },
                     ],
+                    where: filters,
                     order: [
                         [sortBy, sortDir]
                     ],
                     limit: size,
                     offset: (page - 1) * size,
+                    group: ['"Orders".id', 'user.id'],
+                    having: sequelize.literal('SUM("orderItems".quantity * price) BETWEEN ' + totalPriceFrom + ' AND ' + totalPriceTo),
+                    subQuery: false
                 });
-
+                
+                console.log(orders);
                 for (let i = 0; i < orders.length; ++i) {
                     orders[i] = orders[i].dataValues;
+                    orders[i].user = orders[i].user.dataValues;
                     orders[i].formattedCreatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(orders[i].createdAt);
                     orders[i].formattedUpdatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(orders[i].updatedAt);
-                    orders[i].user = orders[i].user.dataValues;
-                    const orderItems = await OrderItem.findAll({
-                        where: {
-                            orderId: orders[i].id
-                        },
-                        include: [
-                            {
-                                model: Product,
-                                as: 'product'
-                            }
-                        ]
-                    });
-                    orders[i].totalAmount = orderItems.reduce((total, item) => {
-                        return total + item.quantity * item.product.price;
-                    }, 0);
                     orders[i].formattedTotalAmount = new Intl.NumberFormat('vi', CurrencyOptions).format(orders[i].totalAmount);
                 }
 
-                const total = await Order.count({
-                    where: filters
+                let total = await Order.findAll({
+                    attributes: [
+                        'id'
+                    ],
+                    where: filters,
+                    include: [
+                        {
+                            model: User,
+                            as: 'user',
+                            attributes: [],
+                            where: usernameFilter
+                        },
+                        {
+                            model: OrderItem,
+                            as: 'orderItems',
+                            include: [
+                                {
+                                    model: Product,
+                                    as: 'product',
+                                    attributes: []
+                                }
+                            ],
+                            attributes: []
+                        },
+                    ],
+                    group: ['"Orders".id', 'user.id'],
+                    having: sequelize.literal('SUM("orderItems".quantity * price) BETWEEN ' + totalPriceFrom + ' AND ' + totalPriceTo),
                 });
+                console.log(total);
 
+                total = total.length;
                 let urlParams = (new URLSearchParams(req.query));
                 urlParams.delete('page');
 
@@ -108,6 +165,7 @@ module.exports = {
                     urlParams: urlParams.toString()
                 });
             } catch (err) {
+                console.log(err);
                 next(err);
             }
     },

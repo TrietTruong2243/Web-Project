@@ -5,15 +5,15 @@ module.exports = (sequelize) => {
         username: {
             type: DataTypes.STRING,
             unique: true,
-            allowNull: false
+            // allowNull: false
         },
         email: {
             type: DataTypes.STRING,
-            allowNull: false
+            // allowNull: false
         },
         password: {
             type: DataTypes.STRING,
-            allowNull: false
+            // allowNull: false
         },
         status: {
             type: DataTypes.STRING(10),
@@ -26,6 +26,10 @@ module.exports = (sequelize) => {
         fullname: DataTypes.STRING,
         address: DataTypes.STRING,
         phone: DataTypes.STRING,
+        isGGAcc:{
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        }
     });
 
     return User;

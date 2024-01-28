@@ -115,10 +115,13 @@
 
                 <nav class="navBar navBar--sub navBar--account flex-row">
                     <ul class="navBar-section">
+                        {{#if isAdmin}}
+                        <li class="navBar-item" id="Admin">
+                            <a class="navBar-action" class="p-2">Admin</a>
+                        </li>
+                        {{/if}}
                         <li class="navBar-item is-active" id="Account">
                             <a class="navBar-action" class="p-2">Account settings</a>
-
-
                         </li>
                         <li class="navBar-item " id="Order">
                             <a class="navBar-action " class="p-2">Orders</a>
@@ -221,7 +224,7 @@
                                 `;
                                 let index = 1;
                                 for (i of orders) {
-                                    
+
                                     dataHTML = dataHTML + `
          
                                                 <tr class="alert order_detail" role="alert" id= "${i.id}">
@@ -264,7 +267,10 @@
 
                         });
                     }
+                    else if (id === "Admin") {
 
+                        window.location.href = "/admin/"
+                    }
 
 
                 }
@@ -375,7 +381,7 @@
                             if (i.path === 'home_address') {
                                 $("#home_address_err").text(i.msg);
 
-                            } 
+                            }
                             if (i.path === 'username') {
                                 $("#username_err").text(i.msg);
 

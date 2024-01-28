@@ -41,7 +41,7 @@ module.exports = (app) => {
                 return done(null, false, { message: 'invalid password' });
             }
             if (user.status !== 'active') {
-                return done(null, false, { message: 'inactive account' });
+                return done(null, false, { message: 'passport account' });
             }
             return done(null, user);
         } catch (err) {

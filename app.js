@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express= require('express');
 const exphbs=require('express-handlebars');
+const Handlebars = require('handlebars');
 const cors=require('cors');
 const app= express();
 const app1= express();
@@ -73,7 +74,10 @@ app.engine('hbs',exphbs.engine({
     extname:'.hbs',
     // defaultLayout:'home.hbs',
     // layoutsDir:"views/layouts",
-    helpers: helpers()
+    helpers: helpers(),
+    helpers: Handlebars.registerHelper('eq', function(arg1, arg2, options) {
+        return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+    }),
 
 }));
 app.set('view engine','hbs');

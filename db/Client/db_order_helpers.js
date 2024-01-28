@@ -44,6 +44,7 @@ module.exports = {
         let total = 0 ;
         const result =  await db.query(`SELECT * FROM public."${sub_table}" WHERE "orderId" = '${orderID}' ORDER BY "quantity" DESC`);
         const products =  result.rows;
+        console.log(products);
         for (i of products)
         {
             let res = await productDB.getProductByID(i.productId);

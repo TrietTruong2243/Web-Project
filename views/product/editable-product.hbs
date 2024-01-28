@@ -1,5 +1,7 @@
-<link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.min.css" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css" media="all"
+    rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.min.css"
+    crossorigin="anonymous">
 <link rel="stylesheet" href="/css/input.css">
 <link rel="stylesheet" href="/css/custom-carousel.css">
 <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/plugins/piexif.min.js"
@@ -12,13 +14,14 @@
         </div>
     </div>
     <div class="card mt-4">
-        <form name="product-form" method="post" {{#if editable}} action="/admin/product/edit/{{ product.id }}" editable="true"
-            {{else}} action="/admin/product" {{/if}} enctype="multipart/form-data" class="p-4">
+        <form name="product-form" method="post" {{#if editable}} action="/admin/product/edit/{{ product.id }}"
+            editable="true" {{else}} action="/admin/product" {{/if}} enctype="multipart/form-data" class="p-4">
             <div class="row mb-2">
                 <h4>Product Details</h4>
                 <div class="form-group col-md-6 has-danger">
                     <label class="form-label">Name *</label>
-                    <input name="name" type="text" class="form-control" aria-label="name" value="{{ product.name }}" required/>
+                    <input name="name" type="text" class="form-control" aria-label="name" value="{{ product.name }}"
+                        required />
                 </div>
                 <div class="form-group col-md-6 has-danger">
                     <label class="form-label">Category *</label>
@@ -32,11 +35,13 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label class="form-label">Quantity</label>
-                    <input name="quantity" type="number" class="form-control" value="{{ product.quantity }}" aria-label="quantity">
+                    <input name="quantity" type="number" class="form-control" value="{{ product.quantity }}"
+                        aria-label="quantity">
                 </div>
                 <div class="form-group col-md-6">
                     <label class="form-label">Price</label>
-                    <input name="price" type="number" class="form-control" value="{{ product.price }}" aria-label="quantity">
+                    <input name="price" type="number" class="form-control" value="{{ product.price }}"
+                        aria-label="quantity">
                 </div>
             </div>
             <div class="form-group">
@@ -47,7 +52,8 @@
                 <h4>Product Images</h4>
                 {{#if product.images}}
                 <p class="fst-italic">
-                    Mark the images that you want to remove or set main by clicking the buttons at the top left corner of the carousel. 
+                    Mark the images that you want to remove or set main by clicking the buttons at the top left corner
+                    of the carousel.
                 </p>
                 <p class="fst-italic">
                     Thumbnail image will be the first one if no one is selected.
@@ -55,14 +61,16 @@
                 <div class="image-icon d-flex flex-row justify-content-end">
                     <input type="checkbox" class="btn-check" id="btnThumbnail" autocomplete="off">
                     <label class="btn btn-outline-info btn-sm" for="btnThumbnail">Thumbnail</label>
-                    <i class="fa-solid fa-circle-minus ms-4 me-4 remove-image-icon"></i>
+                    <i class="fa-solid fa-circle-minus ms-4 me-4 remove-image-icon" data-bs-toggle="tooltip"
+                        data-bs-placement="top" data-bs-original-title="Remove"></i>
                 </div>
                 <div id="imagesCarousel" class="carousel slide" mainImageId="{{product.mainImageId}}">
                     <div class="carousel-inner">
                         {{#each product.images}}
-                            <div class="carousel-item {{#eq @index 0}}active{{/eq}}" imageId="{{this.id}}">
-                                <img src="{{ this.url }}" class="d-block carousel-image image-has-modal mx-auto" alt="product-image-{{ this.id }}">
-                            </div>
+                        <div class="carousel-item {{#eq @index 0}}active{{/eq}}" imageId="{{this.id}}">
+                            <img src="{{ this.url }}" class="d-block carousel-image image-has-modal mx-auto"
+                                alt="product-image-{{ this.id }}">
+                        </div>
                         {{/each}}
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#imagesCarousel"
@@ -77,10 +85,11 @@
                     </button>
                     <div class="carousel-indicators mt-4">
                         {{#each product.images}}
-                            <button type="button" data-bs-target="#imagesCarousel" data-bs-slide-to="{{@index}}"
-                                class="{{#eq @index 0}}active{{/eq}}" aria-label="Slide {{@index}}">
-                                <img src="{{ this.url }}" class="d-block w-100 enlarge-image" alt="product-image-{{ this.id }}">
-                            </button>
+                        <button type="button" data-bs-target="#imagesCarousel" data-bs-slide-to="{{@index}}"
+                            class="{{#eq @index 0}}active{{/eq}}" aria-label="Slide {{@index}}">
+                            <img src="{{ this.url }}" class="d-block w-100 enlarge-image"
+                                alt="product-image-{{ this.id }}">
+                        </button>
                         {{/each}}
                     </div>
                 </div>
@@ -103,7 +112,7 @@
     const editable = $('form[name="product-form"]').attr('editable') === 'true';
     const initCategoryId = $('select[name="category"]').attr('initCategoryId');
     $('select[name="category"]').val(initCategoryId);
-    
+
     // breadcrumbs
     const breadcrumbs = $('.breadcrumb');
     let breadcrumbContent = `
@@ -124,10 +133,10 @@
     // init data
     let removedImageIds = [];
     let thumbnailId = $('#imagesCarousel').attr('mainImageId') || null;
-    if(editable){
+    if (editable) {
         const activeImage = $('#imagesCarousel .carousel-item.active');
         const activeImageId = activeImage.attr('imageId');
-        if(thumbnailId === activeImageId) {
+        if (thumbnailId === activeImageId) {
             $('#btnThumbnail').prop("checked", true);
         } else {
             $('#btnThumbnail').prop("checked", false);
@@ -139,7 +148,7 @@
         showUpload: false,
         showCaption: false,
         maxFileCount: 10,
-        browseClass: "btn bg-gradient-info", 
+        browseClass: "btn bg-gradient-info",
     })
 
     // change remove image icon when sliding
@@ -151,12 +160,16 @@
         if (removedImageIds.includes(activeImageId)) {
             toggleIcon.removeClass('fa-circle-minus');
             toggleIcon.addClass('fa-circle-plus');
+            toggleIcon.attr('data-bs-original-title', 'Add');
+
             thumbnailBtn.prop("disabled", "disabled");
         } else {
             toggleIcon.removeClass('fa-circle-plus');
             toggleIcon.addClass('fa-circle-minus');
+            toggleIcon.attr('data-bs-original-title', 'Remove');
+
             thumbnailBtn.prop("disabled", false);
-            if(thumbnailId === activeImageId) {
+            if (thumbnailId === activeImageId) {
                 thumbnailBtn.prop("checked", true);
             } else {
                 thumbnailBtn.prop("checked", false);
@@ -183,6 +196,8 @@
         if (toggleIcon.hasClass('fa-circle-minus')) {
             toggleIcon.removeClass('fa-circle-minus');
             toggleIcon.addClass('fa-circle-plus');
+            toggleIcon.attr('data-bs-original-title', 'Add');
+
             // find and change active image
             const activeImage = $('#imagesCarousel .carousel-item.active');
             activeImage.find('img').addClass('removed-image');
@@ -194,7 +209,7 @@
             const activeImageId = activeImage.attr('imageId');
             removedImageIds.push(activeImageId);
             // disable thumbnail button
-            if(thumbnailId === activeImageId) {
+            if (thumbnailId === activeImageId) {
                 thumbnailBtn.prop("checked", false);
                 thumbnailId = null;
             }
@@ -202,6 +217,8 @@
         } else {
             toggleIcon.removeClass('fa-circle-plus');
             toggleIcon.addClass('fa-circle-minus');
+            toggleIcon.attr('data-bs-original-title', 'Remove');
+
             // find and change active image
             const activeImage = $('#imagesCarousel .carousel-item.active');
             activeImage.find('img').removeClass('removed-image');
@@ -220,24 +237,24 @@
         }
         console.log(removedImageIds);
     });
-    
+
     // form submit
     $('#submitBtn').click(function (e) {
         e.preventDefault();
         const name = $('input[name="name"]').val();
         const category = $('select[name="category"]').val();
-        
-        if(!name){
+
+        if (!name) {
             $('.badge-error').text('Name is required');
             $('input[name="name"]').addClass('is-invalid');
             return;
         }
-        if(!category){
+        if (!category) {
             $('.badge-error').text('Category is required. If there is no category, please create one.');
             $('select[name="category"]').addClass('is-invalid');
             return;
         }
-        if(editable){
+        if (editable) {
             $('input[name="removeIds"]').val(removedImageIds);
             $('input[name="mainId"]').val(thumbnailId);
         }

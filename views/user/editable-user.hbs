@@ -69,7 +69,7 @@
                                     {{#if user.image}}
                                     <img id="previewImage" initUrl="{{ user.image.url }}" src="{{ user.image.url }}" alt="avatar" class="d-block m-auto enlarge-image image-has-modal">
                                     {{else}}
-                                    <img id="previewImage" src="/img/no-image-icon.png" alt="avatar" class="d-block m-auto enlarge-image image-has-modal">
+                                    <img id="previewImage" src="/img/user.png" alt="avatar" class="d-block m-auto enlarge-image image-has-modal">
                                     {{/if}}
                                     <input type="file" id="image" name="image" accept="image/*" hidden>
                                     <label class="btn btn-sm mt-2" for="image">Upload</label>
@@ -135,7 +135,7 @@
         $('#image').val('');
         const src = $('#previewImage').attr('initUrl');
         if(src) $('#previewImage').attr('src', src);
-        else $('#previewImage').attr('src', '/img/no-image-icon.png');
+        else $('#previewImage').attr('src', '/img/user.png');
     });
 
     // username input

@@ -5,7 +5,12 @@ var { validationResult } = require('express-validator');
 
 module.exports = {
     userinfo: async (req, res) => {
-        res.render("home", { layout: "user_info" })
+        let isAdmin = false;
+        if (req.user.role==='admin')
+        {
+            isAdmin = true
+        }
+        res.render("home", { layout: "user_info" , isAdmin: isAdmin})
 
     },
     signin: async (req, res) => {
@@ -74,7 +79,7 @@ module.exports = {
             res.cookie('email' , user.email)
             return res.redirect("/auth/addgginfo")
         }        
-        const accessToken = jwt.sign({ id: user.id, isGoogleAccount: user.isGGAcc || false }, process.env.SECRET_KEY, { expiresIn: "1h" });
+        const accessToken = jwt.sign({ id: user.id, isGoogleAccount: user.isGGAcc || false , role: user.role}, process.env.SECRET_KEY, { expiresIn: "1h" });
         res.cookie('token', accessToken, { httpOnly: false, sameSite: true, maxAge: "3000000" });
         return res.redirect("/")
     },
@@ -85,7 +90,8 @@ module.exports = {
     ggSuccessAddInfo: async (req,res)=>{
         const email = req.cookies['email'];
         const user = await model.getUserByEmail(email);
-        const accessToken = jwt.sign({ id: user.id, isGoogleAccount: user.isGGAcc || false }, process.env.SECRET_KEY, { expiresIn: "1h" });
+   
+        const accessToken = jwt.sign({ id: user.id, isGoogleAccount: user.isGGAcc || false, role: user.role }, process.env.SECRET_KEY, { expiresIn: "1h" });
         res.cookie('token', accessToken, { httpOnly: false, sameSite: true, maxAge: "3000000" });
         res.clearCookie('email')
         res.redirect('/');

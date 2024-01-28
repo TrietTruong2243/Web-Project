@@ -236,8 +236,11 @@
                 <i class="fa-regular fa-pen-to-square pe-2"></i>
                 <span>Edit</span>
             </a>
-            <img class="detail-image enlarge-image image-has-modal" {{#if this.mainImage }}
-                src="{{ this.mainImage.url }}" {{else}} src="/img/no-image-icon.png" {{/if}} alt="product">
+            {{#if this.mainImage}}
+            <img class="detail-image enlarge-image image-has-modal" src="{{ this.mainImage.url }}" alt="product">
+            {{else}}
+            <img class="detail-image" src="/img/no-image-icon.png" alt="product">
+            {{/if}}
             {{#if this.images }}
             <div class="list-image">
                 <p class="detail-info-item-title">Images</p>
@@ -269,11 +272,11 @@
                 <p class="detail-info-item-title">Price</p>
                 <p class="detail-info-item-content">{{ this.formattedPrice }}</p>
             </div>
-                        {{#if this.description}}
+            {{#if this.description}}
 
             <div class="detail-info-item">
                 <p class="detail-info-item-title">Description</p>
-<p class="detail-info-item-content">{{ this.description }}</p>
+                <p class="detail-info-item-content">{{ this.description }}</p>
             </div>
             {{/if}}
             <div class="detail-info-item">
@@ -335,7 +338,7 @@
             $('#collapseFilter').addClass('show');
         }
 
-$('#product-pagination').html(renderPagination(page, total, size, 'product', urlParams));
+        $('#product-pagination').html(renderPagination(page, total, size, 'product', urlParams));
         // breadcrumbs
         const breadcrumbs = $('.breadcrumb');
         let breadcrumbContent = `
@@ -381,7 +384,7 @@ $('#product-pagination').html(renderPagination(page, total, size, 'product', url
             productId = button.attr('product-id');
             productName = button.attr('product-name');
 
-            
+
         })
 
         // filter
@@ -401,7 +404,7 @@ $('#product-pagination').html(renderPagination(page, total, size, 'product', url
         });
         $('#filter-apply-btn').click(() => {
             const name_f = $('#filter-name').val();
-                        const category_f = $('#filter-category').val();
+            const category_f = $('#filter-category').val();
 
             const quantityFrom_f = $('#filter-quantityFrom').val();
             const quantityTo_f = $('#filter-quantityTo').val();
@@ -428,7 +431,7 @@ $('#product-pagination').html(renderPagination(page, total, size, 'product', url
             if (name_f) {
                 urlParams += `&name=${name_f}`;
             }
-             if (category_f && category_f !== 'Select category') {
+            if (category_f && category_f !== 'Select category') {
                 urlParams += `&category=${category_f}`;
             }
             if (quantityFrom_f) {

@@ -4,6 +4,7 @@ var { validationResult } = require('express-validator');
 module.exports = {
     accountsettings: async (req, res) => {
         const id = req.user.id;
+      
         const user = await userModel.getUserByID(id);
         var jsonfile;
         if (user.IsGGAcc === true) {
@@ -301,7 +302,9 @@ module.exports = {
     },
     accountorders: async (req, res) => {
         const id = req.user.id;
+        console.log(id);
         const orders = await userModel.getAllOrderOfUser(id);
+        console.log(orders);
         res.json({orders: orders});
     },
     changeUserInfo: async (req, res) => {

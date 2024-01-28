@@ -49,13 +49,18 @@ module.exports = {
     },
     getProductByID:async(productID)=>{
         const product = await productDB.getProductByID(productID);
-        console.log(product.mainImageId);
-        const image = await imageDB.getImageByImageID(product.mainImageId);
-        if (image){
-            product.image = image.url;
+        if (product.mainImageId)
+        {
+            const image = await imageDB.getImageByImageID(product.mainImageId);
+            if (image){
+                product.image = image.url;
+            }
+            else{
+                product.image = ""
+            }
         }
-        else{
-            product.image = ""
+        else {
+            product.image =""
         }
         return product; 
     },

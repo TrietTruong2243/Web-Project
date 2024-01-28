@@ -20,7 +20,7 @@ passport.use(new GoogleStrategy({
 },
     async function (request, accessToken, refreshToken, profile, done) {
         request.user = profile;
-        const user = await User.findOrCreateUser({ id: profile.id, email: profile.email });
+        const user = await User.findOrCreateUser({ email: profile.email });
         
         return done(null, user)
 
@@ -36,6 +36,11 @@ passport.use('local1',new LocalStrategy(async (username, password, done) => {
         if (rs.IsGoogleAccount === true) {
             return done(null, false, { message: 'invalid' })
         }
+        if (rs.status=='banned')
+        {
+            return done(null, false, { message: 'invalid' })
+
+        }
         auth = await bcrypt.compare(password, rs.password);
 
     }
@@ -46,10 +51,10 @@ passport.use('local1',new LocalStrategy(async (username, password, done) => {
     // done('invalid auth');
     done(null, false, { message: 'bad password' })
 }));
-passport.serializeUser((user, done) => done(null, user.CustomerID));
-passport.deserializeUser((username, done) => {
-    done(null, false)
-});
+// passport.serializeUser((user, done) => done(null, user.CustomerID));
+// passport.deserializeUser((username, done) => {
+//     done(null, false)
+// });
 router.get("/userinfo", mws.verifyToken, appControl.userinfo);
 router.get("/signin", appControl.signin)
 router.get("/signup", appControl.signup);
@@ -97,8 +102,8 @@ router.post("/signin", passport.authenticate('local1', { failureRedirect: '/auth
     async function (req, res) {
         const user = await User.findUserByUserName(req.body.username);
         console.log(user);
-        const accessToken = jwt.sign({ id: user.id, isGoogleAccount: user.isGGAcc || false }, process.env.SECRET_KEY, { expiresIn: "1h" });
-        res.cookie('token', accessToken, { httpOnly: false, sameSite: true, maxAge: "3000000" });
+        const accessToken = jwt.sign({ id: user.id, isGoogleAccount: user.isGGAcc || false,role: user.role }, process.env.SECRET_KEY, { expiresIn: "1h" });
+        res.cookie('token', accessToken, { httpOnly: false, sameSite: true, maxAge: "300000000" });
         res.redirect("/")
     }
 );

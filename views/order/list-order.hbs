@@ -6,7 +6,7 @@
             <p class="total-mark mt-0 mb-1 ms-2 px-3">{{ total }}</p>
         </div>
         <div class="d-flex flex-row">
-            <a class="btn btn-outline-info d-flex align-items-center me-4" href="/order/create-new">
+            <a class="btn btn-outline-info d-flex align-items-center me-4" href="/admin/order/create-new">
                 <i class="fa-solid fa-plus pe-2"></i>
                 <span>Create</span>
             </a>
@@ -28,8 +28,8 @@
                     <option value="confirmed" {{#eq queryObj.status "confirmed" }} selected {{/eq}}>
                         Confirmed
                     </option>
-                    <option value="awaiting payment" {{#eq queryObj.status "awaiting payment" }} selected {{/eq}}>
-                        Awaiting payment
+                    <option value="unpaid" {{#eq queryObj.status "unpaid" }} selected {{/eq}}>
+                        unpaid
                     </option>
                     <option value="shipping" {{#eq queryObj.status "shipping" }} selected {{/eq}}>
                         Shipping
@@ -136,7 +136,7 @@
         </div>
 
     </div>
-    <form name="table-container" method="post" action="/order/multi-action">
+    <form name="table-container" method="post" action="/admin/order/multi-action">
         <div class="multiselect-row row mt-2 mx-1 py-2 border-radius-md d-flex flex-row invisible">
             <span class="col-2 multiselect-text">Selected</span>
             <button id="multiselect-delete-btn" class="col-2 btn-sm btn-multiselect-row ms-2 p-0" data-bs-toggle="modal"
@@ -192,8 +192,8 @@
                                     {{#eq this.status "confirmed"}}
                                     <span class="badge badge-pill bg-gradient-info">Confirmed</span>
                                     {{/eq}}
-                                    {{#eq this.status "awaiting payment"}}
-                                    <span class="badge badge-pill bg-gradient-info">Awaiting payment</span>
+                                    {{#eq this.status "unpaid"}}
+                                    <span class="badge badge-pill bg-gradient-info">Unpaid</span>
                                     {{/eq}}
                                     {{#eq this.status "shipping"}}
                                     <span class="badge badge-pill bg-gradient-info">Shipping</span>
@@ -219,7 +219,7 @@
                                             <li><button class="dropdown-item btn-change-status">Confirmed</button></li>
                                             <li><button class="dropdown-item btn-change-status">Shipping</button></li>
                                             <li><button class="dropdown-item btn-change-status">Completed</button></li>
-                                            <li><button class="dropdown-item btn-change-status">Awaiting payment</button></li>
+                                            <li><button class="dropdown-item btn-change-status">Unpaid</button></li>
                                             <li><button class="dropdown-item btn-change-status">Cancelled</button></li>
                                             <li><button class="dropdown-item btn-change-status">Refunded</button></li>
                                         </ul>
@@ -349,7 +349,7 @@
         // breadcrumbs
         const breadcrumbs = $('.breadcrumb');
         let breadcrumbContent = `
-            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/"><span class="breadcrumb-text">Dashboard</span></a></li>
+            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/admin"><span class="breadcrumb-text">Dashboard</span></a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Orders</li>
         `;
         breadcrumbs.html(breadcrumbContent);
@@ -445,7 +445,7 @@
                 urlParams += `&updatedAtTo=${updatedAtTo_f}`;
             }
 
-            window.location.href = `/order?${urlParams}`;
+            window.location.href = `/admin/order?${urlParams}`;
         });
 
         const singleItemForm = $('#single-item-action');
@@ -455,7 +455,7 @@
             orderId = $(e.relatedTarget).attr('order-id');
             // load order data
             $.ajax({
-                url: `/order/api/data/${orderId}`,
+                url: `/admin/order/api/data/${orderId}`,
                 method: 'GET',
                 success: (res) => {
                     const order = res.data;
@@ -468,8 +468,8 @@
                         case 'confirmed':
                             $('#detail-status').html(`<span class="badge badge-pill bg-gradient-info">Confirmed</span>`);
                             break;
-                        case 'awaiting payment':
-                            $('#detail-status').html(`<span class="badge badge-pill bg-gradient-info">Awaiting payment</span>`);
+                        case 'unpaid':
+                            $('#detail-status').html(`<span class="badge badge-pill bg-gradient-info">Unpaid</span>`);
                             break;
                         case 'shipping':
                             $('#detail-status').html(`<span class="badge badge-pill bg-gradient-info">Shipping</span>`);
@@ -486,9 +486,9 @@
                     }
                     $('#detail-customer').html(`${order.user.username}`);
                     if(order.user.role == 'admin'){
-                        $('#detail-customer').attr('href', `/admin?id=${order.user.id}`);
+                        $('#detail-customer').attr('href', `/admin/admin?id=${order.user.id}`);
                     } else {
-                        $('#detail-customer').attr('href', `/customer?id=${order.user.id}`);
+                        $('#detail-customer').attr('href', `/admin/customer?id=${order.user.id}`);
                     }
                     $('#detail-createdAt').html(`${new Intl.DateTimeFormat('vi', DateOptions).format(new Date(order.createdAt))}`);
                     $('#detail-updatedAt').html(`${new Intl.DateTimeFormat('vi', DateOptions).format(new Date(order.updatedAt))}`);
@@ -496,7 +496,7 @@
                         return `
                             <tr>
                                 <td class="align-middle">${index + 1}</td>
-                                <td class="align-middle"><a href="/product?id=${item.product.id}">${item.product.name}</a></td>
+                                <td class="align-middle"><a href="/admin/product?id=${item.product.id}">${item.product.name}</a></td>
                                 <td class="align-middle">${new Intl.NumberFormat('vi', CurrencyOptions).format(item.product.price)}</td>
                                 <td class="align-middle">${item.quantity}</td>
                                 <td class="align-middle">${new Intl.NumberFormat('vi', CurrencyOptions).format(item.product.price * item.quantity)}</td>
@@ -509,7 +509,7 @@
             });
             // buttons
             $('#detail-modal-edit-btn').click(() => {
-                window.location.href = `/order/edit/${orderId}`;
+                window.location.href = `/admin/order/edit/${orderId}`;
             });
         });
         
@@ -519,7 +519,7 @@
             const status = $(this).html().toLowerCase();
             orderId = $(this).parent().parent().attr('order-id');
             $.ajax({
-                url: `/order/api/change-status/${orderId}`,
+                url: `/admin/order/api/change-status/${orderId}`,
                 method: 'PATCH',
                 data: {
                     status: status
@@ -532,8 +532,8 @@
                         case 'confirmed':
                             $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-info">Confirmed</span>`);
                             break;
-                        case 'awaiting payment':
-                            $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-info">Awaiting payment</span>`);
+                        case 'unpaid':
+                            $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-info">Unpaid</span>`);
                             break;
                         case 'shipping':
                             $(`#order-status[order-id="${orderId}"]`).html(`<span class="badge badge-pill bg-gradient-info">Shipping</span>`);
@@ -564,7 +564,7 @@
                 modalTitle.html('Delete order');
                 modalBody.html(`Are you sure you want to delete this order with id: <b>${orderId}</b>? This action cannot be undone.`);
                 modalDeleteBtn.click(() => {
-                    singleItemForm.attr('action', `/order/${orderId}`);
+                    singleItemForm.attr('action', `/admin/order/${orderId}`);
                     singleItemForm.find('input[name="action"]').val('delete');
                     singleItemForm.submit();
                 });

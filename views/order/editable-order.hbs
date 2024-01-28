@@ -107,7 +107,7 @@
     // breadcrumbs
     const breadcrumbs = $('.breadcrumb');
     let breadcrumbContent = `
-            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/admin/"><span class="breadcrumb-text">Dashboard</span></a></li>
+            <li class="breadcrumb-item text-sm"><a class="text-dark" href="/admin"><span class="breadcrumb-text">Dashboard</span></a></li>
             <li class="breadcrumb-item text-sm"><a class="text-dark" href="/admin/order"><span class="breadcrumb-text">Orders</span></a></li>
         `;
     if ($('form[name="product-form"]').attr('editable') === 'true') {
@@ -216,7 +216,9 @@
             `);
             let currentTotal = parseInt($('#order-total').attr('value'));
             if(isNaN(currentTotal)) currentTotal = 0;
-            $('#order-total').text(new Intl.NumberFormat('vi', CurrencyOptions).format(currentTotal + product.price * number));
+            const newTotal = currentTotal + product.price * number;
+            $('#order-total').text(new Intl.NumberFormat('vi', CurrencyOptions).format(newTotal));
+            $('#order-total').attr('value', newTotal);
         }
         $('#item-product').val('');
         $('#item-number').val('');
@@ -233,7 +235,9 @@
             const amount = parseInt(orderItem.find('#orderItem-total').text());
             let currentTotal = parseInt($('#order-total').attr('value'));
             if (isNaN(currentTotal)) currentTotal = 0;
-            $('#order-total').text(new Intl.NumberFormat('vi', CurrencyOptions).format(currentTotal - amount));
+            const newTotal = currentTotal - amount;
+            $('#order-total').text(new Intl.NumberFormat('vi', CurrencyOptions).format(newTotal));
+            $('#order-total').attr('value', newTotal);
             orderItem.remove();
         }
     });

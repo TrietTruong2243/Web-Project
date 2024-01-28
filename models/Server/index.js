@@ -1,7 +1,5 @@
 const sequelize = require('../../config/db');
-
 const db = {};
-
 db.sequelize = sequelize;
 db.User = require('./user.m')(sequelize);
 db.Category = require('./category.m')(sequelize);
@@ -23,11 +21,12 @@ db.Product.belongsTo(db.Image, { as: 'mainImage', foreignKey: 'mainImageId', con
 // Category - Product
 db.Category.hasMany(db.Product, { as: 'products', foreignKey: 'categoryId' });
 db.Product.belongsTo(db.Category, { as: 'category', foreignKey: 'categoryId' });
+// Order - User
 db.User.hasMany(db.Order, { as: 'orders', foreignKey: 'userId' });
 db.Order.belongsTo(db.User, { as: 'user', foreignKey: 'userId' });
 // Order - OrderItem
 db.Order.hasMany(db.OrderItem, { as: 'orderItems', foreignKey: 'orderId', onDelete: 'cascade' });
-db.OrderItem.belongsTo(db.Order, { foreignKey: 'orderId' });
+db.OrderItem.belongsTo(db.Order, { as: 'order', foreignKey: 'orderId' });
 // OrderItem - Product
 db.Product.hasMany(db.OrderItem, { as: 'orderItems', foreignKey: 'productId', onDelete: 'cascade' });
 db.OrderItem.belongsTo(db.Product, { as: 'product', foreignKey: 'productId' });

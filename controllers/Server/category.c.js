@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 const e = require('express');
 const { Op, UniqueConstraintError } = require('sequelize');
 const cloudinary = require('../../config/cloudinary');
-// const toDataUri = require('../../helpers/dataUriConverter');
 const Category = db.Category;
 const Product = db.Product;
 const Image = db.Image;
@@ -15,11 +14,13 @@ const DateOptions = {
     minute: "2-digit",
     hour12: false
 }
+
 module.exports = {
     // [GET] /category
     showAll: async (req, res, next) => {
         try {
-            let { page, size, sortBy, sortDir, id, name, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query;            page = page || 1;
+            let { page, size, sortBy, sortDir, id, name, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo } = req.query;
+            page = page || 1;
             size = size || 10;
             sortBy = (sortBy || sortBy === 'productsNum') || 'id';
             sortDir = sortDir || 'asc';
@@ -46,7 +47,8 @@ module.exports = {
                 }
                 else createdAtTo = '9999-12-31'
                 filters.createdAt = {
-                    [Op.between]: [createdAtFrom, createdAtTo]                }
+                    [Op.between]: [createdAtFrom, createdAtTo]
+                }
             }
             if (updatedAtFrom || updatedAtTo) {
                 if(updatedAtFrom){
@@ -57,8 +59,10 @@ module.exports = {
                     updatedAtTo = new Date(updatedAtTo);
                     updatedAtTo.setHours(23, 59, 59, 999);
                 } else updatedAtTo = '9999-12-31';
+
                 filters.updatedAt = {
-                    [Op.between]: [updatedAtFrom , updatedAtTo]                }
+                    [Op.between]: [updatedAtFrom , updatedAtTo]
+                }
             }
 
             // get all categories
@@ -78,10 +82,8 @@ module.exports = {
                         categoryId: categories[i].id
                     }
                 });
-                const productsUrl = `/admin/product?category=${categories[i].id}`;                const createdAt = new Date(categories[i].createdAt);
-                const updatedAt = new Date(categories[i].updatedAt);
-                const formattedCreatedAt = `${createdAt.getDate()}-${createdAt.getMonth() + 1}-${createdAt.getFullYear()} ${createdAt.getHours()}:${createdAt.getMinutes()}`;
-                const formattedUpdatedAt = `${updatedAt.getDate()}-${updatedAt.getMonth() + 1}-${updatedAt.getFullYear()} ${updatedAt.getHours()}:${updatedAt.getMinutes()}`;
+                const productsUrl = `/admin/product?category=${categories[i].id}`;
+                
                 categories[i] = categories[i].dataValues;
                 categories[i].products = {
                     number: productsNum,
@@ -89,7 +91,7 @@ module.exports = {
                 }
                 categories[i].formattedCreatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(categories[i].createdAt);
                 categories[i].formattedUpdatedAt = new Intl.DateTimeFormat('vi', DateOptions).format(categories[i].updatedAt);
-             }
+            }
 
             if(sortBy === 'productsNum') {
                 categories.sort((a, b) => {
@@ -100,11 +102,14 @@ module.exports = {
                     }
                 });
             }
+
             const total = await Category.count({
                 where: filters
             });
+
             const urlParams = new URLSearchParams(req.query);
             urlParams.delete('page');
+
             res.render('category/list-category', {
                 active: { Categories: true },
                 categories,
@@ -114,14 +119,8 @@ module.exports = {
                 urlParams: urlParams.toString()
             });
         } catch (err) {
-            if(err instanceof UniqueConstraintError) {
-                res.render('category/editable-category', {
-                    active: { Categories: true },
-                    editable: false,
-                    category: req.body,
-                    message: 'Category name already exists'
-                });
-            } else next(err);        }
+            next(err);
+        }
     },
 
     // [GET] /category/create-new
@@ -143,9 +142,16 @@ module.exports = {
             const category = await Category.create({
                 name
             });
-            res.redirect('/admin/category');
+            res.redirect('/category');
         } catch (err) {
-            next(err);
+            if(err instanceof UniqueConstraintError) {
+                res.render('category/editable-category', {
+                    active: { Categories: true },
+                    editable: false,
+                    category: req.body,
+                    message: 'Category name already exists'
+                });
+            } else next(err);
         }
     },
 
@@ -211,7 +217,7 @@ module.exports = {
                     }
                 });
                 for(let i = 0; i < images.length; ++i) {
-                    await cloudinary.uploader.destroy(images[i].publicId);
+                    await cloudinary.uploader.destroy(images[i].public_id);
                 }
                 await Image.destroy({
                     where: {
@@ -235,7 +241,7 @@ module.exports = {
         }
     },
 
-  // [POST] /category/multiselect-handle
+    // [POST] /category/multiselect-handle
     handleMultiItems: async (req, res, next) => {
         try {
             const { action, selectedItems } = req.body;
