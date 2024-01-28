@@ -46,7 +46,7 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, '/views'));
 
 /* ============== Routes =============== */
-// app.use(unlessRoute(['/auth', '/api', '/wakeup-heroku'], authMiddleware));
+app.use(unlessRoute(['/auth', '/api', '/wakeup-heroku'], authMiddleware));
 app.use('/api', apiAuthentication, apiRoute);
 app.use('/auth', authRoute);
 app.use('/*', authMiddleware);

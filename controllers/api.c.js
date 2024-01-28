@@ -1,8 +1,13 @@
+require('dotenv').config();
 const { Op } = require('sequelize');
 const db = require('../models');
 const Account = db.Account;
 const PaymentHistory = db.PaymentHistory;
+const jwt = require('jsonwebtoken');
+const { TRACKING_QUERY_KEY } = require('../constants');
+const bcrypt = require('bcrypt');
 
+// [GET] /api/balnace/:userId
 exports.getUserBalance = async (req, res) => {
 	const userId = Number(req.params.userId);
 
@@ -16,10 +21,39 @@ exports.getUserBalance = async (req, res) => {
 		return res.status(200).json({ balance: account?.balance || 0 });
 	} catch (error) {
 		console.error('Function getUserBalance Error: ', error);
-		return res.status(500).json({ balance: 0 });
+		return res.status(500).json({});
 	}
 };
 
+// [GET] /api/check-account
+exports.getCheckAccount = async (req, res) => {
+	let { userId, totalMoney } = req.query;
+
+	try {
+		const account = await Account.findOne({
+			raw: true,
+			where: { userId },
+			attributes: ['balance', 'id'],
+		});
+
+		if (!account) {
+			throw new Error('Account not found!');
+		}
+
+		let { balance } = account;
+		balance = Number(balance);
+		totalMoney = Number(totalMoney);
+		if (balance < totalMoney) {
+			throw new Error('Not enough money!');
+		}
+		return res.status(200).json({ accountId: account.id });
+	} catch (error) {
+		console.error('Function getCheckAccount Error: ', error);
+		return res.status(400).json({error: error.message});
+	}
+}
+
+// [POST] /api/payment/create-account
 exports.postCreateAccount = async (req, res) => {
 	const { username, userId } = req.body;
 
@@ -48,43 +82,68 @@ exports.postCreateAccount = async (req, res) => {
 			throw 'Account creation failed!';
 		}
 
-		return res.status(201).json({ msg: 'Successfully' });
+		return res.status(201).json({ accountId: newAccount.id });
 	} catch (error) {
 		console.error('Function postCreateAccount Error: ', error);
-		return res.status(400).json({ msg: error });
+		return res.status(400).json({});
 	}
 };
 
+// [POST] /api/payment
 exports.postPayment = async (req, res) => {
-	let { totalMoney, userId } = req.body;
-	[totalMoney, userId] = [Number(totalMoney), Number(userId)];
-	const tx = await db.transaction();
-
+	const tx = await db.sequelize.transaction();
 	try {
-		const { balance, id } = await Account.findOne({
+		const { token } = req.body;
+		const jwtData = jwt.verify(token, process.env.JWT_CHECKOUT_SECRET);
+		let {
+			totalMoney,
+			accountId,
+			accountPassword,
+		} = jwtData.sub;
+
+		const account = await Account.findOne({
 			raw: true,
-			where: { userId },
-			attributes: ['balance', 'id'],
+			where: { id: accountId },
 		});
 
+		console.log('account: ', account);
+		if (!account) {
+			throw new Error('Account not found!');
+		}
+		
+		// check password
+		const isCorrectPwd = await bcrypt.compare(accountPassword, account.password);
+		if (!isCorrectPwd) {
+			throw new Error('Wrong password!');
+		}
+
+		let { balance } = account;
 		const afterBalance = balance - totalMoney > 0 ? balance - totalMoney : 0;
+		// create payment history
 		await PaymentHistory.create(
 			{
 				transactionCode: Date.now().toString(),
 				beforeBalance: balance,
 				afterBalance,
 				totalMoney,
-				createdDate: new Date(),
+				content: 'Thanh toán',
 				cardNumber: null,
 				cardName: null,
 				isPutMoney: false,
-				accountId: id,
+				accountId,
 			},
 			{ transaction: tx }
 		);
+		// update account balance
 		await Account.update(
 			{ balance: afterBalance },
-			{ where: { id }, transaction: tx }
+			{ where: { id: accountId }, transaction: tx }
+		);
+		// transfer money to admin
+		await Account.increment(
+			'balance',
+			{ by: totalMoney, where: { id: 1 } },
+			{ transaction: tx }
 		);
 
 		await tx.commit();
@@ -92,6 +151,6 @@ exports.postPayment = async (req, res) => {
 	} catch (error) {
 		await tx.rollback();
 		console.error('Function postPayment Error: ', error);
-		return res.status(400).json({});
+		return res.status(400).json({error: error.message});
 	}
 };

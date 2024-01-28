@@ -4,7 +4,6 @@ const BANK_LIST = require('../constants/bank-list');
 
 exports.getPaymentCheckout = (req, res) => {
 	const { token } = req.query;
-
 	try {
 		const tokenData = jwt.verify(token, process.env.JWT_CHECKOUT_SECRET);
 		const { totalMoney, bank } = tokenData.sub;
@@ -32,6 +31,7 @@ exports.getPaymentCheckout = (req, res) => {
 
 exports.postPaymentCheckout = async (req, res) => {
 	const { token, cardNumber, transactionCode } = req.body;
+	console.log('req.body in postPaymentCheckout: ', req.body);
 	try {
 		if (!token || !cardNumber) {
 			throw 'Failed';
@@ -46,9 +46,7 @@ exports.postPaymentCheckout = async (req, res) => {
 			successTokenKey,
 			token: AToken,
 		} = tokenData.sub;
-		// payment processing .......
 
-		// payment successfully
 		const newToken = jwt.sign(
 			{
 				sub: {

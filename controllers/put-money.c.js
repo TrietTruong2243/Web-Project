@@ -5,12 +5,12 @@ const {
 	JWT_CHECKOUT_SUCCESS_KEY,
 	TRACKING_QUERY_KEY,
 	PRIVATE_KEY,
-	PAYMENT_TYPES,
 } = require('../constants');
 const db = require('../models');
 const Account = db.Account;
 const PaymentHistory = db.PaymentHistory;
 
+// [GET] /put-money
 exports.getPutMoneyPage = (req, res) => {
 	const token = req.query[TRACKING_QUERY_KEY];
 
@@ -20,7 +20,9 @@ exports.getPutMoneyPage = (req, res) => {
 	});
 };
 
+// [GET] /put-money/checkout-success
 exports.getCheckoutSuccess = async (req, res) => {
+	console.log('req.query in getCheckoutSuccess: ', req.query);
 	const { token } = req.query;
 	const tx = await db.sequelize.transaction();
 
@@ -43,7 +45,6 @@ exports.getCheckoutSuccess = async (req, res) => {
 		const currentBalance = Number(account.balance);
 
 		let newBalance = currentBalance + totalMoney;
-		let paymentType = PAYMENT_TYPES.PUT_MONEY;
 		let promises = [];
 
 		promises.push(
@@ -54,10 +55,7 @@ exports.getCheckoutSuccess = async (req, res) => {
 					accountId,
 					cardNumber,
 					cardName: bank,
-					content:
-						paymentType === PAYMENT_TYPES.PUT_MONEY
-							? 'Nạp tiền'
-							: 'Thanh toán',
+					content: 'Nạp tiền',
 					isPutMoney: true,
 					beforeBalance: currentBalance,
 					afterBalance: newBalance,
@@ -66,8 +64,7 @@ exports.getCheckoutSuccess = async (req, res) => {
 			)
 		);
 
-		promises.push(Account.increment('balance', { by: totalMoney, where: { id: 1 }}, { transaction: tx }));
-
+		// promises.push(Account.increment('balance', { by: totalMoney, where: { id: 1 }}, { transaction: tx }));
 		promises.push(
 			Account.update(
 				{ balance: newBalance },
@@ -93,6 +90,7 @@ exports.getCheckoutSuccess = async (req, res) => {
 	}
 };
 
+// [POST] /put-money/checkout
 exports.postCheckoutPutMoney = async (req, res) => {
 	const { totalMoney, bank, token } = req.body;
 	const { id: accountId } = req.user;
@@ -100,7 +98,7 @@ exports.postCheckoutPutMoney = async (req, res) => {
 
 	const fakePaymentToken = jwt.sign(
 		{
-			issuer: 'SkullPay',
+			issuer: 'SkullPay',	
 			iat: Date.now(),
 			exp: Date.now() + MAX.CHECKOUT_JWT_EXP,
 			sub: {
