@@ -13,7 +13,8 @@ exports.getPaymentCheckout = (req, res) => {
 		const { name: bankName, logoUrl: bankLogo } =
 			BANK_LIST.find((b) => b.code === bank) || {};
 
-		return res.render('fake-payment-checkout.pug', {
+		return res.render('home', {
+			layout: "fake-payment-system",
 			transactionCode,
 			totalMoney: formatCurrency(totalMoney),
 			bankName: bankName,
@@ -33,7 +34,7 @@ exports.getPaymentCheckout = (req, res) => {
 exports.postPaymentCheckout = async (req, res) => {
 	const { token, cardNumber, transactionCode } = req.body;
 	try {
-		if (!token || !cardNumber) {
+		if (!token || !cardNumber) { 
 			throw 'Failed';
 		}
 

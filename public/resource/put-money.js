@@ -23,7 +23,7 @@ $(document).ready(function () {
 
 	$('#paymentBtn').click(async function () {
 		const bank = $('input[name="bank"]:checked').val();
-
+	
 		if (!bank) {
 			return $('#bankList').addClass(ERROR_CLASS);
 		} else {
@@ -39,7 +39,7 @@ $(document).ready(function () {
 
 		$(this).addClass('disabled');
 
-		const response = await fetch('/put-money/checkout', {
+		const response = await fetch('/top-up/checkout', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -50,7 +50,6 @@ $(document).ready(function () {
 				token,
 			}),
 		});
-
 		const { url = '/', msg } = (await response.json()) || {};
 
 		if (response.status === 200) {

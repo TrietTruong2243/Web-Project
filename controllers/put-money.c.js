@@ -97,6 +97,7 @@ exports.getCheckoutSuccess = async (req, res) => {
 exports.postCheckoutPutMoney = async (req, res) => {
 	const { totalMoney, bank, token } = req.body;
 	const { id: accountId } = req.user;
+
 	const rootUrl = `${req.protocol}://${req.get('host')}`;
 
 	const fakePaymentToken = jwt.sign(
@@ -109,15 +110,14 @@ exports.postCheckoutPutMoney = async (req, res) => {
 				totalMoney,
 				bank,
 				successTokenKey: JWT_CHECKOUT_SUCCESS_KEY,
-				callback: `${rootUrl}/put-money/checkout-success`,
+				callback: `${rootUrl}/top-up/checkout-success`,
 				token,
 			},
 		},
 		process.env.JWT_CHECKOUT_SECRET
 	);
-
+	
 	const fakePaymentSystemUrl = `${rootUrl}/fake-payment-system/checkout?token=${fakePaymentToken}`;
-
 	return res.status(200).json({
 		url: fakePaymentSystemUrl,
 	});

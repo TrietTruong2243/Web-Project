@@ -70,7 +70,7 @@ passport.deserializeUser(async function (user, done) {
 
 		return done(null, false);
 	} catch (error) {
-		console.log('PASSPORT DESERIALIZE ERROR: ', error);
+		// console.log('PASSPORT DESERIALIZE ERROR: ', error);
 		done(error, false);
 	}
 });
