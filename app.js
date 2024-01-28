@@ -30,7 +30,6 @@ app.use(cors({
 app.use(methodOverride('_method'));
 
 const https = require('https');
-// const secret = 'mysecretkey';
 // const passport = require('passport');
 
 // app.use(express.bodyParser());
@@ -42,7 +41,6 @@ app.use(express.static(__dirname+'/public'));
 app.use(session({ 
     secret: process.env.SECRET_KEY,
     saveUninitialized:true,
-    // cookie: { maxAge: 10000}, 
     resave: false
     }));
 app.use(express.json());

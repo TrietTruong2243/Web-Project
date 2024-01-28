@@ -35,6 +35,7 @@ module.exports = {
                 }
                 const retUrl = req.query.retUrl || '/admin/';
                 req.logIn(user, (err) => {
+                    // console.log(user);
                     res.isAuthenticated = true
                     res.locals.isAuthenticated = true
 
