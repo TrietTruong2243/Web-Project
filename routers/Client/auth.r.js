@@ -65,7 +65,6 @@ const { check } = require('express-validator');
 
 let validateRegisterUser = () => {
     return [
-        check('name', 'Invalid fullname!').isAlphanumeric(),
         check('name', 'Fullname must not empty!').not().isEmpty(),
 
         check('username', 'Username must be more than 6 characters').isLength({ min: 6 }),

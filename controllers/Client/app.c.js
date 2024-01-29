@@ -46,6 +46,7 @@ module.exports = {
         }
         const productID = req.query.id;
         const product = await model.getProductByID(productID);
+        product.formattedPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price);
         const relatedProduct = await model.getRelatedProduct(productID);
         const allImages = await model.getAllImageByProduct(productID);
         res.render("home", {

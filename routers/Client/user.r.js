@@ -11,7 +11,6 @@ const upload = multer({
 router.use(app.static(__dirname+'/../public'));
 let validateUserInfo = () => {
     return [
-        check('name', 'Tên không hợp lệ!').isAlphanumeric(),
         check('name', 'Tên không được trống!').not().isEmpty(),
         check('username', 'Tên phải dài hơn 6 ký tự!').isLength({min: 6}),
         check('username', 'Tên không được trống!').not().isEmpty(),
@@ -45,11 +44,6 @@ let validateUserPassword = () => {
         }),
         check('password_confirm', 'Confirm password length must more than 6! ').isLength({ min: 6 }),
         check('password_confirm', 'Confirm password must not empty!').not().isEmpty(),
-        check('current_password', 'Current password must have at least 1 uppercase, 1 lowercase and 1 special characters').matches(
-            /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d@$.!%*#?&]/,
-          ),
-        check('current_password', 'Current password length must more than 6! ').isLength({ min: 6 }),
-        check('current_password', 'Current password must not empty!').not().isEmpty(),
 
     ];
 };
