@@ -65,9 +65,11 @@ module.exports = {
         // console.log(res);
         return res;
     },
-    updateStatus: async (OrderID, Status) => {
-        const query = `UPDATE public."${table}" SET "status" = '${Status}' WHERE  "id" = '${OrderID}' ;`
+    updateStatus: async (OrderID, Status,Code) => {
+        const query = `UPDATE public."${table}" SET "status" = '${Status}'  WHERE  "id" = '${OrderID}' ;`
         const result = await db.query(query);
+        query = `UPDATE public."${table}" SET "transactionCode" = '${Code}'  WHERE  "id" = '${OrderID}' ;`
+        const result_2 = await db.query(query);
         res = await db.query(`SELECT * FROM public."${table}" WHERE "id" = '${OrderID}'`)
         // Check if any rows were returned
         return res.rows;

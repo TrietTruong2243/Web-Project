@@ -4,7 +4,7 @@ module.exports = {
     getOrderDetail: async(req,res)=>{
         const userID = req.user.id;
         const orderID = req.query.OrderID;
-        //note: 
+        //note:  
         //      userInfo: user's information (name, address, phonenum, email)
         //      orderInfo: order's information (status, date, total ammount)
         //      orderDetail: information of products in order
@@ -25,7 +25,8 @@ module.exports = {
     StatusUpdate: async(req,res)=>{
         const OrderID = req.query.id;
         const Status = req.query.status;
-        const result = await orderModel.updateStatus(OrderID,Status);
+        const tCode = req.query.tCode || "";
+        const result = await orderModel.updateStatus(OrderID,Status,tCode);
         // console.log(orderDetail); 
         res.json({});
     },

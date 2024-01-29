@@ -17,14 +17,14 @@ module.exports = {
             const query = `INSERT INTO public."${table}" ("userId", "productId","quantity","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5) RETURNING "productId"`
             // console.log(query);
             const values = [userid, productId, quantity, new Date().toISOString(), new Date().toISOString()]
-            console.log(query);
+            // console.log(query);
             const result = await db.query(query, values);
             // Check if any rows were returned
-            console.log(result.rows);
+            // console.log(result.rows);
             return result.rows;
         }
         catch (err) {
-            console.log(err);
+            // console.log(err);
             return null
         }
 
@@ -57,7 +57,7 @@ module.exports = {
         const result = await db.query(query);
         // Check if any rows were returned
         if (result.rows.length == 0) {
-            console.log("ffdas");
+            // console.log("ffdas");
             return null;
         }
         return result.rows;
