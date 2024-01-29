@@ -23,6 +23,7 @@ const router = require('./routers/Server');
 const router2 = require("./routers/Client/index.r");
 const api = require("./routers/api/api")
 const fs = require("fs")
+process.env.NODE_TLS_REJECT_UNAUTHORIZED='0'
 // cors
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -75,6 +76,7 @@ app.use(LocalsMiddleware)
 router(app)
 
 ErrorHandlerMiddleware(app);
+
 const server = https.createServer({
     key: fs.readFileSync('./certs/demo.key'),
     cert: fs.readFileSync('./certs/demo.crt')
