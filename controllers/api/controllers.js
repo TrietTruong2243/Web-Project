@@ -3,8 +3,7 @@ const jwt = require('jsonwebtoken')
 module.exports = {
     // [POST] /api/create-payment-account
     createPaymentAccount: async (req, res, next) => {
-        console.log(res.session);
-        console.log(req.session);
+        
         try {
             // const { username, userId } = req.body
             const username = req.session.user.username
