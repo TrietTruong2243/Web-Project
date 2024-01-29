@@ -433,6 +433,7 @@
                         url: "/order/updatestatus",
                         data: data,
                         success: function (response) {
+                                                      console.log("1.a");
                             window.location.reload();
                         },
                         error: function (error) {
@@ -448,9 +449,11 @@
                         url: "/api/check-account?userId=" + userId + "&totalMoney=" + totalMoney,
                         type: "GET",
                         success: function (res) {
+                            console.log("1.b");
                             if(res.accountId){
                                 alert("Successfully check account");
                                 const accountId = res.accountId;
+                          console.log("1.c");
                                 // show password input
                                 $("#password").parent().removeClass("d-none");
                                 $("#password").focus();
@@ -464,11 +467,30 @@
                                             password: $("#password").val()
                                         }, 
                                         success: function (data) {
-                                            
-                                            code  = data.transactionCode;
+                                                                      console.log("1.d");
+                                            alert(data.data .transactionCode)
+                                            code  = data.data.transactionCode;
+                                             var update_data = {
+                                                id: {{ orderInfo.OrderID }},
+                                                total: {{ orderInfo.Total }},
+                                                status: "confirmed",
+                                                tCode: code || 0
+                                            };
+                                            $.ajax({
+                                                type: "GET",
+                                                url: "/order/updatestatus",
+                                                data: update_data,
+                                                success: function (response) {
+                                                                              console.log("1.e");
+                                                    window.location.reload();
+                                                },
+                                                error: function (error) {
+                                                    alert("reloadfailed")
+                                                }
+                                            });
                                         },
                                         error: function (data) {
-                                            {{!-- alert("Error " + data.error); --}}
+                                            alert("Error " + data.error);
                                         }
                                     })
                                 });
@@ -477,27 +499,10 @@
                             }
                         },
                         error: function (res) {
-                            {{!-- alert("Error " + res.error); --}}
+                            alert("Error " + res.error);
                         }
                     });
-                    var update_data = {
-                        id: {{ orderInfo.OrderID }},
-                        total: {{ orderInfo.Total }},
-                        status: "confirmed",
-                        tCode: code || 0
-                        
-                    };
-                    $.ajax({
-                        type: "GET",
-                        url: "/order/updatestatus",
-                        data: update_data,
-                        success: function (response) {
-                            window.location.reload();
-                        },
-                        error: function (error) {
-                            // Xử lý lỗi
-                        }
-                    });
+
                 }
             }
         });
