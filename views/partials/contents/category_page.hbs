@@ -113,6 +113,10 @@
   </div>
   
   <script>
+    const CurrencyOptions = {
+      style: 'currency',
+      currency: 'VND',
+    }
     window.onload = function () {
       $.ajax({
         type: 'GET',
@@ -172,7 +176,7 @@
                         <h4 class="card-title">${i.name}</h4>
                         <div class="card-text" data-test-info-type="price">
                           <div class="price-section price-section--withoutTax">
-                            <span class="price price--withoutTax">${i.price}đ</span>
+                            <span class="price price--withoutTax">${new Intl.NumberFormat('vi', CurrencyOptions).format(i.price)}</span>
                           </div>
                         </div>
                       </div>
@@ -240,7 +244,7 @@
                         <h4 class="card-title">${i.name}</h4>
                         <div class="card-text" data-test-info-type="price">
                           <div class="price-section price-section--withoutTax">
-                            <span class="price price--withoutTax">${i.price}đ</span>
+                            <span class="price price--withoutTax">${new Intl.NumberFormat('vi', CurrencyOptions).format(i.price)}</span>
                           </div>
                         </div>
                       </div>
@@ -313,7 +317,7 @@
                         <h4 class="card-title">${i.name}</h4>
                         <div class="card-text" data-test-info-type="price">
                           <div class="price-section price-section--withoutTax">
-                            <span class="price price--withoutTax">${i.price}đ</span>
+                            <span class="price price--withoutTax">${new Intl.NumberFormat('vi', CurrencyOptions).format(i.price)}</span>
                           </div>
                         </div>
                       </div>
@@ -388,7 +392,7 @@
                         <h4 class="card-title">${i.name}</h4>
                         <div class="card-text" data-test-info-type="price">
                           <div class="price-section price-section--withoutTax">
-                            <span class="price price--withoutTax">${i.price}đ</span>
+                            <span class="price price--withoutTax">${new Intl.NumberFormat('vi', CurrencyOptions).format(i.price)}</span>
                           </div>
                         </div>
                       </div>

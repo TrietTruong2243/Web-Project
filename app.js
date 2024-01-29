@@ -1,11 +1,11 @@
 require('dotenv').config()
-const express= require('express');
-const exphbs=require('express-handlebars');
+const express = require('express');
+const exphbs = require('express-handlebars');
 const Handlebars = require('handlebars');
-const cors=require('cors');
-const app= express(); 
-const app1= express(); 
-const port=3000;
+const cors = require('cors');
+const app = express();
+const app1 = express();
+const port = 3000;
 const bodyParser = require('body-parser');
 var path = require('path');
 const flash = require('express-flash');
@@ -50,13 +50,20 @@ app.use(express.urlencoded({extended:true}));
 app.use(cookieParser(process.env.SECRET_KEY));
  ///TODO: uncomment these line to create new tables and insert first admin 
 // db.sequelize.sync({ force: true })
-// db.User.create({
-//     username: 'admin', 
-//     email: 'abc@gmail.com',
-//     password: '$2a$10$tLB8GqgbFjgF0iiGHdG0pOF/4gCo79dZOboRrjkfVjIJywYRgkCBe',
-//     fullname: 'Admin', 
-//     role: 'admin'
-// });
+db.sequelize.sync({after: true}).then((_) => {
+    db.User.count().then((count) => {
+        if(count === 0){
+            db.User.create({
+                username: 'admin',
+                email: 'abc@gmail.com',
+                password: '$2a$10$tLB8GqgbFjgF0iiGHdG0pOF/4gCo79dZOboRrjkfVjIJywYRgkCBe',
+                fullname: 'Admin',
+                role: 'admin'
+            });
+        }
+    });
+})
+
 // app.set('views', path.join(__dirname, './view/Client'));
 app.engine('hbs',exphbs.engine({
     extname:'.hbs', 

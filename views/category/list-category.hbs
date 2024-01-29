@@ -252,7 +252,7 @@
             $('#collapseFilter').addClass('show');
         }
 
-        $('#data-pagination').html(renderPagination(page, total, size, 'category', urlParams));
+        $('#data-pagination').html(renderPagination(page, total, size, 'admin/category', urlParams));
 
         // breadcrumbs
         const breadcrumbs = $('.breadcrumb');
@@ -350,7 +350,7 @@
                 urlParams += `&sortDir=${sortDir_f}`;
             }
             if (name_f) {
-                urlParams += `&username=${username_f}`;
+                urlParams += `&name=${name_f}`;
             }
             if (createdAtFrom_f) {
                 urlParams += `&createdAtFrom=${createdAtFrom_f}`;

@@ -261,7 +261,7 @@
             <div class="detail-info-item">
                 <p class="detail-info-item-title">Category</p>
                 <p class="detail-info-item-content">
-                    <a href="/admin/{{ this.categoryUrl }}">{{ this.categoryName }}</a>
+                    <a href="/admin/category?id={{ this.category.id }}">{{ this.category.name }}</a>
                 </p>
             </div>
             <div class="detail-info-item">
@@ -276,7 +276,7 @@
 
             <div class="detail-info-item">
                 <p class="detail-info-item-title">Description</p>
-                <p class="detail-info-item-content">{{ this.description }}</p>
+                <div class="detail-info-item-content" style="width: 50px">{{ this.description }}</div>
             </div>
             {{/if}}
             <div class="detail-info-item">
@@ -338,7 +338,7 @@
             $('#collapseFilter').addClass('show');
         }
 
-        $('#product-pagination').html(renderPagination(page, total, size, 'product', urlParams));
+        $('#product-pagination').html(renderPagination(page, total, size, 'admin/product', urlParams));
         // breadcrumbs
         const breadcrumbs = $('.breadcrumb');
         let breadcrumbContent = `
