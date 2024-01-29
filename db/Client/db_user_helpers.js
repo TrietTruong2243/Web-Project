@@ -22,16 +22,17 @@ module.exports = {
     findUserByEmail: async(email)=>{
         const query = `SELECT * FROM public."${userTable}" WHERE "email" = '${email}'`
         const result = await db.query(query);
+        console.log(result);
         // Check if any rows were returned
         return result.rows[0]; 
     },
     addNewUser: async(param)=>{
         var currentdate = new Date().toISOString();
         const hashedPassword = await bcrypt.hash(param.password, 10);
-        const query = `INSERT INTO public."${userTable}" ("fullname", "phone", "address", "email", "password","username","createdAt","updatedAt","isGGAcc") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING "id"`;
+        const query = `INSERT INTO public."${userTable}" ("fullname", "phone", "address", "email", "password","username","createdAt","updatedAt","isGGAcc") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING "id","username"`;
         const values = [param.name,param.phone_number,param.home_address,param.email_address, hashedPassword,param.username,currentdate,currentdate,0];
         // console.log(values);
-        const data =  db.query(query, values);
+        const data = await db.query(query, values);
         return data;
     },
     addGoogleUser: async(param)=>{

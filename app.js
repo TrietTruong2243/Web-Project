@@ -21,6 +21,7 @@ const ErrorHandlerMiddleware = require('./middlewares/errorHandler');
 const db = require('./models/Server');
 const router = require('./routers/Server');
 const router2 = require("./routers/Client/index.r");
+const api = require("./routers/api/api")
 const fs = require("fs")
 // cors
 app.use(cors({
@@ -69,8 +70,10 @@ app.engine('hbs',exphbs.engine({
 app.set('view engine','hbs');
 router2(app)
 PassportMiddleware(app)
+api(app)
 app.use(LocalsMiddleware)
 router(app)
+
 ErrorHandlerMiddleware(app);
 const server = https.createServer({
     key: fs.readFileSync('./certs/demo.key'),

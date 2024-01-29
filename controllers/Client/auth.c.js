@@ -1,4 +1,5 @@
 const model = require("../../models/Client/auth.m");
+const userdb = require("../../db/Client/db_user_helpers")
 const jwt = require('jsonwebtoken');
 var { validationResult } = require('express-validator');
 
@@ -59,7 +60,15 @@ module.exports = {
                 res.json({addErr: err});
 
             }else{
-               res.json("Success")
+                const user = await model.getUserByEmail(req.body.email_address)
+                // console.log("Check User: " );
+                // console.log(user);
+                // req.flash('userId', user.id );
+                // req.flash('username,' ,user.username);
+                req.session.user = user
+                res.redirect("/api/create-account")
+               
+            //    res.json("Success")
             }
     
         }
@@ -90,11 +99,16 @@ module.exports = {
     ggSuccessAddInfo: async (req,res)=>{
         const email = req.cookies['email'];
         const user = await model.getUserByEmail(email);
-   
+        // const user1 = await userdb.findUserByEmail(email)
+        // req.flash('userId', user1.id );
+        // req.flash('username,' ,user1.username);
+        req.session.user = user
         const accessToken = jwt.sign({ id: user.id, isGoogleAccount: user.isGGAcc || false, role: user.role,status: user.status }, process.env.SECRET_KEY, { expiresIn: "1h" });
         res.cookie('token', accessToken, { httpOnly: false, sameSite: true, maxAge: "3000000" });
         res.clearCookie('email')
-        res.redirect('/');
+        // res.redirect('/');
+        res.redirect("/api/create-account")
+
     }
     
 }
