@@ -159,21 +159,21 @@
                         <div class="p-1 ">
                         <article class="product-card card rounded-4" >
                 <div class="card-content">
-                  <a href="/viewproduct?id=${i.ProductID}" class="card-content-inner">
+                  <a href="/viewproduct?id=${i.id}" class="card-content-inner">
                     <figure class="card-figure">
                       <img class="card-image lazyautosizes lazyloaded" data-sizes="auto"
                         src="${i.image}"
-                        alt="${i.Describe}" sizes="50px">
+                        alt="${i.description}" sizes="50px">
                     </figure>
                     <div class="product-card-swatch-container swatches-loaded"
                 >
                       
                     </div>
                     <div class="card-body">
-                      <h4 class="card-title">${i.ProductName}</h4>
+                      <h4 class="card-title">${i.name}</h4>
                       <div class="card-text" data-test-info-type="price">
                         <div class="price-section price-section--withoutTax">
-                          <span class="price price--withoutTax">${i.Price}đ</span>
+                          <span class="price price--withoutTax">${i.price}đ</span>
                         </div>
                       </div>
                     </div>
