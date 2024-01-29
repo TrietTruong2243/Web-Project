@@ -9,10 +9,10 @@ db.PaymentHistory = require('./payment-history.m')(sequelize);
 // associations
 // Account - PaymentHistory
 db.Account.hasMany(db.PaymentHistory, {
-    foreignKey: {
-        name: 'accountId',
+    foreignKey: { 
+        name: 'accountId', 
         allowNull: false,
-    },
+    }, 
     onDelete: 'RESTRICT',
     onUpdate: 'CASCADE',
 });

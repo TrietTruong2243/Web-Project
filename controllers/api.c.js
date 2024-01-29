@@ -93,12 +93,14 @@ exports.postCreateAccount = async (req, res) => {
 exports.postPayment = async (req, res) => {
 	const tx = await db.sequelize.transaction();
 	try {
+
 		const { token } = req.body;
+		// console.log(token); 
 		const jwtData = jwt.verify(token, process.env.JWT_CHECKOUT_SECRET);
 		let {
 			totalMoney,
 			accountId,
-			accountPassword,
+			accountPassword, 
 		} = jwtData.sub;
 
 		const account = await Account.findOne({
@@ -106,23 +108,33 @@ exports.postPayment = async (req, res) => {
 			where: { id: accountId },
 		});
 
-		console.log('account: ', account);
 		if (!account) {
 			throw new Error('Account not found!');
 		}
-		
+
 		// check password
-		const isCorrectPwd = await bcrypt.compare(accountPassword, account.password);
-		if (!isCorrectPwd) {
+		let isCorrectPwd = true;
+		if(account.password){
+		   isCorrectPwd = await bcrypt.compare(accountPassword, account.password);
+		}
+		if (!isCorrectPwd ) {
 			throw new Error('Wrong password!');
 		}
 
+
+		if( accountPassword != ''){
+			throw new Error('Wrong password!');
+		}
+
+
 		let { balance } = account;
+
 		const afterBalance = balance - totalMoney > 0 ? balance - totalMoney : 0;
+		let transactionCode = Date.now().toString();
 		// create payment history
-		await PaymentHistory.create(
+		 await PaymentHistory.create(
 			{
-				transactionCode: Date.now().toString(),
+				transactionCode: transactionCode,
 				beforeBalance: balance,
 				afterBalance,
 				totalMoney,
@@ -134,23 +146,25 @@ exports.postPayment = async (req, res) => {
 			},
 			{ transaction: tx }
 		);
-		// update account balance
+
+		// update account balance 
 		await Account.update(
 			{ balance: afterBalance },
 			{ where: { id: accountId }, transaction: tx }
 		);
+		console.log("test1");
 		// transfer money to admin
-		await Account.increment(
-			'balance',
-			{ by: totalMoney, where: { id: 1 } },
-			{ transaction: tx }
-		);
+		// console.log(tx);
+		const test = await Account.increment('balance', { by: totalMoney, where: { id: 1 } , transaction: tx});
+	
 
 		await tx.commit();
-		return res.status(200).json({ currentBalance: afterBalance });
+		console.log("test3");
+		return res.status(200).json({ currentBalance: afterBalance, transactionCode: transactionCode});
 	} catch (error) {
 		await tx.rollback();
-		console.error('Function postPayment Error: ', error);
-		return res.status(400).json({error: error.message});
+		console.error('Function postPayment Error: ', error); 
+		return res.status(400).json({msg: error.message});
 	}
-};
+}; 
+ 
