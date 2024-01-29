@@ -11890,7 +11890,7 @@ h5,
   background: #f2be1d;
 }
 
-.table tbody td.status .shipping {
+.table tbody td.status .confirmed {
   background: #fdf5dd;
   color: #cfa00c;
 }

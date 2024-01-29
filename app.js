@@ -42,13 +42,13 @@ app.use(cors());
 app.use(express.static(__dirname+'/public'));
 app.use(session({ 
     secret: process.env.SECRET_KEY,
-    saveUninitialized:true,
-    resave: false
+    saveUninitialized:true, 
+    resave: false 
     }));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser(process.env.SECRET_KEY));
- ///TODO: uncomment these line to create new tables and insert first admin
+ ///TODO: uncomment these line to create new tables and insert first admin 
 // db.sequelize.sync({ force: true })
 db.sequelize.sync({after: true}).then((_) => {
     db.User.count().then((count) => {
@@ -66,7 +66,7 @@ db.sequelize.sync({after: true}).then((_) => {
 
 // app.set('views', path.join(__dirname, './view/Client'));
 app.engine('hbs',exphbs.engine({
-    extname:'.hbs',
+    extname:'.hbs', 
     // defaultLayout:'home.hbs',
     // layoutsDir:"views/layouts",
     helpers: helpers(),

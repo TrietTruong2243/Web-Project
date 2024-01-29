@@ -65,8 +65,8 @@ module.exports = {
         return total;
 
     },
-    updateStatus: async (OrderID,Status) => {
-        let result = await orderDB.updateStatus(OrderID,Status);
+    updateStatus: async (OrderID,Status,TCode) => {
+        let result = await orderDB.updateStatus(OrderID,Status,TCode);
         return result;
     }
 }

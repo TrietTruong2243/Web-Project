@@ -359,6 +359,11 @@
                                                 <button type="button" class="btn btn-primary mt-4" id="payment_btn">
                                                     Pay by <div class="badge bg-success">SkullPay</div>
                                                 </button>
+                                                <div class="d-none">
+                                                    <label for="password">Password for payment account</label>
+                                                    <input type="password" name="password" id="password">
+                                                    <button id="confirmPayment" class="btn btn-primary mt-4">Confirm</button>
+                                                </div>
                                             </div>
                                             {{/if}}
 
@@ -421,7 +426,7 @@
                 if (paymentMethod === "cash") {
                     var data = {
                         id: {{ orderInfo.OrderID }},
-                    status: "unpaid",
+                        status: "unpaid",
                     };
                     $.ajax({
                         type: "GET",
@@ -436,9 +441,9 @@
                     });
                 }
                 if (paymentMethod === "transact") {      
-                    const userId = {{userID }};
+                    const userId = {{ userID }};
                     const totalMoney =  {{ orderInfo.Total }};
-
+                    let code;
                     $.ajax({
                         url: "/api/check-account?userId=" + userId + "&totalMoney=" + totalMoney,
                         type: "GET",
@@ -455,17 +460,15 @@
                                         type: "POST",
                                         data: {
                                             accountId: accountId,
+                                            totalMoney,
                                             password: $("#password").val()
-                                        },
+                                        }, 
                                         success: function (data) {
-                                            if(data.msg === 'Successfully'){
-                                                alert("Payment Successfully");
-                                            } else {
-                                                alert("Failed");
-                                            }
+                                            
+                                            code  = data.transactionCode;
                                         },
                                         error: function (data) {
-                                            alert("Error " + data.error);
+                                            {{!-- alert("Error " + data.error); --}}
                                         }
                                     })
                                 });
@@ -473,14 +476,16 @@
                                 alert("Failed");
                             }
                         },
-                        error: function (data) {
-                            alert("Error" + data.error);
+                        error: function (res) {
+                            {{!-- alert("Error " + res.error); --}}
                         }
                     });
-                     {{!-- const update_data = {
+                    var update_data = {
                         id: {{ orderInfo.OrderID }},
                         total: {{ orderInfo.Total }},
                         status: "confirmed",
+                        tCode: code || 0
+                        
                     };
                     $.ajax({
                         type: "GET",
@@ -492,7 +497,7 @@
                         error: function (error) {
                             // Xử lý lỗi
                         }
-                    }); --}}
+                    });
                 }
             }
         });

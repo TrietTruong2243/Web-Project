@@ -22,7 +22,7 @@ module.exports = {
     },
 
     // [POST] /api/check-account
-    checkAccount: async (req, res, next) => {
+    checkAccount: async (req, res, next) => { 
         try {
             const { totalMoney, userId } = req.query;
             // check account
@@ -53,6 +53,7 @@ module.exports = {
                 },
                 process.env.JWT_CHECKOUT_SECRET
             );
+ 
             const result = await paymentApi.postPayment({ token });
             console.log(result);
             if (result.currentBalance) {
