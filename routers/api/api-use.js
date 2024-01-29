@@ -7,8 +7,8 @@ router.get('/check-account', ctrl.checkAccount);
 router.post('/payment', ctrl.postPayment);
 router.get('/balance/:userId', ctrl.getUserBalance);
 router.get('/', (req, res) => {
-    res.render('home', {
+    res.render('home', {  
         layout: false
-    });
-});
+    }); 
+}); 
 module.exports = router;

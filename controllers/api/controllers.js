@@ -3,8 +3,6 @@ const jwt = require('jsonwebtoken')
 module.exports = {
     // [POST] /api/create-payment-account
     createPaymentAccount: async (req, res, next) => {
-        console.log(res.session);
-        console.log(req.session);
         try {
             // const { username, userId } = req.body
             const username = req.session.user.username
@@ -54,6 +52,7 @@ module.exports = {
                 },
                 process.env.JWT_CHECKOUT_SECRET
             );
+ 
             const result = await paymentApi.postPayment({ token });
             console.log(result);
             if (result.currentBalance) {
