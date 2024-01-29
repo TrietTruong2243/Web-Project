@@ -1,4 +1,5 @@
 const orderModel = require("../../models/Client/order.m");
+require('dotenv').config()
 module.exports = {
     getOrderDetail: async(req,res)=>{
         const userID = req.user.id;
@@ -9,9 +10,8 @@ module.exports = {
         //      orderDetail: information of products in order
         const userInfo = await orderModel.getUserInfo(userID);
         const orderInfo = await orderModel.getOrderInfo(orderID);
-        console.log(orderInfo);
         const orderDetail = await orderModel.getOrderDetail(orderID);
-        res.render("home",{ layout: "orderdetails", orderInfo: orderInfo, userInfo: userInfo, orderDetail: orderDetail})
+        res.render("home",{ layout: "orderdetails", url_payment: process.env.PAYMENT_SYS_URL , orderInfo: orderInfo, userInfo: userInfo, orderDetail: orderDetail, userID: userID})
         // res.json({orderInfo: orderInfo, userInfo: userInfo, orderDetail: orderDetail});
     },
     OrderDetail: async(req,res)=>{
