@@ -19,6 +19,9 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/b3b98b22fa.js" crossorigin="anonymous"></script>
+    <style>
+        
+    </style>
 </head>
 
 <body class="g-sidenav-show">
@@ -29,7 +32,6 @@
                 <i class="fas fa-times p-3 cursor-pointer position-absolute end-0 top-0 d-xl-none" aria-hidden="true"
                     id="iconSidenav"></i>
                 <a class="navbar-brand m-0" href="/">
-              
                     <img src="https://cdn.pixabay.com/photo/2017/03/29/04/09/shopping-icon-2184065_1280.png" class="navbar-brand-img h-100" alt="main_logo">
                     <span class="ms-1 font-weight-bold text-light">SHOPPINGWEB</span>
                 </a>
@@ -84,48 +86,92 @@
         {{!-- main components --}}
         <main class="main-content position-relative max-height-vh-100 h-100">
             <nav
-                class="navbar navbar-main navbar-expand-lg bg-white shadow-none border-radius-xl blur shadow-blur mx-2 mt-2">
+                class="navbar navbar-main navbar-expand-lg bg-white shadow-none border-radius-xl blur shadow-blur mx-2 mt-2 z-index-2">
                 <div class="container-fluid">
                     <div class="d-xl-none me-4 cursor-pointer" id="iconNavbarSidenav">
                         <i class="fa-solid fa-bars"></i>
                     </div>
-
                     <div class="collapse navbar-collapse justify-content-end align-items-center">
-                        <h4 class="me-5">Welcome {{ user.username }}</h4>
-                        <ul class="navbar-nav align-items-center py-2" id="navbar">
-                            <li class="nav-item pe-2"><i class="fa-solid fa-bell px-2"></i></li>
-                            <li class="nav-item dropdown">
-                                <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
-                                    <img src="/img/user.png" class="avatar-sm img-fluid rounded" alt="">
+                        <h4 class="ms-2 me-auto">Welcome {{ authUser.username }}</h4>
+                        <div class="navbar-nav align-items-center py-2" id="navbar">
+                            <div class="dropdown">
+                                <a href="javascript:;" class="p-0 show font-weight-bolder" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="true" style="font-size: 1.3rem">
+                                    <i class="fa-solid fa-bell cursor-pointer me-5" aria-hidden="true"></i>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li href="#" class="dropdown-item">Profile</li>
-                                    {{!-- <li href="#" class="dropdown-item">Setting</li> --}}
-                                    {{!-- <li href="/admin/logout" class="dropdown-item">Logout</li> --}}
+                                <ul class="dropdown-menu dropdown-menu-end px-2 py-3 ms-n4" aria-labelledby="dropdownMenuButton"
+                                    data-bs-popper="static">
+                                    <li class="mb-2">
+                                        <a class="dropdown-item border-radius-md" href="javascript:;">
+                                            <div class="d-flex py-1">
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <h6 class="text-sm font-weight-normal mb-1">
+                                                        <span class="font-weight-bold">New order #1</span> from username
+                                                    </h6>
+                                                    <p class="text-xs text-secondary mb-0">
+                                                        <i class="fa fa-clock me-1" aria-hidden="true"></i>
+                                                        13 minutes ago
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="mb-2">
+                                        <a class="dropdown-item border-radius-md" href="javascript:;">
+                                            <div class="d-flex py-1">
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <h6 class="text-sm font-weight-normal mb-1">
+                                                        <span class="font-weight-bold">Successful payment</span> from TravisScott
+                                                    </h6>
+                                                    <p class="text-xs text-secondary mb-0">
+                                                        <i class="fa fa-clock me-1" aria-hidden="true"></i>
+                                                        1 day
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item border-radius-md" href="javascript:;">
+                                            <div class="d-flex py-1">
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <h6 class="text-sm font-weight-normal mb-1">
+                                                        <span class="font-weight-bold">New order #2</span> from TaylorSwift
+                                                    </h6>
+                                                    <p class="text-xs text-secondary mb-0">
+                                                        <i class="fa fa-clock me-1" aria-hidden="true"></i>
+                                                        2 day
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
                                 </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb bg-transparent ms-4 mb-0 pb-0 mt-3">
-
-                </ol>
-            </nav>
-            <main class="content px-3 py-2">
-                <div class="container-fluid">
-                    <div class="mb-3">
-                        {{{body}}}
-                        <div id="my-modal-image" class="modal-image">
-                            <span class="modal-image-close zoomable-image">&times;</span>
-                            <img class="modal-image-content ">
+                            </div>
+                            {{#if authUser.image}}
+                            <img src="{{ authUser.image.url }}" class="avatar-sm img-fluid rounded" alt="">
+                            {{else}}
+                            <img src="/img/user.png" class="avatar-sm img-fluid rounded" alt="">
+                            {{/if}}
                         </div>
                     </div>
                 </div>
-            </main>
+            </nav>
+            <div class="container-fluid">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent ms-4 mb-0 pb-0 mt-3">
+                    </ol>
+                </nav>
+            </div>
+            <div class="container-fluid">
+                <main class="content px-3 py-2 mb-3">
+                    {{{body}}}
+                    <div id="my-modal-image" class="modal-image">
+                        <span class="modal-image-close zoomable-image">&times;</span>
+                        <img class="modal-image-content ">
+                    </div>
+                </main>
+            </div>
         </main>
-
     <script src="/js/image-extension.js"></script>
     <script src="/js/layout.js"></script>
     <script src="/js/soft-ui-dashboard.js"></script>

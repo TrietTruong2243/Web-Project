@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="./css/dashboard.css">
+<link rel="stylesheet" href="/css/dashboard.css">
 <style>
 </style>
 <div class="container-fluid">
@@ -343,7 +343,7 @@
             }
             yearSelection.val(operationYears[0]);
             $.ajax({
-                url: `//adminstatistic/api/sale-distributed-by-month?year=${operationYears[0]}`,
+                url: `/admin/statistic/api/sale-distributed-by-month?year=${operationYears[0]}`,
                 method: 'GET',
                 success: function (res) {
                     yearData = res.data;
