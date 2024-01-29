@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 module.exports = {
     // [POST] /api/create-payment-account
     createPaymentAccount: async (req, res, next) => {
+        
         try {
             // const { username, userId } = req.body
             const username = req.session.user.username
@@ -21,7 +22,7 @@ module.exports = {
     },
 
     // [POST] /api/check-account
-    checkAccount: async (req, res, next) => {
+    checkAccount: async (req, res, next) => { 
         try {
             const { totalMoney, userId } = req.query;
             // check account
