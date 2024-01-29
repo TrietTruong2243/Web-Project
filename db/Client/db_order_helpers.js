@@ -57,7 +57,7 @@ module.exports = {
         const values = [userID, new Date().toISOString(),new Date().toISOString()];
         const res = await db.query(query,values);
         return res.rows[0].id; 
-    },
+    }, 
     addOrderItem: async (OrderID, ProductID, Quantity) => {
         const query = `INSERT INTO public."${sub_table}" ("orderId","productId","quantity","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5) RETURNING "productId"`
         const values = [OrderID,ProductID,Quantity, new Date().toISOString(),new Date().toISOString()];
@@ -65,8 +65,8 @@ module.exports = {
         // console.log(res);
         return res;
     },
-    updateStatus: async (OrderID, Status,Code) => {
-        const query = `UPDATE public."${table}" SET "status" = '${Status}'  WHERE  "id" = '${OrderID}' ;`
+    updateStatus: async (OrderID, Status, Code) => {
+        let query = `UPDATE public."${table}" SET "status" = '${Status}'  WHERE  "id" = '${OrderID}' ;`
         const result = await db.query(query);
         query = `UPDATE public."${table}" SET "transactionCode" = '${Code}'  WHERE  "id" = '${OrderID}' ;`
         const result_2 = await db.query(query);

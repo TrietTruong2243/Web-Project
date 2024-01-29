@@ -426,7 +426,7 @@
                 if (paymentMethod === "cash") {
                     var data = {
                         id: {{ orderInfo.OrderID }},
-                    status: "unpaid",
+                        status: "unpaid",
                     };
                     $.ajax({
                         type: "GET",
@@ -441,7 +441,7 @@
                     });
                 }
                 if (paymentMethod === "transact") {      
-                    const userId = {{userID }};
+                    const userId = {{ userID }};
                     const totalMoney =  {{ orderInfo.Total }};
                     let code;
                     $.ajax({
@@ -464,10 +464,11 @@
                                             password: $("#password").val()
                                         }, 
                                         success: function (data) {
+                                            
                                             code  = data.transactionCode;
                                         },
                                         error: function (data) {
-                                            alert("Error " + data.error);
+                                            {{!-- alert("Error " + data.error); --}}
                                         }
                                     })
                                 });
@@ -475,15 +476,16 @@
                                 alert("Failed");
                             }
                         },
-                        error: function (data) {
-                            alert("Error" + data.error);
+                        error: function (res) {
+                            {{!-- alert("Error " + res.error); --}}
                         }
                     });
-                     const update_data = {
+                    var update_data = {
                         id: {{ orderInfo.OrderID }},
                         total: {{ orderInfo.Total }},
                         status: "confirmed",
-                        tCode: code;
+                        tCode: code || 0
+                        
                     };
                     $.ajax({
                         type: "GET",

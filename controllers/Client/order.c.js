@@ -27,7 +27,6 @@ module.exports = {
         const Status = req.query.status;
         const tCode = req.query.tCode || "";
         const result = await orderModel.updateStatus(OrderID,Status,tCode);
-        // console.log(orderDetail); 
         res.json({});
     },
 }

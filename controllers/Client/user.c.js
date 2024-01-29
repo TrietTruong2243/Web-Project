@@ -450,7 +450,7 @@ module.exports = {
         if (err1.errors.length) {
             res.json({ err: err1.errors })
         }
-        else {
+        else { 
             const checkUsername = await userModel.findUserNameToChangeInfo(userID, req.body.username)
             if (checkUsername == false) {
                 return res.json({ addErr: "Username already exists, cannot be added!" });
