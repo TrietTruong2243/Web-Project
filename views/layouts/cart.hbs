@@ -331,7 +331,7 @@
 
                                                                 <!-- price per item -->
                                                                 <td>
-                                                                    ${i.price} đ
+                                                                    ${new Intl.NumberFormat('vi', {style: 'currency', currency: 'VND'}).format(i.price)}
                                                                 </td>
 
                                                                 <!-- quantity -->
@@ -343,13 +343,13 @@
                                                                 <!-- price for <quantity> items -->
                                                                 <td>
                                                                     <h4>
-                                                                        ${ammount}đ
+                                                                        ${new Intl.NumberFormat('vi', {style: 'currency', currency: 'VND'}).format(amount)}
                                                                     </h4>
                                                                 </td>
                                                             </tr>`
                     }
                     $("#allItems").html(dataHTML)
-                    $("#totalAmmount").html(totalAmmount + " đ")
+                    $("#totalAmmount").html(`${new Intl.NumberFormat('vi', {style: 'currency', currency: 'VND'}).format(totalAmmount)}`)
                     $("body").delegate("#checkout_btn", "click", function (e) {
                         e.preventDefault()
                         console.log(cartInfo.length)

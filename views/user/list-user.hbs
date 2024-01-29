@@ -366,7 +366,7 @@
             $('#collapseFilter').addClass('show');
         }
 
-        $('#user-pagination').html(renderPagination(page, total, size, role, urlParams));
+        $('#user-pagination').html(renderPagination(page, total, size, 'admin/' + role, urlParams));
 
         // breadcrumbs
         const breadcrumbs = $('.breadcrumb');
@@ -569,7 +569,7 @@
             if (phone_f) {
                 urlParams += `&phone=${phone_f}`;
             }
-            if (address) {
+            if (address_f) {
                 urlParams += `&address=${address}`;
             }
             if (createdAtFrom_f) {
