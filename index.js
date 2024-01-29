@@ -11,7 +11,7 @@ const db = require('./models');
 // db.sequelize.sync({force: true});
 const Account = db.Account;
 const PaymentLimit = db.PaymentLimit;
-
+const https = require("https")
 /* ============== Import apis, middlewares =============== */
 const { apiAuthentication } = require('./middleware/authentication.middleware');
 const { authMiddleware, unlessRoute } = require('./middleware/auth.middleware');
@@ -22,7 +22,7 @@ const paymentHistoryRoute = require('./routes/payment-history.r');
 const changePasswordRoute = require('./routes/change-password.r');
 const putMoneyRoute = require('./routes/put-money.r');
 const fakePaymentSystemRoute = require('./routes/fake-payment-system.r');
-
+const fs = require("fs")
 /* ============== Config =============== */
 app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.json({}));
@@ -67,7 +67,14 @@ app.use((req, res) => res.status(404).json({ message: 'Page not found' }));
 /* ============== Listening =============== */
 const PORT = process.env.PORT || 3001;
 db.sequelize.sync({ after: true }).then((_) => {
-    app.listen(PORT, () => {
+    const server = https.createServer({
+        key: fs.readFileSync('./certs/demo.key'),
+        cert: fs.readFileSync('./certs/demo.crt')
+    }, app);
+    // server.listen(port, () => {
+    //     console.log(`App listening on port ${port}!: https://localhost:3000`)
+    // });
+    server.listen(PORT, () => {
         // Create a main account (admin, admin), payment limit if not exists
         Account.count().then((count) => {
             if (!count) {
@@ -78,7 +85,7 @@ db.sequelize.sync({ after: true }).then((_) => {
                 });
             }
         });
-        console.log(`Server is listening on port ${PORT}: http://localhost:${process.env.PORT}`);
+        console.log(`Server is listening on port ${PORT}: https://localhost:${process.env.PORT}`);
     });
 });
 

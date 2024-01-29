@@ -56,7 +56,7 @@ exports.getCheckAccount = async (req, res) => {
 // [POST] /api/payment/create-account
 exports.postCreateAccount = async (req, res) => {
 	const { username, userId } = req.body;
-
+	console.log(req.body);
 	try {
 		if (!username || !userId) {
 			throw 'username & userId is required!';
