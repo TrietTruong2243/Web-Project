@@ -84,7 +84,7 @@ let validateRegisterUser = () => {
           ),
           check('password', 'Password lenght must more than 6 characters').isLength({ min: 6 }),
 
-        check('password', 'Password must not wmpty!').not().isEmpty(),
+        check('password', 'Password must not empty!').not().isEmpty(),
 
         check('password_confirm', 'Confirm password is not the same as the original password!').custom((value, { req, loc, path }) => {
             if (value !== req.body.password) {
